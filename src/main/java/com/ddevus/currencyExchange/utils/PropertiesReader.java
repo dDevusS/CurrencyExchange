@@ -6,12 +6,14 @@ import java.util.Properties;
 public class PropertiesReader {
     private final static Properties PROPERTIES = new Properties();
 
-    public static String read(String key) {
-        return PROPERTIES.getProperty(key);
-    }
+    private PropertiesReader() {}
 
     static {
         loadPropertiesFile();
+    }
+
+    public static String read(String key) {
+        return PROPERTIES.getProperty(key);
     }
 
     private static void loadPropertiesFile() {
@@ -24,6 +26,4 @@ public class PropertiesReader {
             throw new RuntimeException(e);
         }
     }
-
-    private PropertiesReader() {}
 }
