@@ -31,4 +31,8 @@ public class ExchangeRateDTO {
     public float getRate() {
         return rate;
     }
+
+    public void setId(int id) {
+        Id = id;
+    }
 }
