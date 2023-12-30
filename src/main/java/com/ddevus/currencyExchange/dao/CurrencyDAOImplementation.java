@@ -56,6 +56,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     @Override
     public Optional<CurrencyEntity> findById(int id) {
         String sql = "SELECT * FROM currencies WHERE ID = ?";
+
         try (var connection = ConnectionManager.open();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
@@ -64,7 +65,27 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             CurrencyEntity currency = null;
             if (resultSet.next()) {
                 currency = createCurrency(resultSet);
-                currency.setId(resultSet.getInt("ID"));
+            }
+
+            return Optional.ofNullable(currency);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<CurrencyEntity> findByCode(String Code) {
+        String sql = "SELECT * FROM currencies WHERE Code = ?";
+
+        try (var connection = ConnectionManager.open();
+             var preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, Code);
+            var resultSet = preparedStatement.executeQuery();
+
+            CurrencyEntity currency = null;
+            if (resultSet.next()) {
+                currency = createCurrency(resultSet);
             }
 
             return Optional.ofNullable(currency);
@@ -111,6 +132,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
 
     private static CurrencyEntity createCurrency(ResultSet resultSet) throws SQLException {
         return new CurrencyEntity(
+                resultSet.getInt("ID"),
                 resultSet.getString("Code"),
                 resultSet.getString("FullName"),
                 resultSet.getString("Sing")
