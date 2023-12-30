@@ -4,7 +4,7 @@ import com.ddevus.currencyExchange.entity.CurrencyEntity;
 
 import java.util.List;
 
-public class CurrencyDAOimplementation implements CurrencyDAO {
+public class CurrencyDAOImplementation implements CurrencyDAO {
 
     @Override
     public CurrencyEntity save(CurrencyEntity currency) {
