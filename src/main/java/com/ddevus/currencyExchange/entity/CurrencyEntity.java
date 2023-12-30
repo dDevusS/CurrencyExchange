@@ -7,7 +7,8 @@ public class CurrencyEntity {
     private String name;
     private String sing;
 
-    public CurrencyEntity(String code, String name, String sing) {
+    public CurrencyEntity(int id, String code, String name, String sing) {
+        this.id = id;
         this.code = code;
         this.name = name;
         this.sing = sing;
