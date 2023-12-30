@@ -6,11 +6,11 @@ import java.util.List;
 
 public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
 
-    private final ExchangeRateDAOImplementation INSTANCE = new ExchangeRateDAOImplementation();
+    private static final ExchangeRateDAOImplementation INSTANCE = new ExchangeRateDAOImplementation();
 
     private ExchangeRateDAOImplementation() {}
 
-    public ExchangeRateDAOImplementation getINSTANCE() {
+    public static ExchangeRateDAOImplementation getINSTANCE() {
         return INSTANCE;
     }
 

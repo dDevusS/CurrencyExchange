@@ -10,11 +10,11 @@ import java.util.List;
 
 public class CurrencyDAOImplementation implements CurrencyDAO {
 
-    private final CurrencyDAOImplementation INSTANCE = new CurrencyDAOImplementation();
+    private static final CurrencyDAOImplementation INSTANCE = new CurrencyDAOImplementation();
 
     private CurrencyDAOImplementation() {}
 
-    public CurrencyDAOImplementation getINSTANCE() {
+    public static CurrencyDAOImplementation getINSTANCE() {
         return INSTANCE;
     }
 
