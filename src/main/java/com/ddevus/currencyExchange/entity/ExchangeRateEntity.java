@@ -1,18 +1,16 @@
 package com.ddevus.currencyExchange.entity;
 
-import java.math.BigDecimal;
-
 public class ExchangeRateEntity {
 
     private int id;
-    private int baseCurrencyId;
-    private int targetCurrencyId;
+    private CurrencyEntity baseCurrency;
+    private CurrencyEntity targetCurrency;
     private float rate;
 
-    public ExchangeRateEntity(int id, int baseCurrencyId, int targetCurrencyId, float rate) {
+    public ExchangeRateEntity(int id, CurrencyEntity baseCurrencyId, CurrencyEntity targetCurrency, float rate) {
         this.id = id;
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+        this.baseCurrency = baseCurrencyId;
+        this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
@@ -24,20 +22,20 @@ public class ExchangeRateEntity {
         this.id = id;
     }
 
-    public int getBaseCurrencyId() {
-        return baseCurrencyId;
+    public CurrencyEntity getBaseCurrencyId() {
+        return baseCurrency;
     }
 
-    public void setBaseCurrencyId(int baseCurrencyId) {
-        this.baseCurrencyId = baseCurrencyId;
+    public void setBaseCurrencyId(CurrencyEntity baseCurrency) {
+        this.baseCurrency = baseCurrency;
     }
 
-    public int getTargetCurrencyId() {
-        return targetCurrencyId;
+    public CurrencyEntity getTargetCurrency() {
+        return targetCurrency;
     }
 
-    public void setTargetCurrencyId(int targetCurrencyId) {
-        this.targetCurrencyId = targetCurrencyId;
+    public void setTargetCurrency(CurrencyEntity targetCurrency) {
+        this.targetCurrency = targetCurrency;
     }
 
     public float getRate() {
