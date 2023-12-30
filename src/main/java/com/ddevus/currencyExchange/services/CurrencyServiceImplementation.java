@@ -1,5 +1,6 @@
 package com.ddevus.currencyExchange.services;
 
+import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.CurrencyDAOImplementation;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public class CurrencyServiceImplementation implements CurrencyService{
 
-    private final CurrencyDAOImplementation currencyDAO = CurrencyDAOImplementation.getINSTANCE();
+    private final CurrencyDAO currencyDAO = CurrencyDAOImplementation.getINSTANCE();
 
     @Override
     public CurrencyEntity save(CurrencyEntity currency) {
