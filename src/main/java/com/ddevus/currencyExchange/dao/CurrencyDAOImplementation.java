@@ -4,6 +4,7 @@ import com.ddevus.currencyExchange.entity.CurrencyEntity;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,11 +63,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
 
             CurrencyEntity currency = null;
             if (resultSet.next()) {
-                currency = new CurrencyEntity(
-                        resultSet.getString("Code"),
-                        resultSet.getString("FullName"),
-                        resultSet.getString("Sing")
-                );
+                currency = createCurrency(resultSet);
                 currency.setId(resultSet.getInt("ID"));
             }
 
@@ -79,7 +76,21 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
 
     @Override
     public List<CurrencyEntity> findAll() {
-        return null;
+        String sql = "SELECT * FROM currencies";
+
+        try (var connection = ConnectionManager.open();
+             var preparedStatement = connection.prepareStatement(sql)) {
+            var resultSet = preparedStatement.executeQuery();
+
+            List<CurrencyEntity> currencies = new ArrayList<>();
+            while (resultSet.next()) {
+                currencies.add(createCurrency(resultSet));
+            }
+            return currencies;
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -96,5 +107,13 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
         catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static CurrencyEntity createCurrency(ResultSet resultSet) throws SQLException {
+        return new CurrencyEntity(
+                resultSet.getString("Code"),
+                resultSet.getString("FullName"),
+                resultSet.getString("Sing")
+        );
     }
 }
