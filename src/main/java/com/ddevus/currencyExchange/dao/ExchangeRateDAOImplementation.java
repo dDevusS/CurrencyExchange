@@ -28,4 +28,9 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
     public List<ExchangeRateEntity> findAll() {
         return null;
     }
+
+    @Override
+    public ExchangeRateEntity update(float rate) {
+        return null;
+    }
 }

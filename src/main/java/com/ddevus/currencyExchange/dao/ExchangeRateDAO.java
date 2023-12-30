@@ -12,4 +12,6 @@ public interface ExchangeRateDAO {
 
     public List<ExchangeRateEntity> findAll();
 
+    public ExchangeRateEntity update(float rate);
+
 }
