@@ -11,4 +11,6 @@ public interface CurrencyDAO {
     public CurrencyEntity findById(int id);
 
     public List<CurrencyEntity> findAll();
+
+    public void delete(int id);
 }
