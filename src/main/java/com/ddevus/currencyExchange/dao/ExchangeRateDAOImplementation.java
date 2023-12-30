@@ -6,6 +6,14 @@ import java.util.List;
 
 public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
 
+    private ExchangeRateDAOImplementation exchangeRateDAO = new ExchangeRateDAOImplementation();
+
+    private ExchangeRateDAOImplementation() {}
+
+    public ExchangeRateDAOImplementation getExchangeRateDAO() {
+        return exchangeRateDAO;
+    }
+
     @Override
     public ExchangeRateEntity save(ExchangeRateEntity exchangeRate) {
         return null;
