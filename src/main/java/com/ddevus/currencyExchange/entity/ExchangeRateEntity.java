@@ -45,4 +45,14 @@ public class ExchangeRateEntity {
     public void setRate(float rate) {
         this.rate = rate;
     }
+
+    @Override
+    public String toString() {
+        return "ExchangeRateEntity{" +
+                "id=" + id +
+                ", baseCurrency=" + baseCurrency.toString() +
+                ", targetCurrency=" + targetCurrency.toString() +
+                ", rate=" + rate +
+                '}';
+    }
 }

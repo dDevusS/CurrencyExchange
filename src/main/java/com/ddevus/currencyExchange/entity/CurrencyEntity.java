@@ -44,4 +44,14 @@ public class CurrencyEntity {
     public void setSing(String sing) {
         this.sing = sing;
     }
+
+    @Override
+    public String toString() {
+        return "CurrencyEntity{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", sing='" + sing + '\'' +
+                '}';
+    }
 }
