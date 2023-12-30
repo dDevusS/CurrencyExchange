@@ -12,6 +12,6 @@ public interface ExchangeRateDAO {
 
     public List<ExchangeRateEntity> findAll();
 
-    public ExchangeRateEntity update(float rate);
+    public boolean update(int id, float rate);
 
 }
