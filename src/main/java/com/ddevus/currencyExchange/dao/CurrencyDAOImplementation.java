@@ -6,12 +6,12 @@ import java.util.List;
 
 public class CurrencyDAOImplementation implements CurrencyDAO {
 
-    private CurrencyDAOImplementation currencyDAO = new CurrencyDAOImplementation();
+    private final CurrencyDAOImplementation INSTANCE = new CurrencyDAOImplementation();
 
     private CurrencyDAOImplementation() {}
 
-    public CurrencyDAOImplementation getCurrencyDAO() {
-        return currencyDAO;
+    public CurrencyDAOImplementation getINSTANCE() {
+        return INSTANCE;
     }
 
     @Override
