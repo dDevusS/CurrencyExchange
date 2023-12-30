@@ -7,12 +7,20 @@ import com.ddevus.currencyExchange.dao.ExchangeRateDAOImplementation;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
 import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExchangeRateServiceImplementation implements ExchangeRateService {
 
-    private final ExchangeRateDAO exchangeRateDAO = ExchangeRateDAOImplementation.getINSTANCE();
-    private final CurrencyDAO currencyDAO = CurrencyDAOImplementation.getINSTANCE();
+    private static final ExchangeRateDAO exchangeRateDAO = ExchangeRateDAOImplementation.getINSTANCE();
+    private static final CurrencyDAO currencyDAO = CurrencyDAOImplementation.getINSTANCE();
+    private static final ExchangeRateService INSTANCE= new ExchangeRateServiceImplementation();
+
+    private ExchangeRateServiceImplementation() {}
+
+    public static ExchangeRateService getINSTANCE() {
+        return INSTANCE;
+    }
 
     @Override
     public ExchangeRateDTO save(ExchangeRateDTO exchangeRateDTO) {
@@ -30,23 +38,59 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
     }
 
     @Override
-    public ExchangeRateDTO findByBaseAndTargetCurrenciesId(String baseCurrencyCode, String targetCurrencyCode) {
-        var baseCurrency = currencyDAO.findByCode(baseCurrencyCode).get();
-        var targetCurrency = currencyDAO.findByCode(targetCurrencyCode).get();
-        var exchangeRate = exchangeRateDAO
-                .findByBaseAndTargetCurrenciesId(baseCurrency.getId(),
-                        targetCurrency.getId());
-        return null;
+    public ExchangeRateDTO findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode) {
+        try {
+            var baseCurrency = currencyDAO.findByCode(baseCurrencyCode).get();
+            var targetCurrency = currencyDAO.findByCode(targetCurrencyCode).get();
+            var exchangeRate = exchangeRateDAO
+                    .findByBaseAndTargetCurrenciesId(baseCurrency.getId(),
+                            targetCurrency.getId());
+
+            ExchangeRateDTO exchangeRateDTO
+                    = new ExchangeRateDTO(exchangeRate.getId(), baseCurrency, targetCurrency, exchangeRate.getRate());
+            return exchangeRateDTO;
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<ExchangeRateDTO> findAll() {
-        return null;
+        List<ExchangeRateEntity> exchangeRateEntityList = exchangeRateDAO.findAll();
+
+        List<ExchangeRateDTO> exchangeRateDTOList = new ArrayList<>();
+        for (ExchangeRateEntity entity : exchangeRateEntityList) {
+            var baseCurrency = currencyDAO.findById(entity.getBaseCurrencyId()).get();
+            var targetCurrency = currencyDAO.findById(entity.getTargetCurrencyId()).get();
+
+            ExchangeRateDTO exchangeRateDTO
+                    = new ExchangeRateDTO(entity.getId(), baseCurrency, targetCurrency, entity.getRate());
+
+            exchangeRateDTOList.add(exchangeRateDTO);
+        }
+
+        return exchangeRateDTOList;
     }
 
     @Override
-    public ExchangeRateDTO update(float rate) {
-        return null;
+    public ExchangeRateDTO update(String baseCurrencyCode, String targetCurrencyCode, float rate) {
+        try {
+            var baseCurrency = currencyDAO.findByCode(baseCurrencyCode).get();
+            var targetCurrency = currencyDAO.findByCode(targetCurrencyCode).get();
+            var exchangeRate = exchangeRateDAO
+                    .findByBaseAndTargetCurrenciesId(baseCurrency.getId(),
+                            targetCurrency.getId());
+
+            exchangeRateDAO.update(exchangeRate.getId(), rate);
+
+                ExchangeRateDTO exchangeRateDTO
+                        = new ExchangeRateDTO(exchangeRate.getId(), baseCurrency, targetCurrency, exchangeRate.getRate());
+                return exchangeRateDTO;
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static ExchangeRateEntity convertExchangeRateDtoToEntity(ExchangeRateDTO exchangeRateDTO) {

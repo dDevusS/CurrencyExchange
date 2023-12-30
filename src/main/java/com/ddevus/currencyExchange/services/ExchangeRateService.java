@@ -8,9 +8,9 @@ public interface ExchangeRateService {
 
     public ExchangeRateDTO save(ExchangeRateDTO exchangeRate);
 
-    public ExchangeRateDTO findByBaseAndTargetCurrenciesId(String baseCurrencyCode, String targetCurrencyCode);
+    public ExchangeRateDTO findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode);
 
     public List<ExchangeRateDTO> findAll();
 
-    public ExchangeRateDTO update(float rate);
+    public ExchangeRateDTO update(String baseCurrencyCode, String targetCurrencyCode, float rate);
 }

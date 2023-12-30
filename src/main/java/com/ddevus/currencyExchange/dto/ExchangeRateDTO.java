@@ -35,4 +35,14 @@ public class ExchangeRateDTO {
     public void setId(int id) {
         Id = id;
     }
+
+    @Override
+    public String toString() {
+        return "ExchangeRateDTO{" +
+                "Id=" + Id +
+                ", baseCurrency=" + baseCurrency +
+                ", targetCurrency=" + targetCurrency +
+                ", rate=" + rate +
+                '}';
+    }
 }
