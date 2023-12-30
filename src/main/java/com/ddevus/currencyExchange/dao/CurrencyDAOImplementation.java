@@ -3,10 +3,9 @@ package com.ddevus.currencyExchange.dao;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 public class CurrencyDAOImplementation implements CurrencyDAO {
 
@@ -54,8 +53,28 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public CurrencyEntity findById(int id) {
-        return null;
+    public Optional<CurrencyEntity> findById(int id) {
+        String sql = "SELECT * FROM currencies WHERE ID = ?";
+        try (var connection = ConnectionManager.open();
+             var preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            var resultSet = preparedStatement.executeQuery();
+
+            CurrencyEntity currency = null;
+            if (resultSet.next()) {
+                currency = new CurrencyEntity(
+                        resultSet.getString("Code"),
+                        resultSet.getString("FullName"),
+                        resultSet.getString("Sing")
+                );
+                currency.setId(resultSet.getInt("ID"));
+            }
+
+            return Optional.ofNullable(currency);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
