@@ -3,7 +3,9 @@ package com.ddevus.currencyExchange.dao;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class CurrencyDAOImplementation implements CurrencyDAO {
@@ -18,7 +20,25 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
 
     @Override
     public CurrencyEntity save(CurrencyEntity currency) {
-        return null;
+        try (var connection = ConnectionManager.open();
+        var preparedStatement
+                = connection
+                .prepareStatement("INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)"
+                        , Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setString(1, currency.getCode());
+            preparedStatement.setString(2, currency.getName());
+            preparedStatement.setString(3, currency.getSing());
+            preparedStatement.executeUpdate();
+
+            var generatedKeys = preparedStatement.getGeneratedKeys();
+            generatedKeys.next();
+            currency.setId(generatedKeys.getInt("ID"));
+            return currency;
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -34,11 +54,11 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     @Override
     public boolean delete(int id) {
         try (var connection = ConnectionManager.open();
-        var prepareStatement
+        var preparedStatement
                 = connection.prepareStatement("DELETE FROM currencies WHERE ID = ?")) {
-            prepareStatement.setInt(1, id);
+            preparedStatement.setInt(1, id);
 
-            return prepareStatement.executeUpdate() > 0;
+            return preparedStatement.executeUpdate() > 0;
         }
         catch (SQLException e) {
             throw new RuntimeException(e);
