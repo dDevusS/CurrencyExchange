@@ -20,20 +20,32 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
 
     @Override
     public CurrencyEntity save(CurrencyEntity currency) {
+        String sql = "INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)";
+
         try (var connection = ConnectionManager.open();
         var preparedStatement
-                = connection
-                .prepareStatement("INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)"
-                        , Statement.RETURN_GENERATED_KEYS)) {
+                = connection.prepareStatement(sql, new String[]{"ID"})) {
 
             preparedStatement.setString(1, currency.getCode());
             preparedStatement.setString(2, currency.getName());
             preparedStatement.setString(3, currency.getSing());
-            preparedStatement.executeUpdate();
 
-            var generatedKeys = preparedStatement.getGeneratedKeys();
-            generatedKeys.next();
-            currency.setId(generatedKeys.getInt("ID"));
+            if (preparedStatement.executeUpdate() == 0) {
+                // TODO: change this exception
+                throw new SQLException("Inserting currency failed, no rows affected.");
+            }
+
+            try (var statement = connection.createStatement()) {
+                try (var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
+                    if (resultSet.next()) {
+                        currency.setId(resultSet.getInt(1));
+                    } else {
+                        // TODO: измените этот exception
+                        throw new SQLException("Inserting currency failed, no ID obtained.");
+                    }
+                }
+            }
+
             return currency;
         }
         catch (SQLException e) {
@@ -53,9 +65,11 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
 
     @Override
     public boolean delete(int id) {
+        String sql = "DELETE FROM currencies WHERE ID = ?";
+
         try (var connection = ConnectionManager.open();
         var preparedStatement
-                = connection.prepareStatement("DELETE FROM currencies WHERE ID = ?")) {
+                = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
 
             return preparedStatement.executeUpdate() > 0;
