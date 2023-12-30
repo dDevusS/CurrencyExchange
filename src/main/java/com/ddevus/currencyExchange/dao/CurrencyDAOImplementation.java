@@ -1,7 +1,9 @@
 package com.ddevus.currencyExchange.dao;
 
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
+import com.ddevus.currencyExchange.utils.ConnectionManager;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class CurrencyDAOImplementation implements CurrencyDAO {
@@ -30,7 +32,16 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public void delete(int id) {
+    public boolean delete(int id) {
+        try (var connection = ConnectionManager.open();
+        var prepareStatement
+                = connection.prepareStatement("DELETE FROM currencies WHERE ID = ?")) {
+            prepareStatement.setInt(1, id);
 
+            return prepareStatement.executeUpdate() > 0;
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
