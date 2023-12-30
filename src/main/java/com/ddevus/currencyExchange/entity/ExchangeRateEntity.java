@@ -3,14 +3,14 @@ package com.ddevus.currencyExchange.entity;
 public class ExchangeRateEntity {
 
     private int id;
-    private CurrencyEntity baseCurrency;
-    private CurrencyEntity targetCurrency;
+    private int baseCurrencyId;
+    private int targetCurrencyId;
     private float rate;
 
-    public ExchangeRateEntity(int id, CurrencyEntity baseCurrencyId, CurrencyEntity targetCurrency, float rate) {
+    public ExchangeRateEntity(int id, int baseCurrencyId, int targetCurrencyId, float rate) {
         this.id = id;
-        this.baseCurrency = baseCurrencyId;
-        this.targetCurrency = targetCurrency;
+        this.baseCurrencyId = baseCurrencyId;
+        this.targetCurrencyId = targetCurrencyId;
         this.rate = rate;
     }
 
@@ -22,20 +22,20 @@ public class ExchangeRateEntity {
         this.id = id;
     }
 
-    public CurrencyEntity getBaseCurrencyId() {
-        return baseCurrency;
+    public int getBaseCurrencyId() {
+        return baseCurrencyId;
     }
 
-    public void setBaseCurrencyId(CurrencyEntity baseCurrency) {
-        this.baseCurrency = baseCurrency;
+    public void setBaseCurrencyId(int baseCurrencyId) {
+        this.baseCurrencyId = baseCurrencyId;
     }
 
-    public CurrencyEntity getTargetCurrency() {
-        return targetCurrency;
+    public int getTargetCurrencyId() {
+        return targetCurrencyId;
     }
 
-    public void setTargetCurrency(CurrencyEntity targetCurrency) {
-        this.targetCurrency = targetCurrency;
+    public void setTargetCurrencyId(int targetCurrencyId) {
+        this.targetCurrencyId = targetCurrencyId;
     }
 
     public float getRate() {
@@ -50,8 +50,8 @@ public class ExchangeRateEntity {
     public String toString() {
         return "ExchangeRateEntity{" +
                 "id=" + id +
-                ", baseCurrency=" + baseCurrency.toString() +
-                ", targetCurrency=" + targetCurrency.toString() +
+                ", baseCurrency=" + baseCurrencyId +
+                ", targetCurrency=" + targetCurrencyId +
                 ", rate=" + rate +
                 '}';
     }
