@@ -8,7 +8,14 @@ import java.util.List;
 
 public class CurrencyServiceImplementation implements CurrencyService{
 
-    private final CurrencyDAO currencyDAO = CurrencyDAOImplementation.getINSTANCE();
+    private static final CurrencyDAO currencyDAO = CurrencyDAOImplementation.getINSTANCE();
+    private static final CurrencyService INSTANCE = new CurrencyServiceImplementation();
+
+    private CurrencyServiceImplementation() {}
+
+    public static CurrencyService getINSTANCE() {
+        return INSTANCE;
+    }
 
     @Override
     public CurrencyEntity save(CurrencyEntity currency) {
