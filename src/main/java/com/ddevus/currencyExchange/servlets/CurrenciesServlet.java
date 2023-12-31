@@ -25,8 +25,11 @@ public class CurrenciesServlet extends HttpServlet {
 
         List<CurrencyEntity> currencies = currencyService.findAll();
         var json = ConvertListToJson(currencies);
+        System.out.println("JSON Response: " + json);
 
-        resp.getWriter().write(json);
+        try (var writer = resp.getWriter()) {
+            writer.write(json);
+        }
     }
 
     private String ConvertListToJson(List<CurrencyEntity> currencies) {
@@ -38,6 +41,9 @@ public class CurrenciesServlet extends HttpServlet {
 
         if (json.length() > 1) {
             json.setCharAt(json.length() - 1, ']');
+        }
+        else {
+            json.append("]");
         }
 
         return json.toString();
