@@ -2,9 +2,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+out/
 
 ### IntelliJ IDEA ###
 .idea/
-
-### My Tester ###
-src/main/java/com/ddevus/currencyExchange/DAORunner.java
