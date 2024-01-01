@@ -40,6 +40,18 @@ public class CurrencyServiceImplementation implements CurrencyService{
     }
 
     @Override
+    public CurrencyEntity findByCode(String code) {
+        try {
+            var possibleCurrency = currencyDAO.findByCode(code);
+
+            return possibleCurrency.get();
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<CurrencyEntity> findAll() {
         try {
             var currencies = currencyDAO.findAll();
