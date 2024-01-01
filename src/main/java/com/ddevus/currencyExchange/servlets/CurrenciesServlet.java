@@ -38,7 +38,18 @@ public class CurrenciesServlet extends HttpServlet {
         String code = req.getParameter("code");
         String sing = req.getParameter("sing");
 
-        System.out.println(name + code + sing);
+        var newCurrency = new CurrencyEntity(0, code, name, sing);
+        newCurrency = currencyService.save(newCurrency);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+
+        System.out.println("JSON Response: " + newCurrency);
+
+        try (var writer = resp.getWriter()) {
+            writer.write(newCurrency.toString());
+        }
+
     }
 
     private String ConvertListToJson(List<CurrencyEntity> currencies) {
