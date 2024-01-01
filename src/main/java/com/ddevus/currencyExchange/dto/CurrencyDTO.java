@@ -7,7 +7,7 @@ public class CurrencyDTO {
     private String name;
     private String sing;
 
-    public CurrencyDTO(int id, String code, String name, String sing) {
+    public CurrencyDTO(int id, String name, String code, String sing) {
         this.id = id;
         this.code = code;
         this.name = name;

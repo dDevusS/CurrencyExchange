@@ -2,8 +2,10 @@ package com.ddevus.currencyExchange.services;
 
 import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.CurrencyDAOImplementation;
+import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CurrencyServiceImplementation implements CurrencyService{
@@ -18,9 +20,14 @@ public class CurrencyServiceImplementation implements CurrencyService{
     }
 
     @Override
-    public CurrencyEntity save(CurrencyEntity currency) {
+    public CurrencyDTO save(CurrencyDTO currencyDTO) {
+        CurrencyEntity currencyEntity = convertCurrencyDtoToEntity(currencyDTO);
+
         try {
-            return currencyDAO.save(currency);
+            currencyEntity = currencyDAO.save(currencyEntity);
+            currencyDTO.setId(currencyEntity.getId());
+
+            return currencyDTO;
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -28,11 +35,13 @@ public class CurrencyServiceImplementation implements CurrencyService{
     }
 
     @Override
-    public CurrencyEntity findById(int id) {
+    public CurrencyDTO findById(int id) {
         try {
             var possibleCurrency = currencyDAO.findById(id);
+            CurrencyEntity possibleCurrencyEntity = possibleCurrency.get();
+            CurrencyDTO currencyDTO = convertCurrencyEntityToDto(possibleCurrencyEntity);
 
-            return possibleCurrency.get();
+            return currencyDTO;
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -40,11 +49,13 @@ public class CurrencyServiceImplementation implements CurrencyService{
     }
 
     @Override
-    public CurrencyEntity findByCode(String code) {
+    public CurrencyDTO findByCode(String code) {
         try {
             var possibleCurrency = currencyDAO.findByCode(code);
+            CurrencyEntity possibleCurrencyEntity = possibleCurrency.get();
+            CurrencyDTO currencyDTO = convertCurrencyEntityToDto(possibleCurrencyEntity);
 
-            return possibleCurrency.get();
+            return currencyDTO;
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -52,11 +63,17 @@ public class CurrencyServiceImplementation implements CurrencyService{
     }
 
     @Override
-    public List<CurrencyEntity> findAll() {
+    public List<CurrencyDTO> findAll() {
         try {
-            var currencies = currencyDAO.findAll();
+            var currencyEntities = currencyDAO.findAll();
+            var currencyDTOlist = new ArrayList<CurrencyDTO>();
 
-            return currencies;
+            for (CurrencyEntity currencyEntity : currencyEntities) {
+                CurrencyDTO currencyDTO = convertCurrencyEntityToDto(currencyEntity);
+                currencyDTOlist.add(currencyDTO);
+            }
+
+            return currencyDTOlist;
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -73,5 +90,19 @@ public class CurrencyServiceImplementation implements CurrencyService{
         catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static CurrencyEntity convertCurrencyDtoToEntity(CurrencyDTO currencyDTO) {
+        return new CurrencyEntity(currencyDTO.getId()
+                , currencyDTO.getCode()
+                , currencyDTO.getName()
+                , currencyDTO.getSing());
+    }
+
+    private static CurrencyDTO convertCurrencyEntityToDto(CurrencyEntity currencyEntity) {
+        return new CurrencyDTO(currencyEntity.getId()
+                , currencyEntity.getName()
+                , currencyEntity.getCode()
+                , currencyEntity.getSing());
     }
 }

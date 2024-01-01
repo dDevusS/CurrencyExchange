@@ -95,10 +95,10 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
 
     private static ExchangeRateEntity convertExchangeRateDtoToEntity(ExchangeRateDTO exchangeRateDTO) {
         ExchangeRateEntity exchangeRateEntity
-                = new ExchangeRateEntity(exchangeRateDTO.getId(),
-                exchangeRateDTO.getBaseCurrency().getId(),
-                exchangeRateDTO.getTargetCurrency().getId(),
-                exchangeRateDTO.getRate());
+                = new ExchangeRateEntity(exchangeRateDTO.getId()
+                , exchangeRateDTO.getBaseCurrency().getId()
+                , exchangeRateDTO.getTargetCurrency().getId()
+                , exchangeRateDTO.getRate());
 
         return exchangeRateEntity;
     }

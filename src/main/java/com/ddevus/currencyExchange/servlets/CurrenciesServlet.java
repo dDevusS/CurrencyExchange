@@ -1,6 +1,6 @@
 package com.ddevus.currencyExchange.servlets;
 
-import com.ddevus.currencyExchange.entity.CurrencyEntity;
+import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.services.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
 
@@ -23,7 +23,7 @@ public class CurrenciesServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
-        List<CurrencyEntity> currencies = currencyService.findAll();
+        List<CurrencyDTO> currencies = currencyService.findAll();
         var json = ConvertListToJson(currencies);
         System.out.println("JSON Response: " + json);
 
@@ -38,7 +38,7 @@ public class CurrenciesServlet extends HttpServlet {
         String code = req.getParameter("code");
         String sing = req.getParameter("sing");
 
-        var newCurrency = new CurrencyEntity(0, code, name, sing);
+        var newCurrency = new CurrencyDTO(0, name, code, sing);
         newCurrency = currencyService.save(newCurrency);
 
         resp.setContentType("application/json");
@@ -52,10 +52,10 @@ public class CurrenciesServlet extends HttpServlet {
 
     }
 
-    private String ConvertListToJson(List<CurrencyEntity> currencies) {
+    private String ConvertListToJson(List<CurrencyDTO> currencies) {
         StringBuilder json = new StringBuilder("[");
 
-        for (CurrencyEntity currency : currencies) {
+        for (CurrencyDTO currency : currencies) {
             json.append(currency).append(",");
         }
 
