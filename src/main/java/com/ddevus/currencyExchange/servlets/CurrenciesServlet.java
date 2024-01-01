@@ -32,6 +32,15 @@ public class CurrenciesServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String name = req.getParameter("name");
+        String code = req.getParameter("code");
+        String sing = req.getParameter("sing");
+
+        System.out.println(name + code + sing);
+    }
+
     private String ConvertListToJson(List<CurrencyEntity> currencies) {
         StringBuilder json = new StringBuilder("[");
 

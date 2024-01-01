@@ -49,8 +49,8 @@ public class CurrencyEntity {
     @Override
     public String toString() {
         return "{\"id\":" + id
-                + ",\"code\":\"" + code
-                + "\",\"name\":\"" + name
+                + ",\"name\":\"" + name
+                + "\",\"code\":\"" + code
                 + "\",\"sing\":\"" + sing
                 + "\"}";
     }
