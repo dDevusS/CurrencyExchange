@@ -1,13 +1,13 @@
-package com.ddevus.currencyExchange.entity;
+package com.ddevus.currencyExchange.dto;
 
-public class CurrencyEntity {
+public class CurrencyDTO {
 
     private int id;
     private String code;
     private String name;
     private String sing;
 
-    public CurrencyEntity(int id, String code, String name, String sing) {
+    public CurrencyDTO(int id, String code, String name, String sing) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -49,8 +49,8 @@ public class CurrencyEntity {
     @Override
     public String toString() {
         return "{\"id\":" + id
-                + ",\"code\":\"" + code
-                + "\",\"name\":\"" + name
+                + ",\"name\":\"" + name
+                + "\",\"code\":\"" + code
                 + "\",\"sing\":\"" + sing
                 + "\"}";
     }
