@@ -1,5 +1,7 @@
 package com.ddevus.currencyExchange.utils;
 
+import com.ddevus.currencyExchange.exceptions.DataBaseException;
+
 import java.io.IOException;
 import java.util.Properties;
 
@@ -23,7 +25,7 @@ public class PropertiesReader {
                 PROPERTIES.load(inputStream);
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new DataBaseException("File application.properties was not found in resources root directory.", e);
         }
     }
 }
