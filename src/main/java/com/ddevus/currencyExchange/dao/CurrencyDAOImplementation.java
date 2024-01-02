@@ -96,7 +96,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public List<CurrencyEntity> findAll() {
+    public List<CurrencyEntity> findAll() throws DataBaseException {
         String sql = "SELECT * FROM currencies";
 
         try (var connection = ConnectionManager.open();

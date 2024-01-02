@@ -12,7 +12,7 @@ public class ConnectionManager {
 
     private ConnectionManager() {}
 
-    public static Connection open() {
+    public static Connection open() throws DataBaseException {
         System.out.println("Trying to connect to DB");
 
         try {
