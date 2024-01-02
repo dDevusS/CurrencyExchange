@@ -24,7 +24,7 @@ public class CurrenciesServlet extends HttpServlet {
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         List<CurrencyDTO> currencies = currencyService.findAll();
-        var json = ConvertListToJson(currencies);
+        var json = convertListToJson(currencies);
         System.out.println("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
@@ -52,7 +52,7 @@ public class CurrenciesServlet extends HttpServlet {
 
     }
 
-    private String ConvertListToJson(List<CurrencyDTO> currencies) {
+    private String convertListToJson(List<CurrencyDTO> currencies) {
         StringBuilder json = new StringBuilder("[");
 
         for (CurrencyDTO currency : currencies) {

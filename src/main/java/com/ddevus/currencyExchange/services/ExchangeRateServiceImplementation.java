@@ -6,6 +6,7 @@ import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dao.ExchangeRateDAOImplementation;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
 import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
+import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
 
     @Override
     public ExchangeRateDTO save(ExchangeRateDTO exchangeRateDTO) {
-        var exchangeRateEntity = convertExchangeRateDtoToEntity(exchangeRateDTO);
+        var exchangeRateEntity = DtoEntityConvertor.convertExchangeRateDtoToEntity(exchangeRateDTO);
 
         try {
             var savedExchangeRateEntity = exchangeRateDAO.save(exchangeRateEntity);
@@ -46,8 +47,11 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
                     .findByBaseAndTargetCurrenciesId(baseCurrency.getId(),
                             targetCurrency.getId());
 
-            ExchangeRateDTO exchangeRateDTO
-                    = new ExchangeRateDTO(exchangeRate.getId(), baseCurrency, targetCurrency, exchangeRate.getRate());
+            var exchangeRateDTO = new ExchangeRateDTO(exchangeRate.getId()
+                    , DtoEntityConvertor.convertCurrencyEntityToDto(baseCurrency)
+                    , DtoEntityConvertor.convertCurrencyEntityToDto(targetCurrency)
+                    , exchangeRate.getRate());
+
             return exchangeRateDTO;
         }
         catch (Exception e) {
@@ -60,12 +64,15 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
         List<ExchangeRateEntity> exchangeRateEntityList = exchangeRateDAO.findAll();
 
         List<ExchangeRateDTO> exchangeRateDTOList = new ArrayList<>();
-        for (ExchangeRateEntity entity : exchangeRateEntityList) {
-            var baseCurrency = currencyDAO.findById(entity.getBaseCurrencyId()).get();
-            var targetCurrency = currencyDAO.findById(entity.getTargetCurrencyId()).get();
+        for (ExchangeRateEntity exchangeRateEntity : exchangeRateEntityList) {
+            var baseCurrency = currencyDAO.findById(exchangeRateEntity.getBaseCurrencyId()).get();
+            var targetCurrency = currencyDAO.findById(exchangeRateEntity.getTargetCurrencyId()).get();
 
             ExchangeRateDTO exchangeRateDTO
-                    = new ExchangeRateDTO(entity.getId(), baseCurrency, targetCurrency, entity.getRate());
+                    = new ExchangeRateDTO(exchangeRateEntity.getId()
+                    , DtoEntityConvertor.convertCurrencyEntityToDto(baseCurrency)
+                    , DtoEntityConvertor.convertCurrencyEntityToDto(targetCurrency)
+                    , exchangeRateEntity.getRate());
 
             exchangeRateDTOList.add(exchangeRateDTO);
         }
@@ -85,7 +92,11 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
             exchangeRateDAO.update(exchangeRate.getId(), rate);
 
                 ExchangeRateDTO exchangeRateDTO
-                        = new ExchangeRateDTO(exchangeRate.getId(), baseCurrency, targetCurrency, exchangeRate.getRate());
+                        = new ExchangeRateDTO(exchangeRate.getId()
+                        , DtoEntityConvertor.convertCurrencyEntityToDto(baseCurrency)
+                        , DtoEntityConvertor.convertCurrencyEntityToDto(targetCurrency)
+                        , exchangeRate.getRate());
+
                 return exchangeRateDTO;
         }
         catch (Exception e) {
@@ -93,13 +104,5 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
         }
     }
 
-    private static ExchangeRateEntity convertExchangeRateDtoToEntity(ExchangeRateDTO exchangeRateDTO) {
-        ExchangeRateEntity exchangeRateEntity
-                = new ExchangeRateEntity(exchangeRateDTO.getId()
-                , exchangeRateDTO.getBaseCurrency().getId()
-                , exchangeRateDTO.getTargetCurrency().getId()
-                , exchangeRateDTO.getRate());
 
-        return exchangeRateEntity;
-    }
 }
