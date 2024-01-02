@@ -21,25 +21,11 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String servletPath = req.getPathInfo();
-        String[] pathParts;
-        String currenciesCode;
-
-        if (servletPath == null) {
-            return;
-        }
-
-        pathParts = servletPath.split("/");
-
-        if (pathParts.length != 2 & pathParts[1].length() != 6) {
-            return;
-        }
-
-        String baseCurrencyCode = pathParts[1].substring(0, 3);
-        String targetCurrencyCode = pathParts[1].substring(3);
+        var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
         var exchangeRate
-                = exchangeRateService.findByBaseAndTargetCurrenciesCode(baseCurrencyCode, targetCurrencyCode);
+                = exchangeRateService.findByBaseAndTargetCurrenciesCode(currenciesCodes[0]
+                , currenciesCodes[1]);
 
         resp.setContentType("application/json");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -62,6 +48,42 @@ public class ExchangeRateServlet extends HttpServlet {
     }
 
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("At patch method");
+        float rate = Float.parseFloat(req.getParameter("rate"));
+        String servletPath = req.getPathInfo();
+        var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
+
+        var exchangeRate
+                = exchangeRateService.update(currenciesCodes[0]
+                , currenciesCodes[1]
+                , rate);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        System.out.println("JSON response: " + exchangeRate);
+
+        try (var writer = resp.getWriter()) {
+            writer.write(exchangeRate.toString());
+        }
+    }
+
+    private static String[] extractCurrenciesCodes(String pathInfo) {
+        String[] pathParts;
+
+        if (pathInfo == null) {
+            return null;
+        }
+
+        pathParts = pathInfo.split("/");
+
+        if (pathParts.length != 2 & pathParts[1].length() != 6) {
+            return null;
+        }
+
+        String baseCurrencyCode = pathParts[1].substring(0, 3);
+        String targetCurrencyCode = pathParts[1].substring(3);
+
+        String[] baseAndTargetCurrenciesCodes = new String[]{ baseCurrencyCode, targetCurrencyCode};
+
+        return baseAndTargetCurrenciesCodes;
     }
 }
