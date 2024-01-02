@@ -21,7 +21,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public CurrencyEntity save(CurrencyEntity currency) {
+    public CurrencyEntity save(CurrencyEntity currency) throws DataBaseException, SqlBadRequestException {
         String sql = "INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();

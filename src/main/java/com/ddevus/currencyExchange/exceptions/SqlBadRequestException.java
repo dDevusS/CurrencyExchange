@@ -46,8 +46,6 @@ public class SqlBadRequestException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "{" +
-                "\"errorMessage\":\"" + errorMessage +
-                "\"}";
+        return "{\"errorMessage\":\"" + errorMessage + "\"}";
     }
 }

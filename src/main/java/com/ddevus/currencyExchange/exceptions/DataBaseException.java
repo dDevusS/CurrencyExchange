@@ -30,8 +30,6 @@ public class DataBaseException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "{" +
-                "\"errorMessage\":\"" + errorMessage +
-                "\"}";
+        return "{\"errorMessage\":\"" + errorMessage + "\"}";
     }
 }
