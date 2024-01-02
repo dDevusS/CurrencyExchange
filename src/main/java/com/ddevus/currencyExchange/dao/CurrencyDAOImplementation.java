@@ -1,6 +1,8 @@
 package com.ddevus.currencyExchange.dao;
 
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
+import com.ddevus.currencyExchange.exceptions.DataBaseException;
+import com.ddevus.currencyExchange.exceptions.SqlBadRequestException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
 import java.sql.*;
@@ -31,8 +33,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             preparedStatement.setString(3, currency.getSing());
 
             if (preparedStatement.executeUpdate() == 0) {
-                // TODO: change this exception
-                throw new SQLException("Inserting currency failed, no rows affected.");
+                throw new SqlBadRequestException("Inserting currency failed, no rows affected.", SqlBadRequestException.ErrorReason.FAILED_INSERT);
             }
 
             try (var statement = connection.createStatement()) {
@@ -40,8 +41,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
                     if (resultSet.next()) {
                         currency.setId(resultSet.getInt(1));
                     } else {
-                        // TODO: измените этот exception
-                        throw new SQLException("Inserting currency failed, no ID obtained.");
+                        throw new SqlBadRequestException("Inserting currency failed, no ID obtained.", SqlBadRequestException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
                     }
                 }
             }
@@ -49,7 +49,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             return currency;
         }
         catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataBaseException("Error connecting to the database.", e);
         }
     }
 
