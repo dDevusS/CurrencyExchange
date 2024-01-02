@@ -43,4 +43,11 @@ public class SqlBadRequestException extends RuntimeException {
     public enum ErrorReason {
         FAILED_INSERT, FAILED_GET_LAST_OPERATION_ID
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"errorMessage\":\"" + errorMessage +
+                "\"}";
+    }
 }

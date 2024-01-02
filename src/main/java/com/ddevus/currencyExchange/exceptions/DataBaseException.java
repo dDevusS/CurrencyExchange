@@ -27,4 +27,11 @@ public class DataBaseException extends RuntimeException {
     public Exception getException() {
         return exception;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"errorMessage\":\"" + errorMessage +
+                "\"}";
+    }
 }
