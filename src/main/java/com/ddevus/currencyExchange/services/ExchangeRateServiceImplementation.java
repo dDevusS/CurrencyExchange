@@ -89,13 +89,13 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
                     .findByBaseAndTargetCurrenciesId(baseCurrency.getId(),
                             targetCurrency.getId());
 
-            exchangeRateDAO.update(exchangeRate.getId(), rate);
+           exchangeRateDAO.update(exchangeRate.getId(), rate);
 
                 ExchangeRateDTO exchangeRateDTO
                         = new ExchangeRateDTO(exchangeRate.getId()
                         , DtoEntityConvertor.convertCurrencyEntityToDto(baseCurrency)
                         , DtoEntityConvertor.convertCurrencyEntityToDto(targetCurrency)
-                        , exchangeRate.getRate());
+                        , rate);
 
                 return exchangeRateDTO;
         }
