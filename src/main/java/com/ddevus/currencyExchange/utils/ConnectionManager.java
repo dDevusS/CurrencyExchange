@@ -1,5 +1,7 @@
 package com.ddevus.currencyExchange.utils;
 
+import com.ddevus.currencyExchange.exceptions.DataBaseException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,9 +19,11 @@ public class ConnectionManager {
             Class.forName("org.sqlite.JDBC");
             return DriverManager.getConnection(PropertiesReader.read(URL_KEY));
         }
-        catch (SQLException | ClassNotFoundException e) {
-            System.err.println("Couldn't to connect to DB");
-            throw new RuntimeException(e);
+        catch (ClassNotFoundException e) {
+            throw new DataBaseException("Database driver was not found.", e);
+        }
+        catch (SQLException e) {
+            throw new DataBaseException("Error connecting to the database.", e);
         }
     }
 }
