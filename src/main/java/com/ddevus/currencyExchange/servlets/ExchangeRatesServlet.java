@@ -6,14 +6,13 @@ import com.ddevus.currencyExchange.services.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
 import com.ddevus.currencyExchange.services.ExchangeRateService;
 import com.ddevus.currencyExchange.services.ExchangeRateServiceImplementation;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet("/exchangeRates")
@@ -27,8 +26,6 @@ public class ExchangeRatesServlet extends HttpServlet {
         List<ExchangeRateDTO> exchangeRateDTOList = exchangeRateService.findAll();
         var json = convertListToJson(exchangeRateDTOList);
 
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
         System.out.println("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
@@ -47,9 +44,6 @@ public class ExchangeRatesServlet extends HttpServlet {
 
 
         var newExchangeRate = new ExchangeRateDTO(0, baseCurrency, targetCurrency, rate);
-
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         System.out.println("JSON Response: " + newExchangeRate);
 

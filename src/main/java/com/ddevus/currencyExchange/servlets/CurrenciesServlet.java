@@ -4,14 +4,13 @@ import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.exceptions.DataBaseException;
 import com.ddevus.currencyExchange.services.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet("/currencies")
@@ -21,8 +20,6 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         List<CurrencyDTO> currencies = null;
         try {
@@ -54,15 +51,11 @@ public class CurrenciesServlet extends HttpServlet {
         var newCurrency = new CurrencyDTO(0, name, code, sing);
         newCurrency = currencyService.save(newCurrency);
 
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
         System.out.println("JSON Response: " + newCurrency);
 
         try (var writer = resp.getWriter()) {
             writer.write(newCurrency.toString());
         }
-
     }
 
     private String convertListToJson(List<CurrencyDTO> currencies) {

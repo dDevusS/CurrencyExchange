@@ -2,14 +2,13 @@ package com.ddevus.currencyExchange.servlets;
 
 import com.ddevus.currencyExchange.services.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
@@ -35,8 +34,6 @@ public class CurrencyServlet extends HttpServlet {
         currencyCode = pathParts[1];
 
         var currency = currencyService.findByCode(currencyCode);
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
         System.out.println("JSON Response: " + currency);
 
         try (var writer = resp.getWriter()) {

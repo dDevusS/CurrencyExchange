@@ -4,14 +4,13 @@ import com.ddevus.currencyExchange.services.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
 import com.ddevus.currencyExchange.services.ExchangeRateService;
 import com.ddevus.currencyExchange.services.ExchangeRateServiceImplementation;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
@@ -27,8 +26,6 @@ public class ExchangeRateServlet extends HttpServlet {
                 = exchangeRateService.findByBaseAndTargetCurrenciesCode(currenciesCodes[0]
                 , currenciesCodes[1]);
 
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
         System.out.println("JSON Response: " + exchangeRate);
 
         try (var writer = resp.getWriter()) {
@@ -57,8 +54,6 @@ public class ExchangeRateServlet extends HttpServlet {
                 , currenciesCodes[1]
                 , rate);
 
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
         System.out.println("JSON response: " + exchangeRate);
 
         try (var writer = resp.getWriter()) {
