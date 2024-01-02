@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @WebFilter("/*")
-public class CharsetFilter implements Filter {
+public class CharsetAndContentTypeFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
