@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/exchange/*")
+@WebServlet("/exchange")
 public class ExchangeServlet extends HttpServlet {
 
     private final CurrencyService currencyService = CurrencyServiceImplementation.getINSTANCE();
