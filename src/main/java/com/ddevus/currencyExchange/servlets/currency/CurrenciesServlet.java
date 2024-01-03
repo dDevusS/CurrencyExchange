@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.dto.CurrencyDTO;
-import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
@@ -23,12 +22,7 @@ public class CurrenciesServlet extends CoreCurrencyExchangeServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException, WrapperException {
         List<CurrencyDTO> currencies = null;
-        try {
              currencies = currencyService.findAll();
-        }
-        catch (DatabaseException e) {
-            handleException(resp, e);
-        }
 
         var json = convertListToJson(currencies);
         System.out.println("JSON Response: " + json);
@@ -44,12 +38,9 @@ public class CurrenciesServlet extends CoreCurrencyExchangeServlet {
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sing = req.getParameter("sing");
-
         var newCurrency = new CurrencyDTO(0, name, code, sing);
 
             newCurrency = currencyService.save(newCurrency);
-
-
         System.out.println("JSON Response: " + newCurrency);
 
         try (var writer = resp.getWriter()) {

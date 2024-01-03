@@ -8,7 +8,6 @@ import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class CurrencyServiceImplementation implements CurrencyService {
     }
 
     @Override
-    public CurrencyDTO save(CurrencyDTO currencyDTO) throws WrapperException, SQLException {
+    public CurrencyDTO save(CurrencyDTO currencyDTO) throws WrapperException {
         CurrencyEntity currencyEntity = DtoEntityConvertor.convertCurrencyDtoToEntity(currencyDTO);
             currencyEntity = currencyDAO.save(currencyEntity);
             currencyDTO.setId(currencyEntity.getId());
@@ -33,7 +32,7 @@ public class CurrencyServiceImplementation implements CurrencyService {
     }
 
     @Override
-    public CurrencyDTO findById(int id) throws WrapperException, SQLException {
+    public CurrencyDTO findById(int id) throws WrapperException {
         var possibleCurrency = currencyDAO.findById(id);
         CurrencyEntity possibleCurrencyEntity = possibleCurrency.get();
         CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(possibleCurrencyEntity);
@@ -42,7 +41,7 @@ public class CurrencyServiceImplementation implements CurrencyService {
     }
 
     @Override
-    public CurrencyDTO findByCode(String code) throws WrapperException, SQLException {
+    public CurrencyDTO findByCode(String code) throws WrapperException {
         var possibleCurrency = currencyDAO.findByCode(code);
         CurrencyEntity possibleCurrencyEntity = possibleCurrency.get();
         CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(possibleCurrencyEntity);
@@ -51,7 +50,7 @@ public class CurrencyServiceImplementation implements CurrencyService {
     }
 
     @Override
-    public List<CurrencyDTO> findAll() throws WrapperException, SQLException {
+    public List<CurrencyDTO> findAll() throws WrapperException {
         var currencyEntities = currencyDAO.findAll();
         var currencyDTOlist = new ArrayList<CurrencyDTO>();
 
@@ -64,7 +63,7 @@ public class CurrencyServiceImplementation implements CurrencyService {
     }
 
     @Override
-    public boolean delete(int id) throws WrapperException, SQLException {
+    public boolean delete(int id) throws WrapperException {
             var isDeleted = currencyDAO.delete(id);
 
             return isDeleted;
