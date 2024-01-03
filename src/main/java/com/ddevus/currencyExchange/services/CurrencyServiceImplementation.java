@@ -1,14 +1,14 @@
 package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.CurrencyDAOImplementation;
+import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
 import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
-import com.ddevus.currencyExchange.exceptions.DatabaseException;
-import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class CurrencyServiceImplementation implements CurrencyService {
     }
 
     @Override
-    public CurrencyDTO save(CurrencyDTO currencyDTO) throws DatabaseException, SQLBadRequestException {
+    public CurrencyDTO save(CurrencyDTO currencyDTO) throws WrapperException, SQLException {
         CurrencyEntity currencyEntity = DtoEntityConvertor.convertCurrencyDtoToEntity(currencyDTO);
             currencyEntity = currencyDAO.save(currencyEntity);
             currencyDTO.setId(currencyEntity.getId());
@@ -33,60 +33,40 @@ public class CurrencyServiceImplementation implements CurrencyService {
     }
 
     @Override
-    public CurrencyDTO findById(int id) {
-        try {
-            var possibleCurrency = currencyDAO.findById(id);
-            CurrencyEntity possibleCurrencyEntity = possibleCurrency.get();
-            CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(possibleCurrencyEntity);
+    public CurrencyDTO findById(int id) throws WrapperException, SQLException {
+        var possibleCurrency = currencyDAO.findById(id);
+        CurrencyEntity possibleCurrencyEntity = possibleCurrency.get();
+        CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(possibleCurrencyEntity);
 
-            return currencyDTO;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return currencyDTO;
     }
 
     @Override
-    public CurrencyDTO findByCode(String code) {
-        try {
-            var possibleCurrency = currencyDAO.findByCode(code);
-            CurrencyEntity possibleCurrencyEntity = possibleCurrency.get();
-            CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(possibleCurrencyEntity);
+    public CurrencyDTO findByCode(String code) throws WrapperException, SQLException {
+        var possibleCurrency = currencyDAO.findByCode(code);
+        CurrencyEntity possibleCurrencyEntity = possibleCurrency.get();
+        CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(possibleCurrencyEntity);
 
-            return currencyDTO;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return currencyDTO;
     }
 
     @Override
-    public List<CurrencyDTO> findAll() throws DatabaseException {
-        try {
-            var currencyEntities = currencyDAO.findAll();
-            var currencyDTOlist = new ArrayList<CurrencyDTO>();
+    public List<CurrencyDTO> findAll() throws WrapperException, SQLException {
+        var currencyEntities = currencyDAO.findAll();
+        var currencyDTOlist = new ArrayList<CurrencyDTO>();
 
-            for (CurrencyEntity currencyEntity : currencyEntities) {
-                CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(currencyEntity);
-                currencyDTOlist.add(currencyDTO);
-            }
+        for (CurrencyEntity currencyEntity : currencyEntities) {
+            CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(currencyEntity);
+            currencyDTOlist.add(currencyDTO);
+        }
 
-            return currencyDTOlist;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return currencyDTOlist;
     }
 
     @Override
-    public boolean delete(int id) {
-        try {
+    public boolean delete(int id) throws WrapperException, SQLException {
             var isDeleted = currencyDAO.delete(id);
 
             return isDeleted;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
