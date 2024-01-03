@@ -2,9 +2,9 @@ package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
-import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
-import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
+import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.servlets.CoreCurrencyExchangeServlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,8 +20,8 @@ public class CurrenciesServlet extends CoreCurrencyExchangeServlet {
     private final CurrencyService currencyService = CurrencyServiceImplementation.getINSTANCE();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException, WrapperException {
         List<CurrencyDTO> currencies = null;
         try {
              currencies = currencyService.findAll();
@@ -40,18 +40,15 @@ public class CurrenciesServlet extends CoreCurrencyExchangeServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException, DatabaseException, SQLBadRequestException {
+            throws ServletException, IOException, WrapperException {
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sing = req.getParameter("sing");
 
         var newCurrency = new CurrencyDTO(0, name, code, sing);
-        try {
+
             newCurrency = currencyService.save(newCurrency);
-        }
-        catch (DatabaseException | SQLBadRequestException e) {
-            handleException(resp, e);
-        }
+
 
         System.out.println("JSON Response: " + newCurrency);
 
