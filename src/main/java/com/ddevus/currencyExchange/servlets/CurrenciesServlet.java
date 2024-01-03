@@ -1,12 +1,12 @@
 package com.ddevus.currencyExchange.servlets;
 
 import com.ddevus.currencyExchange.dto.CurrencyDTO;
-import com.ddevus.currencyExchange.exceptions.DataBaseException;
+import com.ddevus.currencyExchange.exceptions.DatabaseException;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.services.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/currencies")
-public class CurrenciesServlet extends HttpServlet {
+public class CurrenciesServlet extends CoreCurrencyExchangeServlet {
 
     private final CurrencyService currencyService = CurrencyServiceImplementation.getINSTANCE();
 
@@ -25,13 +25,12 @@ public class CurrenciesServlet extends HttpServlet {
         try {
              currencies = currencyService.findAll();
         }
-        catch (DataBaseException e) {
+        catch (DatabaseException e) {
             resp.setStatus(e.getSTATUS_CODE_HTTP_RESPONSE());
 
             try (var writer = resp.getWriter()) {
                 writer.write(e.toString());
             }
-            return;
         }
             var json = convertListToJson(currencies);
             System.out.println("JSON Response: " + json);
@@ -43,19 +42,37 @@ public class CurrenciesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException, DatabaseException, SQLBadRequestException {
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sing = req.getParameter("sing");
 
         var newCurrency = new CurrencyDTO(0, name, code, sing);
-        newCurrency = currencyService.save(newCurrency);
+        try {
+            newCurrency = currencyService.save(newCurrency);
+        }
+        catch (DatabaseException e) {
+            resp.setStatus(e.getSTATUS_CODE_HTTP_RESPONSE());
+
+            try (var writer = resp.getWriter()) {
+                writer.write(e.toString());
+            }
+        }
+        catch (SQLBadRequestException e) {
+            resp.setStatus(e.getSTATUS_CODE_HTTP_RESPONSE());
+
+            try (var writer = resp.getWriter()) {
+                writer.write(e.toString());
+            }
+        }
 
         System.out.println("JSON Response: " + newCurrency);
 
         try (var writer = resp.getWriter()) {
             writer.write(newCurrency.toString());
         }
+
     }
 
     private String convertListToJson(List<CurrencyDTO> currencies) {

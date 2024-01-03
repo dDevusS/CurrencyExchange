@@ -4,7 +4,8 @@ import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.CurrencyDAOImplementation;
 import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
-import com.ddevus.currencyExchange.exceptions.DataBaseException;
+import com.ddevus.currencyExchange.exceptions.DatabaseException;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 
 import java.util.ArrayList;
@@ -22,18 +23,12 @@ public class CurrencyServiceImplementation implements CurrencyService{
     }
 
     @Override
-    public CurrencyDTO save(CurrencyDTO currencyDTO) {
+    public CurrencyDTO save(CurrencyDTO currencyDTO) throws DatabaseException, SQLBadRequestException {
         CurrencyEntity currencyEntity = DtoEntityConvertor.convertCurrencyDtoToEntity(currencyDTO);
-
-        try {
             currencyEntity = currencyDAO.save(currencyEntity);
             currencyDTO.setId(currencyEntity.getId());
 
             return currencyDTO;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -65,7 +60,7 @@ public class CurrencyServiceImplementation implements CurrencyService{
     }
 
     @Override
-    public List<CurrencyDTO> findAll() throws DataBaseException {
+    public List<CurrencyDTO> findAll() throws DatabaseException {
         try {
             var currencyEntities = currencyDAO.findAll();
             var currencyDTOlist = new ArrayList<CurrencyDTO>();

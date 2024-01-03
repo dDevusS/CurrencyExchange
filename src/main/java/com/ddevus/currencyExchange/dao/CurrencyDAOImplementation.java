@@ -1,8 +1,9 @@
 package com.ddevus.currencyExchange.dao;
 
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
-import com.ddevus.currencyExchange.exceptions.DataBaseException;
-import com.ddevus.currencyExchange.exceptions.SqlBadRequestException;
+import com.ddevus.currencyExchange.exceptions.DatabaseException;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
 import java.sql.*;
@@ -21,7 +22,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public CurrencyEntity save(CurrencyEntity currency) throws DataBaseException, SqlBadRequestException {
+    public CurrencyEntity save(CurrencyEntity currency) throws DatabaseException, SQLBadRequestException {
         String sql = "INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
@@ -32,8 +33,11 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             preparedStatement.setString(2, currency.getName());
             preparedStatement.setString(3, currency.getSing());
 
-            if (preparedStatement.executeUpdate() == 0) {
-                throw new SqlBadRequestException("Inserting currency failed, no rows affected.", SqlBadRequestException.ErrorReason.FAILED_INSERT);
+            try {
+                preparedStatement.executeUpdate();
+            }
+            catch (SQLException e) {
+                throw new SQLBadRequestException("Inserting currency failed, no rows affected.", SQLBadRequestException.ErrorReason.FAILED_INSERT);
             }
 
             try (var statement = connection.createStatement()) {
@@ -41,7 +45,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
                     if (resultSet.next()) {
                         currency.setId(resultSet.getInt(1));
                     } else {
-                        throw new SqlBadRequestException("Inserting currency failed, no ID obtained.", SqlBadRequestException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
+                        throw new SQLBadRequestException("Inserting currency failed, no ID obtained.", SQLBadRequestException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
                     }
                 }
             }
@@ -49,7 +53,8 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             return currency;
         }
         catch (SQLException e) {
-            throw new DataBaseException("Error connecting to the database.", e);
+            throw new DatabaseException("Error connecting to the database."
+                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB, e);
         }
     }
 
@@ -96,7 +101,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public List<CurrencyEntity> findAll() throws DataBaseException {
+    public List<CurrencyEntity> findAll() throws DatabaseException {
         String sql = "SELECT * FROM currencies";
 
         try (var connection = ConnectionManager.open();
