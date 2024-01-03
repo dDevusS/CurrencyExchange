@@ -1,5 +1,6 @@
 package com.ddevus.currencyExchange.utils;
 
+import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,5 +24,23 @@ public class ExceptionHandlerForFilterUtil {
         String[] pathParts = pathInfo.split("/");
 
         return (pathParts.length == 2 && pathParts[1].length() == 6);
+    }
+
+    public static void checkRateFormat(String rate, HttpServletResponse res) {
+        try {
+            Float.parseFloat(rate);
+        }
+        catch (NumberFormatException exception) {
+            var e = new IncorrectParametersException("Required parameters are incorrect."
+                    , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
+
+            ExceptionHandlerForFilterUtil.handleException(res, e);
+        }
+        catch (NullPointerException exception) {
+            var e = new IncorrectParametersException("Required parameter is missed."
+                    , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
+
+            ExceptionHandlerForFilterUtil.handleException(res, e);
+        }
     }
 }

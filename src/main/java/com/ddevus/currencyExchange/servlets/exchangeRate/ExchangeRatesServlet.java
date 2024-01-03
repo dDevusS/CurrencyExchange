@@ -46,6 +46,12 @@ public class ExchangeRatesServlet extends HttpServlet {
         CurrencyDTO targetCurrency = currencyService.findByCode(targetCurrencyCode);
 
         var newExchangeRate = new ExchangeRateDTO(0, baseCurrency, targetCurrency, rate);
+
+        //TODO: write logic!!!
+
+
+
+
         System.out.println("JSON Response: " + newExchangeRate);
 
         try (var writer = resp.getWriter()) {

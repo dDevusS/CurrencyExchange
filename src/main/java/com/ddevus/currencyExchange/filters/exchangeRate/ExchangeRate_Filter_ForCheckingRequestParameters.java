@@ -45,16 +45,8 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
 
                 ExceptionHandlerForFilterUtil.handleException(res, exception);
             }
-            else if (req.getParameter("rate") == null) {
-                var exception
-                        = new IncorrectParametersException("Required parameter is missed."
-                        , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
 
-                ExceptionHandlerForFilterUtil.handleException(res, exception);
-            }
-            else {
-                chain.doFilter(request, response);
-            }
+            ExceptionHandlerForFilterUtil.checkRateFormat(req.getParameter("rate"), res);
         }
 
         chain.doFilter(request, response);

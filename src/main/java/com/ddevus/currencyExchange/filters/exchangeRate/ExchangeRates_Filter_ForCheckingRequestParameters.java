@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebFilter ("/exchangeRatesYYY")
+@WebFilter ("/exchangeRates")
 public class ExchangeRates_Filter_ForCheckingRequestParameters implements Filter {
 
     @Override
@@ -28,21 +28,7 @@ public class ExchangeRates_Filter_ForCheckingRequestParameters implements Filter
             String baseCurrencyCode = req.getParameter("baseCurrencyCode");
             String targetCurrencyCode = req.getParameter("targetCurrencyCode");
 
-            try {
-                float rate = Float.parseFloat(req.getParameter("rate"));
-            }
-            catch (NullPointerException exception) {
-                var e = new IncorrectParametersException("Required parameter is missed."
-                        , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
-
-                ExceptionHandlerForFilterUtil.handleException(res, e);
-            }
-            catch (NumberFormatException exception) {
-                var e = new IncorrectParametersException("Required parameters are incorrect."
-                        , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
-
-                ExceptionHandlerForFilterUtil.handleException(res, e);
-            }
+            ExceptionHandlerForFilterUtil.checkRateFormat(req.getParameter("rate"), res);
 
             if (baseCurrencyCode == null || targetCurrencyCode == null) {
                 var e = new IncorrectParametersException("Required parameter is missed."
