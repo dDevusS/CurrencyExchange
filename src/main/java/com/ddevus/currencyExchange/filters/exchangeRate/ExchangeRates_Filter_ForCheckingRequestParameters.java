@@ -36,6 +36,12 @@ public class ExchangeRates_Filter_ForCheckingRequestParameters implements Filter
 
                 ExceptionHandlerForFilterUtil.handleException(res, e);
             }
+            else if (baseCurrencyCode.length() != 3 || targetCurrencyCode.length() != 3) {
+                var exception = new IncorrectParametersException("Required parameters are incorrect."
+                        , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
+
+                ExceptionHandlerForFilterUtil.handleException(res, exception);
+            }
         }
 
         chain.doFilter(request, response);

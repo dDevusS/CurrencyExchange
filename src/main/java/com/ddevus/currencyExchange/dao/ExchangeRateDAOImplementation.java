@@ -33,21 +33,27 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
             preparedStatement.setInt(2, exchangeRate.getTargetCurrencyId());
             preparedStatement.setFloat(3, exchangeRate.getRate());
 
-            if (preparedStatement.executeUpdate() == 0) {
+            try {
+                preparedStatement.executeUpdate();
+            }
+            catch (DatabaseException e) {
+                throw new DatabaseException("Couldn't to connect to the database."
+                        , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            }
+            catch (SQLException e) {
                 throw new SQLBadRequestException("Inserting currency pair failed" +
                         " due to currency with this code or sing exist in the database."
                         , WrapperException.ErrorReason.FAILED_INSERT);
             }
 
-            try (var statement = connection.createStatement()) {
-                try (var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
+            try (var statement = connection.createStatement();
+                 var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
                     if (resultSet.next()) {
                         exchangeRate.setId(resultSet.getInt(1));
                     } else {
                         throw new SQLBadRequestException("Inserting currency failed, no ID obtained."
                                 , WrapperException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
                     }
-                }
             }
 
             return exchangeRate;
