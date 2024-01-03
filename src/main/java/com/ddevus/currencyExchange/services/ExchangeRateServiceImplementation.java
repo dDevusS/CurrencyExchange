@@ -1,11 +1,12 @@
 package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dao.CurrencyDAO;
+import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.CurrencyDAOImplementation;
-import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
+import com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dao.ExchangeRateDAOImplementation;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
 import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
+import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 
 import java.util.ArrayList;

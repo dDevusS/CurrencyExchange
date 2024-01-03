@@ -1,4 +1,4 @@
-package com.ddevus.currencyExchange.services;
+package com.ddevus.currencyExchange.services.interfaces;
 
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
 

@@ -1,17 +1,18 @@
 package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dao.CurrencyDAO;
+import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.CurrencyDAOImplementation;
 import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
+import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrencyServiceImplementation implements CurrencyService{
+public class CurrencyServiceImplementation implements CurrencyService {
 
     private static final CurrencyDAO currencyDAO = CurrencyDAOImplementation.getINSTANCE();
     private static final CurrencyService INSTANCE = new CurrencyServiceImplementation();

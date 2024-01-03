@@ -1,10 +1,11 @@
-package com.ddevus.currencyExchange.servlets;
+package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
-import com.ddevus.currencyExchange.services.CurrencyService;
+import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
+import com.ddevus.currencyExchange.servlets.CoreCurrencyExchangeServlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.ddevus.currencyExchange.dao;
+package com.ddevus.currencyExchange.dao.interfaces;
 
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
 

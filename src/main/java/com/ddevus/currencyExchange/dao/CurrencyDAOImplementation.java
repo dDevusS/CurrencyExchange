@@ -1,5 +1,6 @@
 package com.ddevus.currencyExchange.dao;
 
+import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;

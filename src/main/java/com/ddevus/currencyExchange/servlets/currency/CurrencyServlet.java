@@ -1,6 +1,6 @@
-package com.ddevus.currencyExchange.servlets;
+package com.ddevus.currencyExchange.servlets.currency;
 
-import com.ddevus.currencyExchange.services.CurrencyService;
+import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

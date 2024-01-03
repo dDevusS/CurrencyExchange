@@ -1,5 +1,6 @@
 package com.ddevus.currencyExchange.dao;
 
+import com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO;
 import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 

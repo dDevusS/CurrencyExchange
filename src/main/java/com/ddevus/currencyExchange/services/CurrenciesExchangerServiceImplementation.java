@@ -2,6 +2,9 @@ package com.ddevus.currencyExchange.services;
 
 import com.ddevus.currencyExchange.dto.CurrencyExchangerDTO;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
+import com.ddevus.currencyExchange.services.interfaces.CurrenciesExchangerService;
+import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
+import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 
 public class CurrenciesExchangerServiceImplementation implements CurrenciesExchangerService {
 

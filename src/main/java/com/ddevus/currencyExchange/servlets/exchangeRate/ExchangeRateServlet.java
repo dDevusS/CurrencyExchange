@@ -1,8 +1,8 @@
-package com.ddevus.currencyExchange.servlets;
+package com.ddevus.currencyExchange.servlets.exchangeRate;
 
-import com.ddevus.currencyExchange.services.CurrencyService;
+import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
-import com.ddevus.currencyExchange.services.ExchangeRateService;
+import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 import com.ddevus.currencyExchange.services.ExchangeRateServiceImplementation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
