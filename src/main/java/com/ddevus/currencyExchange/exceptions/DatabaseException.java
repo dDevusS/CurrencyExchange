@@ -7,11 +7,4 @@ public class DatabaseException extends WrapperException {
         super.errorMessage = message;
         super.errorReason = errorReason;
     }
-
-    public DatabaseException(String message, ErrorReason errorReason, Exception exception) {
-        System.err.println(message);
-        super.errorMessage = message;
-        super.exception = exception;
-        super.errorReason = errorReason;
-    }
 }
