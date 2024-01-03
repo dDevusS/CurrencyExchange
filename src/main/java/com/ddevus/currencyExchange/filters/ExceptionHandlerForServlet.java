@@ -1,6 +1,7 @@
 package com.ddevus.currencyExchange.filters;
 
 import com.ddevus.currencyExchange.exceptions.WrapperException;
+import com.ddevus.currencyExchange.utils.UtilExceptionHandlerForFilter;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 
@@ -20,7 +21,7 @@ public class ExceptionHandlerForServlet implements Filter {
             chain.doFilter(request, response);
         }
         catch (WrapperException e) {
-            ExceptionHandlerForFilter.handleException(response, e);
+            UtilExceptionHandlerForFilter.handleException(response, e);
         }
     }
 

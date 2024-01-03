@@ -1,4 +1,4 @@
-package com.ddevus.currencyExchange.filters;
+package com.ddevus.currencyExchange.utils;
 
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import jakarta.servlet.ServletResponse;
@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class ExceptionHandlerForFilter {
+public class UtilExceptionHandlerForFilter {
 
     public static void handleException(ServletResponse response, WrapperException exception) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
