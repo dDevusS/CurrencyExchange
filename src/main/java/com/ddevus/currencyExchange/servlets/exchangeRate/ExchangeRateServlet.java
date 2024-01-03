@@ -1,5 +1,6 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
@@ -19,7 +20,8 @@ public class ExchangeRateServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyServiceImplementation.getINSTANCE();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException, WrapperException {
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
         var exchangeRate
@@ -62,23 +64,10 @@ public class ExchangeRateServlet extends HttpServlet {
     }
 
     private static String[] extractCurrenciesCodes(String pathInfo) {
-        String[] pathParts;
-
-        if (pathInfo == null) {
-            return null;
-        }
-
-        pathParts = pathInfo.split("/");
-
-        if (pathParts.length != 2 & pathParts[1].length() != 6) {
-            return null;
-        }
-
+        String[] pathParts = pathInfo.split("/");
         String baseCurrencyCode = pathParts[1].substring(0, 3);
         String targetCurrencyCode = pathParts[1].substring(3);
 
-        String[] baseAndTargetCurrenciesCodes = new String[]{ baseCurrencyCode, targetCurrencyCode};
-
-        return baseAndTargetCurrenciesCodes;
+        return new String[]{ baseCurrencyCode, targetCurrencyCode};
     }
 }

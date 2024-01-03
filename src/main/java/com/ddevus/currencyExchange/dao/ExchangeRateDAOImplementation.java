@@ -2,6 +2,7 @@ package com.ddevus.currencyExchange.dao;
 
 import com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO;
 import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
+import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
@@ -22,7 +23,7 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
     }
 
     @Override
-    public ExchangeRateEntity save(ExchangeRateEntity exchangeRate) throws WrapperException, SQLException {
+    public ExchangeRateEntity save(ExchangeRateEntity exchangeRate) throws WrapperException {
         String sql = "INSERT INTO exchangeRates (BaseCurrencyID, TargetCurrencyID, Rate) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
@@ -51,11 +52,15 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
 
             return exchangeRate;
         }
+        catch (SQLException e) {
+            throw new DatabaseException("Couldn't to connect to the database."
+                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+        }
     }
 
     @Override
     public ExchangeRateEntity findByBaseAndTargetCurrenciesId(int baseCurrencyId, int targetCurrencyId)
-            throws WrapperException, SQLException{
+            throws WrapperException {
         String sql = "SELECT * FROM exchangeRates WHERE BaseCurrencyID=? AND TargetCurrencyID=?";
 
         try (var connection = ConnectionManager.open();
@@ -74,10 +79,14 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
                         , WrapperException.ErrorReason.FAILED_FIND_OBJECT_IN_DB );
             }
         }
+        catch (SQLException e) {
+            throw new DatabaseException("Couldn't to connect to the database."
+                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+        }
     }
 
     @Override
-    public List<ExchangeRateEntity> findAll() throws WrapperException, SQLException {
+    public List<ExchangeRateEntity> findAll() throws WrapperException {
         String sql = "SELECT * FROM exchangeRates";
 
         try (var connection = ConnectionManager.open();
@@ -90,10 +99,14 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
             }
             return exchangeRates;
         }
+        catch (SQLException e) {
+            throw new DatabaseException("Couldn't to connect to the database."
+                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+        }
     }
 
     @Override
-    public boolean update(int id, float rate) throws WrapperException, SQLException {
+    public boolean update(int id, float rate) throws WrapperException {
         String sql = "UPDATE exchangeRates SET Rate=? WHERE ID=?";
 
         try (var connection = ConnectionManager.open();
@@ -103,6 +116,10 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
             var result = preparedStatement.executeUpdate() > 0;
 
             return result;
+        }
+        catch (SQLException e) {
+            throw new DatabaseException("Couldn't to connect to the database."
+                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
         }
     }
 

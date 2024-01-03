@@ -1,9 +1,9 @@
 package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.CurrencyDAOImplementation;
-import com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dao.ExchangeRateDAOImplementation;
+import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
+import com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
 import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
@@ -11,7 +11,6 @@ import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
     }
 
     @Override
-    public ExchangeRateDTO save(ExchangeRateDTO exchangeRateDTO) throws WrapperException, SQLException {
+    public ExchangeRateDTO save(ExchangeRateDTO exchangeRateDTO) throws WrapperException {
         var exchangeRateEntity = DtoEntityConvertor.convertExchangeRateDtoToEntity(exchangeRateDTO);
         var savedExchangeRateEntity = exchangeRateDAO.save(exchangeRateEntity);
         exchangeRateDTO.setId(savedExchangeRateEntity.getId());
@@ -38,7 +37,7 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
 
     @Override
     public ExchangeRateDTO findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode)
-            throws WrapperException, SQLException {
+            throws WrapperException {
         CurrencyEntity baseCurrency;
         CurrencyEntity targetCurrency;
 
@@ -64,7 +63,7 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
     }
 
     @Override
-    public List<ExchangeRateDTO> findAll() throws WrapperException, SQLException  {
+    public List<ExchangeRateDTO> findAll() throws WrapperException  {
         List<ExchangeRateEntity> exchangeRateEntityList = exchangeRateDAO.findAll();
 
         List<ExchangeRateDTO> exchangeRateDTOList = new ArrayList<>();
@@ -86,7 +85,7 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
 
     @Override
     public ExchangeRateDTO update(String baseCurrencyCode, String targetCurrencyCode, float rate)
-            throws WrapperException, SQLException {
+            throws WrapperException {
         CurrencyEntity baseCurrency;
         CurrencyEntity targetCurrency;
         ExchangeRateEntity exchangeRate;

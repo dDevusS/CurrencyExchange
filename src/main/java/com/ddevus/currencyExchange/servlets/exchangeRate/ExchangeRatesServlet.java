@@ -2,6 +2,7 @@ package com.ddevus.currencyExchange.servlets.exchangeRate;
 
 import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
@@ -22,10 +23,11 @@ public class ExchangeRatesServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyServiceImplementation.getINSTANCE();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException, WrapperException {
         List<ExchangeRateDTO> exchangeRateDTOList = exchangeRateService.findAll();
-        var json = convertListToJson(exchangeRateDTOList);
 
+        var json = convertListToJson(exchangeRateDTOList);
         System.out.println("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
@@ -34,7 +36,8 @@ public class ExchangeRatesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException, WrapperException {
         String baseCurrencyCode = req.getParameter("baseCurrencyCode");
         String targetCurrencyCode = req.getParameter("targetCurrencyCode");
         float rate = Float.parseFloat(req.getParameter("rate"));
@@ -42,9 +45,7 @@ public class ExchangeRatesServlet extends HttpServlet {
         CurrencyDTO baseCurrency = currencyService.findByCode(baseCurrencyCode);
         CurrencyDTO targetCurrency = currencyService.findByCode(targetCurrencyCode);
 
-
         var newExchangeRate = new ExchangeRateDTO(0, baseCurrency, targetCurrency, rate);
-
         System.out.println("JSON Response: " + newExchangeRate);
 
         try (var writer = resp.getWriter()) {

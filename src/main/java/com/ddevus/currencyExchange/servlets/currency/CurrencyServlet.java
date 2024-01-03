@@ -1,5 +1,6 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
 import jakarta.servlet.ServletException;
@@ -16,24 +17,13 @@ public class CurrencyServlet extends HttpServlet {
     private final CurrencyService currencyService = CurrencyServiceImplementation.getINSTANCE();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException, WrapperException {
         String servletPath = req.getPathInfo();
         String[] pathParts;
-        String currencyCode;
-
-        if (servletPath == null) {
-            return;
-        }
-
         pathParts = servletPath.split("/");
 
-        if (pathParts.length != 2 || pathParts[1].length() != 3) {
-            return;
-        }
-
-        currencyCode = pathParts[1];
-
-        var currency = currencyService.findByCode(currencyCode);
+        var currency = currencyService.findByCode(pathParts[1]);
         System.out.println("JSON Response: " + currency);
 
         try (var writer = resp.getWriter()) {
