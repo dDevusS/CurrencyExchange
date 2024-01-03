@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class UtilExceptionHandlerForFilter {
+public class ExceptionHandlerForFilterUtil {
 
     public static void handleException(ServletResponse response, WrapperException exception) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
