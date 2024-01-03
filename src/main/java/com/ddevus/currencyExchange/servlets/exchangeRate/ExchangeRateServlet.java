@@ -36,17 +36,19 @@ public class ExchangeRateServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void service(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String method = req.getMethod();
 
-        if (!method.equals("PATCH")) {
+        if (!("PATCH").equals(method)) {
             super.service(req, resp);
         }
 
         this.doPatch(req, resp);
     }
 
-    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         float rate = Float.parseFloat(req.getParameter("rate"));
         String servletPath = req.getPathInfo();
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
