@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebFilter;
 
 import java.io.IOException;
 
-@WebFilter ("/exchangeRates")
+@WebFilter ("/exchangeRatesYYY")
 public class ExchangeRates_Filter_ForCheckingRequestParameters implements Filter {
 
     @Override

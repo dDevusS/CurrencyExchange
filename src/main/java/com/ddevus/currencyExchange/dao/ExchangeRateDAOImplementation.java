@@ -93,7 +93,7 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
              var preparedStatement = connection.prepareStatement(sql)) {
             var resultSet = preparedStatement.executeQuery();
 
-            List<ExchangeRateEntity> exchangeRates = new ArrayList<ExchangeRateEntity>();
+            List<ExchangeRateEntity> exchangeRates = new ArrayList<>();
             while (resultSet.next()) {
                 exchangeRates.add(createExchangeRate(resultSet));
             }
