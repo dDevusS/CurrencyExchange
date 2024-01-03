@@ -14,8 +14,6 @@ public class ConnectionManager {
     private ConnectionManager() {}
 
     public static Connection open() throws DatabaseException {
-        System.out.println("Trying to connect to DB");
-
         try {
             System.out.println("Trying to find JDBC driver.");
             Class.forName("org.sqlite.JDBC");

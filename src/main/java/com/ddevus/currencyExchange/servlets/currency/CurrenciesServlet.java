@@ -27,15 +27,11 @@ public class CurrenciesServlet extends CoreCurrencyExchangeServlet {
              currencies = currencyService.findAll();
         }
         catch (DatabaseException e) {
-            resp.setStatus(e.getSTATUS_CODE_HTTP_RESPONSE());
-
-            try (var writer = resp.getWriter()) {
-                writer.write(e.toString());
-            }
+            handleException(resp, e);
         }
-            var json = convertListToJson(currencies);
-            System.out.println("JSON Response: " + json);
 
+        var json = convertListToJson(currencies);
+        System.out.println("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
             writer.write(json);
@@ -53,19 +49,8 @@ public class CurrenciesServlet extends CoreCurrencyExchangeServlet {
         try {
             newCurrency = currencyService.save(newCurrency);
         }
-        catch (DatabaseException e) {
-            resp.setStatus(e.getSTATUS_CODE_HTTP_RESPONSE());
-
-            try (var writer = resp.getWriter()) {
-                writer.write(e.toString());
-            }
-        }
-        catch (SQLBadRequestException e) {
-            resp.setStatus(e.getSTATUS_CODE_HTTP_RESPONSE());
-
-            try (var writer = resp.getWriter()) {
-                writer.write(e.toString());
-            }
+        catch (DatabaseException | SQLBadRequestException e) {
+            handleException(resp, e);
         }
 
         System.out.println("JSON Response: " + newCurrency);
@@ -73,7 +58,6 @@ public class CurrenciesServlet extends CoreCurrencyExchangeServlet {
         try (var writer = resp.getWriter()) {
             writer.write(newCurrency.toString());
         }
-
     }
 
     private String convertListToJson(List<CurrencyDTO> currencies) {

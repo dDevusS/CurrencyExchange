@@ -7,7 +7,7 @@ public abstract class WrapperException extends RuntimeException {
 
     public enum ErrorReason {
         FAILED_INSERT, FAILED_GET_LAST_OPERATION_ID, FAILED_READ_PROPERTIES, FAILED_FIND_JDBC_DRIVER,
-        UNKNOWN_ERROR_CONNECTING_TO_DB
+        UNKNOWN_ERROR_CONNECTING_TO_DB, MISSING_PARAMETERS, INCORRECT_PARAMETERS
     }
 
     @Override
@@ -31,6 +31,7 @@ public abstract class WrapperException extends RuntimeException {
         int STATUS_CODE_HTTP_RESPONSE = 500;
         switch (errorReason) {
             case FAILED_INSERT -> {return 409;}
+            case MISSING_PARAMETERS, INCORRECT_PARAMETERS -> {return 400;}
             case FAILED_GET_LAST_OPERATION_ID, FAILED_READ_PROPERTIES,
                     FAILED_FIND_JDBC_DRIVER, UNKNOWN_ERROR_CONNECTING_TO_DB -> {return  500;}
         }
