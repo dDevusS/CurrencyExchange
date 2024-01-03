@@ -13,7 +13,7 @@ public class ConnectionManager {
 
     private ConnectionManager() {}
 
-    public static Connection open() throws DatabaseException {
+    public static Connection open() throws WrapperException {
         try {
             System.out.println("Trying to find JDBC driver.");
             Class.forName("org.sqlite.JDBC");
@@ -27,11 +27,11 @@ public class ConnectionManager {
         }
         catch (ClassNotFoundException e) {
             throw new DatabaseException("Database driver was not found."
-                    , WrapperException.ErrorReason.FAILED_FIND_JDBC_DRIVER, e);
+                    , WrapperException.ErrorReason.FAILED_FIND_JDBC_DRIVER);
         }
         catch (SQLException e) {
             throw new DatabaseException("Error connecting to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB, e);
+                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
         }
     }
 }

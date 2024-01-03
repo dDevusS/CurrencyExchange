@@ -27,8 +27,7 @@ public class PropertiesReader {
         }
         catch (IOException e) {
             throw new DatabaseException("File application.properties was not found in resources root directory."
-                    , WrapperException.ErrorReason.FAILED_READ_PROPERTIES
-                    , e);
+                    , WrapperException.ErrorReason.FAILED_READ_PROPERTIES);
         }
     }
 }

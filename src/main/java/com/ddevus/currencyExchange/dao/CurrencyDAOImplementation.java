@@ -2,12 +2,12 @@ package com.ddevus.currencyExchange.dao;
 
 import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
 import com.ddevus.currencyExchange.entity.CurrencyEntity;
-import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +23,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public CurrencyEntity save(CurrencyEntity currency) throws DatabaseException, SQLBadRequestException {
+    public CurrencyEntity save(CurrencyEntity currency) throws WrapperException, SQLException {
         String sql = "INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
@@ -38,7 +38,9 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
                 preparedStatement.executeUpdate();
             }
             catch (SQLException e) {
-                throw new SQLBadRequestException("Inserting currency failed, no rows affected.", SQLBadRequestException.ErrorReason.FAILED_INSERT);
+                throw new SQLBadRequestException("Inserting currency failed" +
+                        " due to currency with this code or sing exist in the database."
+                        , SQLBadRequestException.ErrorReason.FAILED_INSERT);
             }
 
             try (var statement = connection.createStatement()) {
@@ -46,21 +48,18 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
                     if (resultSet.next()) {
                         currency.setId(resultSet.getInt(1));
                     } else {
-                        throw new SQLBadRequestException("Inserting currency failed, no ID obtained.", SQLBadRequestException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
+                        throw new SQLBadRequestException("Inserting currency failed, no ID obtained."
+                                , SQLBadRequestException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
                     }
                 }
             }
 
             return currency;
         }
-        catch (SQLException e) {
-            throw new DatabaseException("Error connecting to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB, e);
-        }
     }
 
     @Override
-    public Optional<CurrencyEntity> findById(int id) {
+    public Optional<CurrencyEntity> findById(int id) throws WrapperException, SQLException {
         String sql = "SELECT * FROM currencies WHERE ID = ?";
 
         try (var connection = ConnectionManager.open();
@@ -71,17 +70,18 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             CurrencyEntity currency = null;
             if (resultSet.next()) {
                 currency = createCurrency(resultSet);
-            }
 
-            return Optional.ofNullable(currency);
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
+                return Optional.ofNullable(currency);
+            }
+            else {
+                throw new SQLBadRequestException("Where is no currency with this ID."
+                        , SQLBadRequestException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
+            }
         }
     }
 
     @Override
-    public Optional<CurrencyEntity> findByCode(String Code) {
+    public Optional<CurrencyEntity> findByCode(String Code) throws WrapperException, SQLException {
         String sql = "SELECT * FROM currencies WHERE Code = ?";
 
         try (var connection = ConnectionManager.open();
@@ -92,17 +92,18 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             CurrencyEntity currency = null;
             if (resultSet.next()) {
                 currency = createCurrency(resultSet);
-            }
 
-            return Optional.ofNullable(currency);
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
+                return Optional.ofNullable(currency);
+            }
+            else {
+                throw new SQLBadRequestException("Where is no currency with this Code."
+                        , SQLBadRequestException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
+            }
         }
     }
 
     @Override
-    public List<CurrencyEntity> findAll() throws DatabaseException {
+    public List<CurrencyEntity> findAll() throws WrapperException, SQLException {
         String sql = "SELECT * FROM currencies";
 
         try (var connection = ConnectionManager.open();
@@ -113,15 +114,13 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             while (resultSet.next()) {
                 currencies.add(createCurrency(resultSet));
             }
+
             return currencies;
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(int id) throws WrapperException, SQLException {
         String sql = "DELETE FROM currencies WHERE ID = ?";
 
         try (var connection = ConnectionManager.open();
@@ -130,9 +129,6 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             preparedStatement.setInt(1, id);
 
             return preparedStatement.executeUpdate() > 0;
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
