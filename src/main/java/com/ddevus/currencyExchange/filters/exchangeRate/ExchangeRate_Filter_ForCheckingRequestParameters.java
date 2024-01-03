@@ -26,7 +26,7 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
         var pathInfo = req.getPathInfo();
 
         if (("GET").equals(req.getMethod())) {
-            if (isCorrectParameter(pathInfo)) {
+            if (ExceptionHandlerForFilterUtil.isCorrectParameter(pathInfo)) {
                 chain.doFilter(request, response);
             }
             else {
@@ -38,7 +38,7 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
         }
 
         if (("PATCH").equals(req.getMethod())) {
-            if (!isCorrectParameter(pathInfo)) {
+            if (!ExceptionHandlerForFilterUtil.isCorrectParameter(pathInfo)) {
                 var exception
                         = new IncorrectParametersException("Required parameters are incorrect."
                         , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
@@ -63,11 +63,5 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
     @Override
     public void destroy() {
         Filter.super.destroy();
-    }
-
-    private static boolean isCorrectParameter(String pathInfo) {
-            String[] pathParts = pathInfo.split("/");
-
-            return (pathParts.length == 2 && pathParts[1].length() == 6);
     }
 }

@@ -18,4 +18,10 @@ public class ExceptionHandlerForFilterUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static boolean isCorrectParameter(String pathInfo) {
+        String[] pathParts = pathInfo.split("/");
+
+        return (pathParts.length == 2 && pathParts[1].length() == 6);
+    }
 }
