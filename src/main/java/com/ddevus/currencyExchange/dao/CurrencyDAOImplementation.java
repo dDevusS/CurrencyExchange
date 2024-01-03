@@ -74,7 +74,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
                 return Optional.ofNullable(currency);
             }
             else {
-                throw new SQLBadRequestException("Where is no currency with this ID."
+                throw new SQLBadRequestException("There is no currency with this ID."
                         , SQLBadRequestException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
             }
         }
@@ -96,7 +96,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
                 return Optional.ofNullable(currency);
             }
             else {
-                throw new SQLBadRequestException("Where is no currency with this Code."
+                throw new SQLBadRequestException("There is no currency with this Code."
                         , SQLBadRequestException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
             }
         }

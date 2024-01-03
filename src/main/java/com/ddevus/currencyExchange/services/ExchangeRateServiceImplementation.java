@@ -5,10 +5,13 @@ import com.ddevus.currencyExchange.dao.CurrencyDAOImplementation;
 import com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dao.ExchangeRateDAOImplementation;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
+import com.ddevus.currencyExchange.entity.CurrencyEntity;
 import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,43 +28,43 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
     }
 
     @Override
-    public ExchangeRateDTO save(ExchangeRateDTO exchangeRateDTO) {
+    public ExchangeRateDTO save(ExchangeRateDTO exchangeRateDTO) throws WrapperException, SQLException {
         var exchangeRateEntity = DtoEntityConvertor.convertExchangeRateDtoToEntity(exchangeRateDTO);
+        var savedExchangeRateEntity = exchangeRateDAO.save(exchangeRateEntity);
+        exchangeRateDTO.setId(savedExchangeRateEntity.getId());
 
-        try {
-            var savedExchangeRateEntity = exchangeRateDAO.save(exchangeRateEntity);
-            exchangeRateDTO.setId(savedExchangeRateEntity.getId());
-
-            return exchangeRateDTO;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return exchangeRateDTO;
     }
 
     @Override
-    public ExchangeRateDTO findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode) {
+    public ExchangeRateDTO findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode)
+            throws WrapperException, SQLException {
+        CurrencyEntity baseCurrency;
+        CurrencyEntity targetCurrency;
+
         try {
-            var baseCurrency = currencyDAO.findByCode(baseCurrencyCode).get();
-            var targetCurrency = currencyDAO.findByCode(targetCurrencyCode).get();
-            var exchangeRate = exchangeRateDAO
-                    .findByBaseAndTargetCurrenciesId(baseCurrency.getId(),
+            baseCurrency = currencyDAO.findByCode(baseCurrencyCode).get();
+            targetCurrency = currencyDAO.findByCode(targetCurrencyCode).get();
+        }
+        catch (WrapperException e) {
+            e.setErrorMessage("There is no currency or currencies with those codes.");
+            throw e;
+        }
+
+        var exchangeRate = exchangeRateDAO
+                .findByBaseAndTargetCurrenciesId(baseCurrency.getId(),
                             targetCurrency.getId());
 
-            var exchangeRateDTO = new ExchangeRateDTO(exchangeRate.getId()
-                    , DtoEntityConvertor.convertCurrencyEntityToDto(baseCurrency)
-                    , DtoEntityConvertor.convertCurrencyEntityToDto(targetCurrency)
-                    , exchangeRate.getRate());
+        var exchangeRateDTO = new ExchangeRateDTO(exchangeRate.getId()
+                , DtoEntityConvertor.convertCurrencyEntityToDto(baseCurrency)
+                , DtoEntityConvertor.convertCurrencyEntityToDto(targetCurrency)
+                , exchangeRate.getRate());
 
-            return exchangeRateDTO;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return exchangeRateDTO;
     }
 
     @Override
-    public List<ExchangeRateDTO> findAll() {
+    public List<ExchangeRateDTO> findAll() throws WrapperException, SQLException  {
         List<ExchangeRateEntity> exchangeRateEntityList = exchangeRateDAO.findAll();
 
         List<ExchangeRateDTO> exchangeRateDTOList = new ArrayList<>();
@@ -82,15 +85,25 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
     }
 
     @Override
-    public ExchangeRateDTO update(String baseCurrencyCode, String targetCurrencyCode, float rate) {
+    public ExchangeRateDTO update(String baseCurrencyCode, String targetCurrencyCode, float rate)
+            throws WrapperException, SQLException {
+        CurrencyEntity baseCurrency;
+        CurrencyEntity targetCurrency;
+        ExchangeRateEntity exchangeRate;
+
         try {
-            var baseCurrency = currencyDAO.findByCode(baseCurrencyCode).get();
-            var targetCurrency = currencyDAO.findByCode(targetCurrencyCode).get();
-            var exchangeRate = exchangeRateDAO
+            baseCurrency = currencyDAO.findByCode(baseCurrencyCode).get();
+            targetCurrency = currencyDAO.findByCode(targetCurrencyCode).get();
+            exchangeRate = exchangeRateDAO
                     .findByBaseAndTargetCurrenciesId(baseCurrency.getId(),
                             targetCurrency.getId());
 
-           exchangeRateDAO.update(exchangeRate.getId(), rate);
+            exchangeRateDAO.update(exchangeRate.getId(), rate);
+        }
+        catch (WrapperException e) {
+            e.setErrorMessage("There is no currency pair with those codes in the database.");
+            throw e;
+        }
 
                 ExchangeRateDTO exchangeRateDTO
                         = new ExchangeRateDTO(exchangeRate.getId()
@@ -99,11 +112,5 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
                         , rate);
 
                 return exchangeRateDTO;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
-
-
 }

@@ -70,7 +70,7 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
                 return exchangeRate;
             }
             else {
-                throw new SQLBadRequestException("Where is not currency pair with those codes in database"
+                throw new SQLBadRequestException("There is not currency pair with those codes in database"
                         , WrapperException.ErrorReason.FAILED_FIND_OBJECT_IN_DB );
             }
         }
