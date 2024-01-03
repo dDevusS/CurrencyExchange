@@ -2,6 +2,8 @@ package com.ddevus.currencyExchange.dao;
 
 import com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO;
 import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
 import java.sql.ResultSet;
@@ -20,7 +22,7 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
     }
 
     @Override
-    public ExchangeRateEntity save(ExchangeRateEntity exchangeRate) {
+    public ExchangeRateEntity save(ExchangeRateEntity exchangeRate) throws WrapperException, SQLException {
         String sql = "INSERT INTO exchangeRates (BaseCurrencyID, TargetCurrencyID, Rate) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
@@ -31,8 +33,9 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
             preparedStatement.setFloat(3, exchangeRate.getRate());
 
             if (preparedStatement.executeUpdate() == 0) {
-                // TODO: change this exception
-                throw new SQLException("Inserting currency failed, no rows affected.");
+                throw new SQLBadRequestException("Inserting currency pair failed" +
+                        " due to currency with this code or sing exist in the database."
+                        , WrapperException.ErrorReason.FAILED_INSERT);
             }
 
             try (var statement = connection.createStatement()) {
@@ -40,21 +43,19 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
                     if (resultSet.next()) {
                         exchangeRate.setId(resultSet.getInt(1));
                     } else {
-                        // TODO: измените этот exception
-                        throw new SQLException("Inserting currency failed, no ID obtained.");
+                        throw new SQLBadRequestException("Inserting currency failed, no ID obtained."
+                                , WrapperException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
                     }
                 }
             }
 
             return exchangeRate;
         }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
-    public ExchangeRateEntity findByBaseAndTargetCurrenciesId(int baseCurrencyId, int targetCurrencyId) {
+    public ExchangeRateEntity findByBaseAndTargetCurrenciesId(int baseCurrencyId, int targetCurrencyId)
+            throws WrapperException, SQLException{
         String sql = "SELECT * FROM exchangeRates WHERE BaseCurrencyID=? AND TargetCurrencyID=?";
 
         try (var connection = ConnectionManager.open();
@@ -69,16 +70,14 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
                 return exchangeRate;
             }
             else {
-                throw new RuntimeException("Where is not ExchangeRate with those codes in database");
+                throw new SQLBadRequestException("Where is not currency pair with those codes in database"
+                        , WrapperException.ErrorReason.FAILED_FIND_OBJECT_IN_DB );
             }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<ExchangeRateEntity> findAll() {
+    public List<ExchangeRateEntity> findAll() throws WrapperException, SQLException {
         String sql = "SELECT * FROM exchangeRates";
 
         try (var connection = ConnectionManager.open();
@@ -91,13 +90,10 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
             }
             return exchangeRates;
         }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
-    public boolean update(int id, float rate) {
+    public boolean update(int id, float rate) throws WrapperException, SQLException {
         String sql = "UPDATE exchangeRates SET Rate=? WHERE ID=?";
 
         try (var connection = ConnectionManager.open();
@@ -107,9 +103,6 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
             var result = preparedStatement.executeUpdate() > 0;
 
             return result;
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
