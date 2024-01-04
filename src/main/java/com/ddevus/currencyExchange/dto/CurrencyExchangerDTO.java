@@ -30,10 +30,10 @@ public class CurrencyExchangerDTO {
     public String toString() {
         return "{" +
                 "\"baseCurrency\":" + exchangeRate.getBaseCurrency() +
-                ", \"targetCurrency\":" + exchangeRate.getTargetCurrency() +
-                ", \"rate\":" + exchangeRate.getRate() +
-                ", \"amount\":" + amount +
-                ", \"convertedAmount\":" + convertedAmount +
-                '}';
+                ",\"targetCurrency\":" + exchangeRate.getTargetCurrency() +
+                ",\"rate\":" + exchangeRate.getRate() +
+                ",\"amount\":" + amount +
+                ",\"convertedAmount\":" + convertedAmount +
+                "}";
     }
 }
