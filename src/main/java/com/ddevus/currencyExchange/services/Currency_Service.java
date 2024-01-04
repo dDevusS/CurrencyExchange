@@ -1,13 +1,10 @@
 package com.ddevus.currencyExchange.services;
 
 import com.ddevus.currencyExchange.dao.CurrencyDAO;
-import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
-import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Currency_Service implements CurrencyService {
@@ -22,43 +19,32 @@ public class Currency_Service implements CurrencyService {
     }
 
     @Override
-    public CurrencyDTO save(CurrencyDTO currencyDTO) throws WrapperException {
-        Currency currency = DtoEntityConvertor.convertCurrencyDtoToEntity(currencyDTO);
+    public Currency save(Currency currency) throws WrapperException {
             currency = currencyDAO.save(currency);
-            currencyDTO.setId(currency.getId());
+            currency.setId(currency.getId());
 
-            return currencyDTO;
+            return currency;
     }
 
     @Override
-    public CurrencyDTO findById(int id) throws WrapperException {
-        var possibleCurrency = currencyDAO.findById(id);
-        Currency possibleCurrencyEntity = possibleCurrency.get();
-        CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(possibleCurrencyEntity);
+    public Currency findById(int id) throws WrapperException {
+        var currency = currencyDAO.findById(id);
 
-        return currencyDTO;
+        return currency;
     }
 
     @Override
-    public CurrencyDTO findByCode(String code) throws WrapperException {
-        var possibleCurrency = currencyDAO.findByCode(code);
-        Currency possibleCurrencyEntity = possibleCurrency.get();
-        CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(possibleCurrencyEntity);
+    public Currency findByCode(String code) throws WrapperException {
+        var currency = currencyDAO.findByCode(code);
 
-        return currencyDTO;
+        return currency;
     }
 
     @Override
-    public List<CurrencyDTO> findAll() throws WrapperException {
-        var currencyEntities = currencyDAO.findAll();
-        var currencyDTOlist = new ArrayList<CurrencyDTO>();
+    public List<Currency> findAll() throws WrapperException {
+        var currencyList = currencyDAO.findAll();
 
-        for (Currency currency : currencyEntities) {
-            CurrencyDTO currencyDTO = DtoEntityConvertor.convertCurrencyEntityToDto(currency);
-            currencyDTOlist.add(currencyDTO);
-        }
-
-        return currencyDTOlist;
+        return currencyList;
     }
 
     @Override

@@ -7,6 +7,12 @@ public class Currency {
     private String name;
     private String sing;
 
+    public Currency(String name, String code, String sing) {
+        this.code = code;
+        this.name = name;
+        this.sing = sing;
+    }
+
     public Currency(int id, String code, String name, String sing) {
         this.id = id;
         this.code = code;
@@ -49,8 +55,8 @@ public class Currency {
     @Override
     public String toString() {
         return "{\"id\":" + id
-                + ",\"code\":\"" + code
-                + "\",\"name\":\"" + name
+                + ",\"name\":\"" + name
+                + "\",\"code\":\"" + code
                 + "\",\"sing\":\"" + sing
                 + "\"}";
     }

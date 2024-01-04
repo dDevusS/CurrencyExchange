@@ -63,7 +63,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
     }
 
     @Override
-    public Optional<Currency> findById(int id) throws WrapperException {
+    public Currency findById(int id) throws WrapperException {
         String sql = "SELECT * FROM currencies WHERE ID = ?";
 
         try (var connection = ConnectionManager.open();
@@ -71,11 +71,10 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
             preparedStatement.setInt(1, id);
             var resultSet = preparedStatement.executeQuery();
 
-            Currency currency = null;
             if (resultSet.next()) {
-                currency = createCurrency(resultSet);
+               Currency currency = createCurrency(resultSet);
 
-                return Optional.ofNullable(currency);
+                return Optional.ofNullable(currency).get();
             }
             else {
                 throw new SQLBadRequestException("There is no currency with this ID."
@@ -89,7 +88,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
     }
 
     @Override
-    public Optional<Currency> findByCode(String Code) throws WrapperException {
+    public Currency findByCode(String Code) throws WrapperException {
         String sql = "SELECT * FROM currencies WHERE Code = ?";
 
         try (var connection = ConnectionManager.open();
@@ -97,11 +96,10 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
             preparedStatement.setString(1, Code);
             var resultSet = preparedStatement.executeQuery();
 
-            Currency currency = null;
             if (resultSet.next()) {
-                currency = createCurrency(resultSet);
+                Currency currency = createCurrency(resultSet);
 
-                return Optional.ofNullable(currency);
+                return Optional.ofNullable(currency).get();
             }
             else {
                 throw new SQLBadRequestException("There is no currency with this Code."

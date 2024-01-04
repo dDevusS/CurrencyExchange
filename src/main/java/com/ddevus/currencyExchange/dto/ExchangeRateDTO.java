@@ -1,13 +1,15 @@
 package com.ddevus.currencyExchange.dto;
 
+import com.ddevus.currencyExchange.entity.Currency;
+
 public class ExchangeRateDTO {
 
     private int Id;
-    private CurrencyDTO baseCurrency;
-    private CurrencyDTO targetCurrency;
+    private Currency baseCurrency;
+    private Currency targetCurrency;
     private float rate;
 
-    public ExchangeRateDTO(int id, CurrencyDTO baseCurrency, CurrencyDTO targetCurrency, float rate) {
+    public ExchangeRateDTO(int id, Currency baseCurrency, Currency targetCurrency, float rate) {
         Id = id;
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
@@ -18,11 +20,11 @@ public class ExchangeRateDTO {
         return Id;
     }
 
-    public CurrencyDTO getBaseCurrency() {
+    public Currency getBaseCurrency() {
         return baseCurrency;
     }
 
-    public CurrencyDTO getTargetCurrency() {
+    public Currency getTargetCurrency() {
         return targetCurrency;
     }
 

@@ -1,6 +1,5 @@
 package com.ddevus.currencyExchange.utils;
 
-import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;

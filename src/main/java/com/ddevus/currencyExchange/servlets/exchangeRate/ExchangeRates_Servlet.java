@@ -1,6 +1,5 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
-import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;

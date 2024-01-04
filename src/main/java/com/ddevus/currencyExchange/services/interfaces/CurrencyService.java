@@ -1,18 +1,18 @@
 package com.ddevus.currencyExchange.services.interfaces;
 
-import com.ddevus.currencyExchange.dto.CurrencyDTO;
+import com.ddevus.currencyExchange.entity.Currency;
 
 import java.util.List;
 
 public interface CurrencyService {
 
-    public CurrencyDTO save(CurrencyDTO currency);
+    public Currency save(Currency currency);
 
-    public CurrencyDTO findById(int id);
+    public Currency findById(int id);
 
-    public CurrencyDTO findByCode(String code);
+    public Currency findByCode(String code);
 
-    public List<CurrencyDTO> findAll();
+    public List<Currency> findAll();
 
     public boolean delete(int id);
 }
