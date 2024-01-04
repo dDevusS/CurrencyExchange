@@ -1,18 +1,19 @@
 package com.ddevus.currencyExchange.dao;
 
+import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO {
 
+    private static CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
     private static final ExchangeRateDAO INSTANCE = new ExchangeRateDAO();
 
     private ExchangeRateDAO() {}
@@ -28,8 +29,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         try (var connection = ConnectionManager.open();
              var preparedStatement
                      = connection.prepareStatement(sql, new String[]{"ID"})) {
-            preparedStatement.setInt(1, exchangeRate.getBaseCurrencyId());
-            preparedStatement.setInt(2, exchangeRate.getTargetCurrencyId());
+            preparedStatement.setInt(1, exchangeRate.getBaseCurrency().getId());
+            preparedStatement.setInt(2, exchangeRate.getTargetCurrency().getId());
             preparedStatement.setFloat(3, exchangeRate.getRate());
 
             // TODO: Add checking existed inverted pair
@@ -68,20 +69,21 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     }
 
     @Override
-    public ExchangeRate findByBaseAndTargetCurrenciesId(int baseCurrencyId, int targetCurrencyId)
+    public ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency)
             throws WrapperException {
         String sql = "SELECT * FROM exchangeRates WHERE BaseCurrencyID=? AND TargetCurrencyID=?";
 
         try (var connection = ConnectionManager.open();
              var preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, baseCurrencyId);
-            preparedStatement.setInt(2, targetCurrencyId);
+            preparedStatement.setInt(1, baseCurrency.getId());
+            preparedStatement.setInt(2, targetCurrency.getId());
             var resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                ExchangeRate exchangeRate = createExchangeRate(resultSet);
-
-                return exchangeRate;
+                return new ExchangeRate(resultSet.getInt("ID")
+                        , baseCurrency
+                        , targetCurrency
+                        , resultSet.getFloat("Rate"));
             }
             else {
                 throw new SQLBadRequestException("There is not currency pair with those codes in database"
@@ -104,8 +106,19 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
 
             List<ExchangeRate> exchangeRates = new ArrayList<>();
             while (resultSet.next()) {
-                exchangeRates.add(createExchangeRate(resultSet));
+                var baseCurrency
+                        = currencyDAO.findById(resultSet.getInt("BaseCurrencyID"));
+                var targetCurrency
+                        = currencyDAO.findById(resultSet.getInt("TargetCurrencyID"));
+
+                ExchangeRate exchangeRate = new ExchangeRate(resultSet.getInt("ID")
+                , baseCurrency
+                , targetCurrency
+                , resultSet.getFloat("Rate"));
+
+                exchangeRates.add(exchangeRate);
             }
+
             return exchangeRates;
         }
         catch (SQLException e) {
@@ -130,12 +143,5 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             throw new DatabaseException("Couldn't to connect to the database."
                     , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
         }
-    }
-
-    private static ExchangeRate createExchangeRate(ResultSet resultSet) throws SQLException {
-        return new ExchangeRate(resultSet.getInt("ID")
-                , resultSet.getInt("BaseCurrencyID")
-                , resultSet.getInt("TargetCurrencyID")
-                , resultSet.getFloat("Rate"));
     }
 }

@@ -3,14 +3,20 @@ package com.ddevus.currencyExchange.entity;
 public class ExchangeRate {
 
     private int id;
-    private int baseCurrencyId;
-    private int targetCurrencyId;
+    private Currency baseCurrency;
+    private Currency targetCurrency;
     private float rate;
 
-    public ExchangeRate(int id, int baseCurrencyId, int targetCurrencyId, float rate) {
+    public ExchangeRate( Currency baseCurrency, Currency targetCurrency, float rate) {
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
+        this.rate = rate;
+    }
+
+    public ExchangeRate(int id, Currency baseCurrency, Currency targetCurrency, float rate) {
         this.id = id;
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
@@ -22,20 +28,20 @@ public class ExchangeRate {
         this.id = id;
     }
 
-    public int getBaseCurrencyId() {
-        return baseCurrencyId;
+    public Currency getBaseCurrency() {
+        return baseCurrency;
     }
 
-    public void setBaseCurrencyId(int baseCurrencyId) {
-        this.baseCurrencyId = baseCurrencyId;
+    public void setBaseCurrency(Currency baseCurrency) {
+        this.baseCurrency = baseCurrency;
     }
 
-    public int getTargetCurrencyId() {
-        return targetCurrencyId;
+    public Currency getTargetCurrency() {
+        return targetCurrency;
     }
 
-    public void setTargetCurrencyId(int targetCurrencyId) {
-        this.targetCurrencyId = targetCurrencyId;
+    public void setTargetCurrency(Currency targetCurrency) {
+        this.targetCurrency = targetCurrency;
     }
 
     public float getRate() {
@@ -48,11 +54,11 @@ public class ExchangeRate {
 
     @Override
     public String toString() {
-        return "ExchangeRateEntity{" +
-                "id=" + id +
-                ", baseCurrency=" + baseCurrencyId +
-                ", targetCurrency=" + targetCurrencyId +
-                ", rate=" + rate +
-                '}';
+        return "{" +
+                "\"id\":\"" + id +
+                "\", \"baseCurrency\":\"" + baseCurrency +
+                "\", \"targetCurrency\":\"" + targetCurrency +
+                "\", \"rate\":\"" + rate +
+                "\"}";
     }
 }

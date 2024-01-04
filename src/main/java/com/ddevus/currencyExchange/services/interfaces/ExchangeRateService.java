@@ -1,16 +1,16 @@
 package com.ddevus.currencyExchange.services.interfaces;
 
-import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
+import com.ddevus.currencyExchange.entity.ExchangeRate;
 
 import java.util.List;
 
 public interface ExchangeRateService {
 
-    public ExchangeRateDTO save(ExchangeRateDTO exchangeRate);
+    public ExchangeRate save(ExchangeRate exchangeRate);
 
-    public ExchangeRateDTO findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode);
+    public ExchangeRate findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode);
 
-    public List<ExchangeRateDTO> findAll();
+    public List<ExchangeRate> findAll();
 
-    public ExchangeRateDTO update(String baseCurrencyCode, String targetCurrencyCode, float rate);
+    public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, float rate);
 }

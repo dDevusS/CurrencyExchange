@@ -1,11 +1,12 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
-import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
+import com.ddevus.currencyExchange.entity.Currency;
+import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
-import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.Currency_Service;
-import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
+import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
+import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,9 +25,9 @@ public class ExchangeRates_Servlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException, WrapperException {
-        List<ExchangeRateDTO> exchangeRateDTOList = exchangeRateService.findAll();
+        List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
 
-        var json = convertListToJson(exchangeRateDTOList);
+        var json = convertListToJson(exchangeRateList);
         System.out.println("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
@@ -41,10 +42,10 @@ public class ExchangeRates_Servlet extends HttpServlet {
         String targetCurrencyCode = req.getParameter("targetCurrencyCode");
         float rate = Float.parseFloat(req.getParameter("rate"));
 
-        CurrencyDTO baseCurrency = currencyService.findByCode(baseCurrencyCode);
-        CurrencyDTO targetCurrency = currencyService.findByCode(targetCurrencyCode);
+        Currency baseCurrency = currencyService.findByCode(baseCurrencyCode);
+        Currency targetCurrency = currencyService.findByCode(targetCurrencyCode);
 
-        var newExchangeRate = new ExchangeRateDTO(0, baseCurrency, targetCurrency, rate);
+        var newExchangeRate = new ExchangeRate( baseCurrency, targetCurrency, rate);
         newExchangeRate = exchangeRateService.save(newExchangeRate);
         System.out.println("JSON Response: " + newExchangeRate);
 
@@ -53,11 +54,11 @@ public class ExchangeRates_Servlet extends HttpServlet {
         }
     }
 
-    private String convertListToJson(List<ExchangeRateDTO> exchangeRateDTOList) {
+    private String convertListToJson(List<ExchangeRate> exchangeRateList) {
         StringBuilder json = new StringBuilder("[");
 
-        for (ExchangeRateDTO exchangeRateDTO : exchangeRateDTOList) {
-            json.append(exchangeRateDTO).append(",");
+        for (ExchangeRate exchangeRate : exchangeRateList) {
+            json.append(exchangeRate).append(",");
         }
 
         if (json.length() > 1) {
