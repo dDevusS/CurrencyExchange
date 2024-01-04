@@ -1,19 +1,21 @@
 package com.ddevus.currencyExchange.dto;
 
+import com.ddevus.currencyExchange.entity.ExchangeRate;
+
 public class CurrencyExchangerDTO {
 
-    private ExchangeRateDTO exchangeRateDTO;
+    private ExchangeRate exchangeRate;
     private float amount;
     private float convertedAmount;
 
-    public CurrencyExchangerDTO(ExchangeRateDTO exchangeRateDTO, float amount, float convertedAmount) {
-        this.exchangeRateDTO = exchangeRateDTO;
+    public CurrencyExchangerDTO(ExchangeRate exchangeRate, float amount, float convertedAmount) {
+        this.exchangeRate = exchangeRate;
         this.amount = amount;
         this.convertedAmount = convertedAmount;
     }
 
-    public ExchangeRateDTO getExchangeRateDTO() {
-        return exchangeRateDTO;
+    public ExchangeRate getExchangeRateDTO() {
+        return exchangeRate;
     }
 
     public float getAmount() {
@@ -27,9 +29,9 @@ public class CurrencyExchangerDTO {
     @Override
     public String toString() {
         return "{" +
-                "\"baseCurrency\":" + exchangeRateDTO.getBaseCurrency() +
-                ", \"targetCurrency\":" + exchangeRateDTO.getTargetCurrency() +
-                ", \"rate\":" + exchangeRateDTO.getRate() +
+                "\"baseCurrency\":" + exchangeRate.getBaseCurrency() +
+                ", \"targetCurrency\":" + exchangeRate.getTargetCurrency() +
+                ", \"rate\":" + exchangeRate.getRate() +
                 ", \"amount\":" + amount +
                 ", \"convertedAmount\":" + convertedAmount +
                 '}';

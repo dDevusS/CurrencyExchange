@@ -1,6 +1,7 @@
 package com.ddevus.currencyExchange.services;
 
 import com.ddevus.currencyExchange.dto.CurrencyExchangerDTO;
+import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.services.interfaces.CurrenciesExchangerService;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
@@ -49,9 +50,9 @@ public class CurrencyExchanger_Service implements CurrenciesExchangerService {
 
     private CurrencyExchangerDTO tryFirstScript(String baseCurrencyCode, String targetCurrencyCode, float amount) {
         try {
-            var exchangeRateDTO
+            var exchangeRate
                     = exchangeRateService.findByBaseAndTargetCurrenciesCode(baseCurrencyCode, targetCurrencyCode);
-            return convertBaseCurrencyToTargetCurrency(exchangeRateDTO, amount);
+            return convertBaseCurrencyToTargetCurrency(exchangeRate, amount);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -60,9 +61,9 @@ public class CurrencyExchanger_Service implements CurrenciesExchangerService {
 
     private CurrencyExchangerDTO trySecondScript(String baseCurrencyCode, String targetCurrencyCode, float amount) {
         try {
-            var inverseExchangeRateDTO
+            var inverseExchangeRate
                     = exchangeRateService.findByBaseAndTargetCurrenciesCode(targetCurrencyCode, baseCurrencyCode);
-            return convertBaseCurrencyToTargetCurrency(inverseExchangeRateDTO, amount);
+            return convertBaseCurrencyToTargetCurrency(inverseExchangeRate, amount);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -81,11 +82,11 @@ public class CurrencyExchanger_Service implements CurrenciesExchangerService {
         }
     }
 
-    private CurrencyExchangerDTO convertBaseCurrencyToTargetCurrency (ExchangeRateDTO exchangeRateDTO, float amount) {
-        float convertAmount = amount * exchangeRateDTO.getRate();
-        var currencyExchangerDTO
-                = new CurrencyExchangerDTO(exchangeRateDTO, amount, convertAmount);
+    private CurrencyExchangerDTO convertBaseCurrencyToTargetCurrency (ExchangeRate exchangeRate, float amount) {
+        float convertAmount = amount * exchangeRate.getRate();
+        var currencyExchanger
+                = new CurrencyExchangerDTO(exchangeRate, amount, convertAmount);
 
-        return currencyExchangerDTO;
+        return currencyExchanger;
     }
 }
