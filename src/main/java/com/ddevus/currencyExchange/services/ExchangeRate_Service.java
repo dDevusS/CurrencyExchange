@@ -54,8 +54,7 @@ public class ExchangeRate_Service implements ExchangeRateService {
     }
 
     @Override
-    public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, float rate)
-            throws WrapperException {
+    public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, float rate) {
         ExchangeRate exchangeRate;
 
         try {
