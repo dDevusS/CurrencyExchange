@@ -1,8 +1,12 @@
 package com.ddevus.currencyExchange.exceptions;
 
+import java.util.logging.Logger;
+
 public abstract class WrapperException extends RuntimeException {
     protected String errorMessage;
     protected ErrorReason errorReason;
+
+    protected Logger logger = Logger.getLogger(WrapperException.class.getName());
 
     public enum ErrorReason {
         FAILED_INSERT, FAILED_GET_LAST_OPERATION_ID, FAILED_READ_PROPERTIES, FAILED_FIND_JDBC_DRIVER,

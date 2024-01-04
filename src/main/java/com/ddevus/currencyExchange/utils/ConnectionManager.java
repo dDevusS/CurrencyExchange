@@ -6,22 +6,22 @@ import com.ddevus.currencyExchange.exceptions.WrapperException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class ConnectionManager {
 
     private final static String URL_KEY = "db.url";
+    private static final Logger logger = Logger.getLogger(ConnectionManager.class.getName());
 
     private ConnectionManager() {}
 
     public static Connection open() {
         try {
-            System.out.println("Trying to find JDBC driver.");
+            logger.info("Finding JDBC driver.");
             Class.forName("org.sqlite.JDBC");
-            System.out.println("Finding JDBC driver is successful.");
 
-            System.out.println("Trying to connect to the database.");
+            logger.info("Connecting to the database.");
             var connection = DriverManager.getConnection(PropertiesReader.read(URL_KEY));
-            System.out.println("Connecting to the database is successful.");
 
             return connection;
         }

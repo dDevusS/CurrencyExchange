@@ -11,6 +11,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,25 +20,29 @@ import java.util.List;
 @WebServlet("/exchangeRates")
 public class ExchangeRates_Servlet extends HttpServlet {
 
+    private final Logger logger = LoggerFactory.getLogger(ExchangeRates_Servlet.class.getName());
     private final ExchangeRateService exchangeRateService = ExchangeRate_Service.getINSTANCE();
     private final CurrencyService currencyService = Currency_Service.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        logger.info("Processing the client's GET request.");
         List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
 
         var json = convertListToJson(exchangeRateList);
-        System.out.println("JSON Response: " + json);
+        logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
             writer.write(json);
         }
+        logger.info("Finished processing GET request.");
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        logger.info("Processing the client's POST request.");
         String baseCurrencyCode = req.getParameter("baseCurrencyCode");
         String targetCurrencyCode = req.getParameter("targetCurrencyCode");
         float rate = Float.parseFloat(req.getParameter("rate"));
@@ -46,11 +52,12 @@ public class ExchangeRates_Servlet extends HttpServlet {
 
         var newExchangeRate = new ExchangeRate( baseCurrency, targetCurrency, rate);
         newExchangeRate = exchangeRateService.save(newExchangeRate);
-        System.out.println("JSON Response: " + newExchangeRate);
+        logger.info("JSON Response: " + newExchangeRate);
 
         try (var writer = resp.getWriter()) {
             writer.write(newExchangeRate.toString());
         }
+        logger.info("Finished processing POST request.");
     }
 
     private String convertListToJson(List<ExchangeRate> exchangeRateList) {
