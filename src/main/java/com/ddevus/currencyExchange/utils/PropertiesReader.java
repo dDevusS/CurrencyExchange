@@ -8,10 +8,14 @@ import java.util.Properties;
 
 public class PropertiesReader {
     private final static Properties PROPERTIES = new Properties();
+    private final static String PROPERTIES_PATH = "application.properties";
 
     private PropertiesReader() {}
 
     static {
+        //TODO: ?
+        // Can't catch exception if PROPERTIES_PATH is wrong.
+
         loadPropertiesFile();
     }
 
@@ -22,7 +26,7 @@ public class PropertiesReader {
     private static void loadPropertiesFile() {
         try (var inputStream =
                 PropertiesReader.class.getClassLoader()
-                        .getResourceAsStream("application.properties")) {
+                        .getResourceAsStream(PROPERTIES_PATH)) {
                 PROPERTIES.load(inputStream);
         }
         catch (IOException e) {

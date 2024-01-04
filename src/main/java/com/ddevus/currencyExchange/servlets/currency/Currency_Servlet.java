@@ -1,8 +1,7 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
-import com.ddevus.currencyExchange.exceptions.WrapperException;
-import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.Currency_Service;
+import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,7 +17,7 @@ public class Currency_Servlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException, WrapperException {
+            throws ServletException, IOException {
         String servletPath = req.getPathInfo();
         String[] pathParts;
         pathParts = servletPath.split("/");

@@ -2,7 +2,6 @@ package com.ddevus.currencyExchange.servlets.exchangeRate;
 
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
@@ -24,7 +23,7 @@ public class ExchangeRates_Servlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException, WrapperException {
+            throws ServletException, IOException {
         List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
 
         var json = convertListToJson(exchangeRateList);
@@ -37,7 +36,7 @@ public class ExchangeRates_Servlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException, WrapperException {
+            throws ServletException, IOException {
         String baseCurrencyCode = req.getParameter("baseCurrencyCode");
         String targetCurrencyCode = req.getParameter("targetCurrencyCode");
         float rate = Float.parseFloat(req.getParameter("rate"));

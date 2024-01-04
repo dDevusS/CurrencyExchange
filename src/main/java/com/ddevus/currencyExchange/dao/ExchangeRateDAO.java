@@ -23,7 +23,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     }
 
     @Override
-    public ExchangeRate save(ExchangeRate exchangeRate) throws WrapperException {
+    public ExchangeRate save(ExchangeRate exchangeRate) {
         String sql = "INSERT INTO exchangeRates (BaseCurrencyID, TargetCurrencyID, Rate) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
@@ -69,8 +69,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     }
 
     @Override
-    public ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency)
-            throws WrapperException {
+    public ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency) {
         String sql = "SELECT * FROM exchangeRates WHERE BaseCurrencyID=? AND TargetCurrencyID=?";
 
         try (var connection = ConnectionManager.open();
@@ -97,7 +96,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     }
 
     @Override
-    public List<ExchangeRate> findAll() throws WrapperException {
+    public List<ExchangeRate> findAll() {
         String sql = "SELECT * FROM exchangeRates";
 
         try (var connection = ConnectionManager.open();
@@ -128,7 +127,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     }
 
     @Override
-    public boolean update(int id, float rate) throws WrapperException {
+    public boolean update(int id, float rate) {
         String sql = "UPDATE exchangeRates SET Rate=? WHERE ID=?";
 
         try (var connection = ConnectionManager.open();

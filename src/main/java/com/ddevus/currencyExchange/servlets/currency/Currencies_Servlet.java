@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.entity.Currency;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import jakarta.servlet.ServletException;
@@ -20,7 +19,7 @@ public class Currencies_Servlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException, WrapperException {
+            throws ServletException, IOException {
         List<Currency> currencies = null;
              currencies = currencyService.findAll();
 
@@ -34,7 +33,7 @@ public class Currencies_Servlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException, WrapperException {
+            throws ServletException, IOException {
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sing = req.getParameter("sing");

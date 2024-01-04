@@ -2,7 +2,6 @@ package com.ddevus.currencyExchange.services;
 
 import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.entity.Currency;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class Currency_Service implements CurrencyService {
     }
 
     @Override
-    public Currency save(Currency currency) throws WrapperException {
+    public Currency save(Currency currency) {
             currency = currencyDAO.save(currency);
             currency.setId(currency.getId());
 
@@ -27,28 +26,28 @@ public class Currency_Service implements CurrencyService {
     }
 
     @Override
-    public Currency findById(int id) throws WrapperException {
+    public Currency findById(int id) {
         var currency = currencyDAO.findById(id);
 
         return currency;
     }
 
     @Override
-    public Currency findByCode(String code) throws WrapperException {
+    public Currency findByCode(String code) {
         var currency = currencyDAO.findByCode(code);
 
         return currency;
     }
 
     @Override
-    public List<Currency> findAll() throws WrapperException {
+    public List<Currency> findAll() {
         var currencyList = currencyDAO.findAll();
 
         return currencyList;
     }
 
     @Override
-    public boolean delete(int id) throws WrapperException {
+    public boolean delete(int id) {
             var isDeleted = currencyDAO.delete(id);
 
             return isDeleted;

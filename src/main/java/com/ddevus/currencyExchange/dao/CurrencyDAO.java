@@ -23,7 +23,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
     }
 
     @Override
-    public Currency save(Currency currency) throws WrapperException {
+    public Currency save(Currency currency) {
         String sql = "INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
@@ -63,7 +63,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
     }
 
     @Override
-    public Currency findById(int id) throws WrapperException {
+    public Currency findById(int id) {
         String sql = "SELECT * FROM currencies WHERE ID = ?";
 
         try (var connection = ConnectionManager.open();
@@ -88,7 +88,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
     }
 
     @Override
-    public Currency findByCode(String Code) throws WrapperException {
+    public Currency findByCode(String Code) {
         String sql = "SELECT * FROM currencies WHERE Code = ?";
 
         try (var connection = ConnectionManager.open();
@@ -113,7 +113,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
     }
 
     @Override
-    public List<Currency> findAll() throws WrapperException {
+    public List<Currency> findAll() {
         String sql = "SELECT * FROM currencies";
 
         try (var connection = ConnectionManager.open();
@@ -134,7 +134,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
     }
 
     @Override
-    public boolean delete(int id) throws WrapperException {
+    public boolean delete(int id) {
         String sql = "DELETE FROM currencies WHERE ID = ?";
 
         try (var connection = ConnectionManager.open();

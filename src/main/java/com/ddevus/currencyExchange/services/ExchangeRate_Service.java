@@ -22,7 +22,7 @@ public class ExchangeRate_Service implements ExchangeRateService {
     }
 
     @Override
-    public ExchangeRate save(ExchangeRate exchangeRate) throws WrapperException {
+    public ExchangeRate save(ExchangeRate exchangeRate) {
         var savedExchangeRateEntity = exchangeRateDAO.save(exchangeRate);
         exchangeRate.setId(savedExchangeRateEntity.getId());
 
@@ -30,8 +30,7 @@ public class ExchangeRate_Service implements ExchangeRateService {
     }
 
     @Override
-    public ExchangeRate findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode)
-            throws WrapperException {
+    public ExchangeRate findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode) {
         Currency baseCurrency;
         Currency targetCurrency;
 
@@ -48,7 +47,7 @@ public class ExchangeRate_Service implements ExchangeRateService {
     }
 
     @Override
-    public List<ExchangeRate> findAll() throws WrapperException  {
+    public List<ExchangeRate> findAll() {
         List<ExchangeRate> exchangeRateList = exchangeRateDAO.findAll();
 
         return exchangeRateList;

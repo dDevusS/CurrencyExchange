@@ -13,7 +13,7 @@ public class ConnectionManager {
 
     private ConnectionManager() {}
 
-    public static Connection open() throws WrapperException {
+    public static Connection open() {
         try {
             System.out.println("Trying to find JDBC driver.");
             Class.forName("org.sqlite.JDBC");
