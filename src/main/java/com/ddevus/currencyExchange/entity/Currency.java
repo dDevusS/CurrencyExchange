@@ -54,8 +54,8 @@ public class Currency {
 
     @Override
     public String toString() {
-        return "{\"id\":" + id
-                + ",\"name\":\"" + name
+        return "{\"id\":\"" + id
+                + "\",\"name\":\"" + name
                 + "\",\"code\":\"" + code
                 + "\",\"sing\":\"" + sing
                 + "\"}";

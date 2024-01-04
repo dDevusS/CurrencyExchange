@@ -56,9 +56,9 @@ public class ExchangeRate {
     public String toString() {
         return "{" +
                 "\"id\":\"" + id +
-                "\", \"baseCurrency\":\"" + baseCurrency +
-                "\", \"targetCurrency\":\"" + targetCurrency +
-                "\", \"rate\":\"" + rate +
+                "\",\"baseCurrency\":" + baseCurrency +
+                ",\"targetCurrency\":" + targetCurrency +
+                ",\"rate\":\"" + rate +
                 "\"}";
     }
 }
