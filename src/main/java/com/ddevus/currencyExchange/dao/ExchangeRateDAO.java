@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.dao;
 
-import com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO;
-import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
+import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
@@ -12,18 +11,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
+public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO {
 
-    private static final ExchangeRateDAOImplementation INSTANCE = new ExchangeRateDAOImplementation();
+    private static final ExchangeRateDAO INSTANCE = new ExchangeRateDAO();
 
-    private ExchangeRateDAOImplementation() {}
+    private ExchangeRateDAO() {}
 
-    public static ExchangeRateDAOImplementation getINSTANCE() {
+    public static ExchangeRateDAO getINSTANCE() {
         return INSTANCE;
     }
 
     @Override
-    public ExchangeRateEntity save(ExchangeRateEntity exchangeRate) throws WrapperException {
+    public ExchangeRate save(ExchangeRate exchangeRate) throws WrapperException {
         String sql = "INSERT INTO exchangeRates (BaseCurrencyID, TargetCurrencyID, Rate) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
@@ -32,6 +31,10 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
             preparedStatement.setInt(1, exchangeRate.getBaseCurrencyId());
             preparedStatement.setInt(2, exchangeRate.getTargetCurrencyId());
             preparedStatement.setFloat(3, exchangeRate.getRate());
+
+            // TODO: Add checking existed inverted pair
+
+
 
             try {
                 preparedStatement.executeUpdate();
@@ -65,7 +68,7 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
     }
 
     @Override
-    public ExchangeRateEntity findByBaseAndTargetCurrenciesId(int baseCurrencyId, int targetCurrencyId)
+    public ExchangeRate findByBaseAndTargetCurrenciesId(int baseCurrencyId, int targetCurrencyId)
             throws WrapperException {
         String sql = "SELECT * FROM exchangeRates WHERE BaseCurrencyID=? AND TargetCurrencyID=?";
 
@@ -76,7 +79,7 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
             var resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                ExchangeRateEntity exchangeRate = createExchangeRate(resultSet);
+                ExchangeRate exchangeRate = createExchangeRate(resultSet);
 
                 return exchangeRate;
             }
@@ -92,14 +95,14 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
     }
 
     @Override
-    public List<ExchangeRateEntity> findAll() throws WrapperException {
+    public List<ExchangeRate> findAll() throws WrapperException {
         String sql = "SELECT * FROM exchangeRates";
 
         try (var connection = ConnectionManager.open();
              var preparedStatement = connection.prepareStatement(sql)) {
             var resultSet = preparedStatement.executeQuery();
 
-            List<ExchangeRateEntity> exchangeRates = new ArrayList<>();
+            List<ExchangeRate> exchangeRates = new ArrayList<>();
             while (resultSet.next()) {
                 exchangeRates.add(createExchangeRate(resultSet));
             }
@@ -129,8 +132,8 @@ public class ExchangeRateDAOImplementation implements ExchangeRateDAO {
         }
     }
 
-    private static ExchangeRateEntity createExchangeRate(ResultSet resultSet) throws SQLException {
-        return new ExchangeRateEntity(resultSet.getInt("ID")
+    private static ExchangeRate createExchangeRate(ResultSet resultSet) throws SQLException {
+        return new ExchangeRate(resultSet.getInt("ID")
                 , resultSet.getInt("BaseCurrencyID")
                 , resultSet.getInt("TargetCurrencyID")
                 , resultSet.getFloat("Rate"));

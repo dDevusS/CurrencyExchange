@@ -4,9 +4,9 @@ import com.ddevus.currencyExchange.dto.CurrencyDTO;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
-import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
+import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
-import com.ddevus.currencyExchange.services.ExchangeRateServiceImplementation;
+import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,10 +17,10 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/exchangeRates")
-public class ExchangeRatesServlet extends HttpServlet {
+public class ExchangeRates_Servlet extends HttpServlet {
 
-    private final ExchangeRateService exchangeRateService = ExchangeRateServiceImplementation.getINSTANCE();
-    private final CurrencyService currencyService = CurrencyServiceImplementation.getINSTANCE();
+    private final ExchangeRateService exchangeRateService = ExchangeRate_Service.getINSTANCE();
+    private final CurrencyService currencyService = Currency_Service.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

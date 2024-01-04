@@ -6,13 +6,13 @@ import com.ddevus.currencyExchange.services.interfaces.CurrenciesExchangerServic
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 
-public class CurrenciesExchangerServiceImplementation implements CurrenciesExchangerService {
+public class CurrencyExchanger_Service implements CurrenciesExchangerService {
 
-    private final CurrencyService currencyService = CurrencyServiceImplementation.getINSTANCE();
-    private final ExchangeRateService exchangeRateService = ExchangeRateServiceImplementation.getINSTANCE();
-    private static final CurrenciesExchangerService INSTANCE = new CurrenciesExchangerServiceImplementation();
+    private final CurrencyService currencyService = Currency_Service.getINSTANCE();
+    private final ExchangeRateService exchangeRateService = ExchangeRate_Service.getINSTANCE();
+    private static final CurrenciesExchangerService INSTANCE = new CurrencyExchanger_Service();
 
-    private CurrenciesExchangerServiceImplementation() {}
+    private CurrencyExchanger_Service() {}
 
     public static CurrenciesExchangerService getINSTANCE() {
         return INSTANCE;

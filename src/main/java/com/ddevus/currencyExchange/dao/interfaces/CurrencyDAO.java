@@ -1,19 +1,19 @@
 package com.ddevus.currencyExchange.dao.interfaces;
 
-import com.ddevus.currencyExchange.entity.CurrencyEntity;
+import com.ddevus.currencyExchange.entity.Currency;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CurrencyDAO {
 
-    public CurrencyEntity save(CurrencyEntity currency);
+    public Currency save(Currency currency);
 
-    public Optional<CurrencyEntity> findById(int id);
+    public Optional<Currency> findById(int id);
 
-    public Optional<CurrencyEntity> findByCode(String Code);
+    public Optional<Currency> findByCode(String Code);
 
-    public List<CurrencyEntity> findAll();
+    public List<Currency> findAll();
 
     public boolean delete(int id);
 }

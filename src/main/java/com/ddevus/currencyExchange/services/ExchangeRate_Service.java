@@ -1,12 +1,10 @@
 package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dao.CurrencyDAOImplementation;
-import com.ddevus.currencyExchange.dao.ExchangeRateDAOImplementation;
-import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
-import com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO;
+import com.ddevus.currencyExchange.dao.CurrencyDAO;
+import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dto.ExchangeRateDTO;
-import com.ddevus.currencyExchange.entity.CurrencyEntity;
-import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
+import com.ddevus.currencyExchange.entity.Currency;
+import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
@@ -14,13 +12,13 @@ import com.ddevus.currencyExchange.utils.DtoEntityConvertor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExchangeRateServiceImplementation implements ExchangeRateService {
+public class ExchangeRate_Service implements ExchangeRateService {
 
-    private static final ExchangeRateDAO exchangeRateDAO = ExchangeRateDAOImplementation.getINSTANCE();
-    private static final CurrencyDAO currencyDAO = CurrencyDAOImplementation.getINSTANCE();
-    private static final ExchangeRateService INSTANCE= new ExchangeRateServiceImplementation();
+    private static final com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO exchangeRateDAO = ExchangeRateDAO.getINSTANCE();
+    private static final com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
+    private static final ExchangeRateService INSTANCE= new ExchangeRate_Service();
 
-    private ExchangeRateServiceImplementation() {}
+    private ExchangeRate_Service() {}
 
     public static ExchangeRateService getINSTANCE() {
         return INSTANCE;
@@ -38,8 +36,8 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
     @Override
     public ExchangeRateDTO findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode)
             throws WrapperException {
-        CurrencyEntity baseCurrency;
-        CurrencyEntity targetCurrency;
+        Currency baseCurrency;
+        Currency targetCurrency;
 
         try {
             baseCurrency = currencyDAO.findByCode(baseCurrencyCode).get();
@@ -64,18 +62,18 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
 
     @Override
     public List<ExchangeRateDTO> findAll() throws WrapperException  {
-        List<ExchangeRateEntity> exchangeRateEntityList = exchangeRateDAO.findAll();
+        List<ExchangeRate> exchangeRateList = exchangeRateDAO.findAll();
 
         List<ExchangeRateDTO> exchangeRateDTOList = new ArrayList<>();
-        for (ExchangeRateEntity exchangeRateEntity : exchangeRateEntityList) {
-            var baseCurrency = currencyDAO.findById(exchangeRateEntity.getBaseCurrencyId()).get();
-            var targetCurrency = currencyDAO.findById(exchangeRateEntity.getTargetCurrencyId()).get();
+        for (ExchangeRate exchangeRate : exchangeRateList) {
+            var baseCurrency = currencyDAO.findById(exchangeRate.getBaseCurrencyId()).get();
+            var targetCurrency = currencyDAO.findById(exchangeRate.getTargetCurrencyId()).get();
 
             ExchangeRateDTO exchangeRateDTO
-                    = new ExchangeRateDTO(exchangeRateEntity.getId()
+                    = new ExchangeRateDTO(exchangeRate.getId()
                     , DtoEntityConvertor.convertCurrencyEntityToDto(baseCurrency)
                     , DtoEntityConvertor.convertCurrencyEntityToDto(targetCurrency)
-                    , exchangeRateEntity.getRate());
+                    , exchangeRate.getRate());
 
             exchangeRateDTOList.add(exchangeRateDTO);
         }
@@ -86,9 +84,9 @@ public class ExchangeRateServiceImplementation implements ExchangeRateService {
     @Override
     public ExchangeRateDTO update(String baseCurrencyCode, String targetCurrencyCode, float rate)
             throws WrapperException {
-        CurrencyEntity baseCurrency;
-        CurrencyEntity targetCurrency;
-        ExchangeRateEntity exchangeRate;
+        Currency baseCurrency;
+        Currency targetCurrency;
+        ExchangeRate exchangeRate;
 
         try {
             baseCurrency = currencyDAO.findByCode(baseCurrencyCode).get();

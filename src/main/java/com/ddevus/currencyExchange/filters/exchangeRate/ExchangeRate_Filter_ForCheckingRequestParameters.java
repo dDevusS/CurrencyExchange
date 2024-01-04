@@ -2,7 +2,7 @@ package com.ddevus.currencyExchange.filters.exchangeRate;
 
 import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
-import com.ddevus.currencyExchange.utils.ExceptionHandlerForFilterUtil;
+import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,27 +26,27 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
         var pathInfo = req.getPathInfo();
 
         if (("GET").equals(req.getMethod())) {
-            if (ExceptionHandlerForFilterUtil.isCorrectParameter(pathInfo)) {
+            if (FiltersUtil.isCorrectParameter(pathInfo)) {
                 chain.doFilter(request, response);
             }
             else {
                 var exception = new IncorrectParametersException("Required parameters are incorrect."
                         , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
 
-                ExceptionHandlerForFilterUtil.handleException(res, exception);
+                FiltersUtil.handleException(res, exception);
             }
         }
 
         if (("PATCH").equals(req.getMethod())) {
-            if (!ExceptionHandlerForFilterUtil.isCorrectParameter(pathInfo)) {
+            if (!FiltersUtil.isCorrectParameter(pathInfo)) {
                 var exception
                         = new IncorrectParametersException("Required parameters are incorrect."
                         , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
 
-                ExceptionHandlerForFilterUtil.handleException(res, exception);
+                FiltersUtil.handleException(res, exception);
             }
 
-            ExceptionHandlerForFilterUtil.checkRateFormat(req.getParameter("rate"), res);
+            FiltersUtil.checkRateFormat(req.getParameter("rate"), res);
         }
 
         chain.doFilter(request, response);

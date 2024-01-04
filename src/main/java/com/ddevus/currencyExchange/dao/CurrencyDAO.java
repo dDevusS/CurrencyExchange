@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.dao;
 
-import com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO;
-import com.ddevus.currencyExchange.entity.CurrencyEntity;
+import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
@@ -13,18 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CurrencyDAOImplementation implements CurrencyDAO {
+public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO {
 
-    private static final CurrencyDAOImplementation INSTANCE = new CurrencyDAOImplementation();
+    private static final CurrencyDAO INSTANCE = new CurrencyDAO();
 
-    private CurrencyDAOImplementation() {}
+    private CurrencyDAO() {}
 
-    public static CurrencyDAOImplementation getINSTANCE() {
+    public static CurrencyDAO getINSTANCE() {
         return INSTANCE;
     }
 
     @Override
-    public CurrencyEntity save(CurrencyEntity currency) throws WrapperException {
+    public Currency save(Currency currency) throws WrapperException {
         String sql = "INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
@@ -64,7 +63,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public Optional<CurrencyEntity> findById(int id) throws WrapperException {
+    public Optional<Currency> findById(int id) throws WrapperException {
         String sql = "SELECT * FROM currencies WHERE ID = ?";
 
         try (var connection = ConnectionManager.open();
@@ -72,7 +71,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             preparedStatement.setInt(1, id);
             var resultSet = preparedStatement.executeQuery();
 
-            CurrencyEntity currency = null;
+            Currency currency = null;
             if (resultSet.next()) {
                 currency = createCurrency(resultSet);
 
@@ -90,7 +89,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public Optional<CurrencyEntity> findByCode(String Code) throws WrapperException {
+    public Optional<Currency> findByCode(String Code) throws WrapperException {
         String sql = "SELECT * FROM currencies WHERE Code = ?";
 
         try (var connection = ConnectionManager.open();
@@ -98,7 +97,7 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
             preparedStatement.setString(1, Code);
             var resultSet = preparedStatement.executeQuery();
 
-            CurrencyEntity currency = null;
+            Currency currency = null;
             if (resultSet.next()) {
                 currency = createCurrency(resultSet);
 
@@ -116,14 +115,14 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
     }
 
     @Override
-    public List<CurrencyEntity> findAll() throws WrapperException {
+    public List<Currency> findAll() throws WrapperException {
         String sql = "SELECT * FROM currencies";
 
         try (var connection = ConnectionManager.open();
              var preparedStatement = connection.prepareStatement(sql)) {
             var resultSet = preparedStatement.executeQuery();
 
-            List<CurrencyEntity> currencies = new ArrayList<>();
+            List<Currency> currencies = new ArrayList<>();
             while (resultSet.next()) {
                 currencies.add(createCurrency(resultSet));
             }
@@ -153,8 +152,8 @@ public class CurrencyDAOImplementation implements CurrencyDAO {
         }
     }
 
-    private static CurrencyEntity createCurrency(ResultSet resultSet) throws SQLException {
-        return new CurrencyEntity(
+    private static Currency createCurrency(ResultSet resultSet) throws SQLException {
+        return new Currency(
                 resultSet.getInt("ID"),
                 resultSet.getString("Code"),
                 resultSet.getString("FullName"),

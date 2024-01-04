@@ -1,13 +1,13 @@
 package com.ddevus.currencyExchange.entity;
 
-public class CurrencyEntity {
+public class Currency {
 
     private int id;
     private String code;
     private String name;
     private String sing;
 
-    public CurrencyEntity(int id, String code, String name, String sing) {
+    public Currency(int id, String code, String name, String sing) {
         this.id = id;
         this.code = code;
         this.name = name;

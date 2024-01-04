@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class ExceptionHandlerForFilterUtil {
+public class FiltersUtil {
 
     public static void handleException(ServletResponse response, WrapperException exception) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
@@ -34,13 +34,13 @@ public class ExceptionHandlerForFilterUtil {
             var e = new IncorrectParametersException("Required parameters are incorrect."
                     , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
 
-            ExceptionHandlerForFilterUtil.handleException(res, e);
+            FiltersUtil.handleException(res, e);
         }
         catch (NullPointerException exception) {
             var e = new IncorrectParametersException("Required parameter is missed."
                     , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
 
-            ExceptionHandlerForFilterUtil.handleException(res, e);
+            FiltersUtil.handleException(res, e);
         }
     }
 }

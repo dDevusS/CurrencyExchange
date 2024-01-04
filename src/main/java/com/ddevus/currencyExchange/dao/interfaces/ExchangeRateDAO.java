@@ -1,16 +1,16 @@
 package com.ddevus.currencyExchange.dao.interfaces;
 
-import com.ddevus.currencyExchange.entity.ExchangeRateEntity;
+import com.ddevus.currencyExchange.entity.ExchangeRate;
 
 import java.util.List;
 
 public interface ExchangeRateDAO {
 
-    public ExchangeRateEntity save(ExchangeRateEntity exchangeRate);
+    public ExchangeRate save(ExchangeRate exchangeRate);
 
-    public ExchangeRateEntity findByBaseAndTargetCurrenciesId(int baseCurrencyId, int targetCurrencyId);
+    public ExchangeRate findByBaseAndTargetCurrenciesId(int baseCurrencyId, int targetCurrencyId);
 
-    public List<ExchangeRateEntity> findAll();
+    public List<ExchangeRate> findAll();
 
     public boolean update(int id, float rate);
 

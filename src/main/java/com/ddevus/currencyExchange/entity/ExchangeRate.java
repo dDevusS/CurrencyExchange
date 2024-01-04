@@ -1,13 +1,13 @@
 package com.ddevus.currencyExchange.entity;
 
-public class ExchangeRateEntity {
+public class ExchangeRate {
 
     private int id;
     private int baseCurrencyId;
     private int targetCurrencyId;
     private float rate;
 
-    public ExchangeRateEntity(int id, int baseCurrencyId, int targetCurrencyId, float rate) {
+    public ExchangeRate(int id, int baseCurrencyId, int targetCurrencyId, float rate) {
         this.id = id;
         this.baseCurrencyId = baseCurrencyId;
         this.targetCurrencyId = targetCurrencyId;

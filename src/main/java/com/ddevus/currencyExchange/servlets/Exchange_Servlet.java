@@ -1,9 +1,9 @@
 package com.ddevus.currencyExchange.servlets;
 
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
-import com.ddevus.currencyExchange.services.CurrencyServiceImplementation;
+import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
-import com.ddevus.currencyExchange.services.ExchangeRateServiceImplementation;
+import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,10 +13,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/exchange")
-public class ExchangeServlet extends HttpServlet {
+public class Exchange_Servlet extends HttpServlet {
 
-    private final CurrencyService currencyService = CurrencyServiceImplementation.getINSTANCE();
-    private final ExchangeRateService exchangeRateService = ExchangeRateServiceImplementation.getINSTANCE();
+    private final CurrencyService currencyService = Currency_Service.getINSTANCE();
+    private final ExchangeRateService exchangeRateService = ExchangeRate_Service.getINSTANCE();
 
 
     @Override
