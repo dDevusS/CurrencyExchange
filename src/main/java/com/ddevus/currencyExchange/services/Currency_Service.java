@@ -10,7 +10,8 @@ public class Currency_Service implements com.ddevus.currencyExchange.services.in
     private static final CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
     private static final com.ddevus.currencyExchange.services.interfaces.ICurrency_Service INSTANCE = new Currency_Service();
 
-    private Currency_Service() {}
+    private Currency_Service() {
+    }
 
     public static com.ddevus.currencyExchange.services.interfaces.ICurrency_Service getINSTANCE() {
         return INSTANCE;
@@ -45,6 +46,6 @@ public class Currency_Service implements com.ddevus.currencyExchange.services.in
     @Override
     public boolean delete(int id) {
 
-            return currencyDAO.delete(id);
+        return currencyDAO.delete(id);
     }
 }

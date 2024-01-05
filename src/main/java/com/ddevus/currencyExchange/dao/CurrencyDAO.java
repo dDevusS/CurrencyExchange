@@ -16,7 +16,8 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
 
     private static final CurrencyDAO INSTANCE = new CurrencyDAO();
 
-    private CurrencyDAO() {}
+    private CurrencyDAO() {
+    }
 
     public static CurrencyDAO getINSTANCE() {
         return INSTANCE;
@@ -27,8 +28,8 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
         String sql = "INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
-        var preparedStatement
-                = connection.prepareStatement(sql, new String[]{"ID"})) {
+             var preparedStatement
+                     = connection.prepareStatement(sql, new String[]{"ID"})) {
 
             preparedStatement.setString(1, currency.getCode());
             preparedStatement.setString(2, currency.getName());
@@ -47,7 +48,8 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
                 try (var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
                     if (resultSet.next()) {
                         currency.setId(resultSet.getInt(1));
-                    } else {
+                    }
+                    else {
                         throw new SQLBadRequestException("Inserting currency failed, no ID obtained."
                                 , SQLBadRequestException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
                     }
@@ -72,7 +74,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
             var resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-               Currency currency = createCurrency(resultSet);
+                Currency currency = createCurrency(resultSet);
 
                 return Optional.of(currency).get();
             }
@@ -138,8 +140,8 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
         String sql = "DELETE FROM currencies WHERE ID = ?";
 
         try (var connection = ConnectionManager.open();
-        var preparedStatement
-                = connection.prepareStatement(sql)) {
+             var preparedStatement
+                     = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
 
             return preparedStatement.executeUpdate() > 0;

@@ -75,6 +75,6 @@ public class ExchangeRate_Servlet extends HttpServlet {
         String baseCurrencyCode = pathParts[1].substring(0, 3);
         String targetCurrencyCode = pathParts[1].substring(3);
 
-        return new String[]{ baseCurrencyCode, targetCurrencyCode};
+        return new String[]{baseCurrencyCode, targetCurrencyCode};
     }
 }

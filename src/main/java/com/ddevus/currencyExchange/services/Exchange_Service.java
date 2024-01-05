@@ -24,7 +24,8 @@ public class Exchange_Service implements com.ddevus.currencyExchange.services.in
     private final Logger logger = Logger.getLogger(Exchange_Service.class.getName());
     private static final Exchange_Service INSTANCE = new Exchange_Service();
 
-    private Exchange_Service() {}
+    private Exchange_Service() {
+    }
 
     public static Exchange_Service getINSTANCE() {
         return INSTANCE;
@@ -89,38 +90,38 @@ public class Exchange_Service implements com.ddevus.currencyExchange.services.in
 
         Set<ExchangeRate> exchangeRateSet = new LinkedHashSet<>();
 
-            for (ExchangeRate exchangeRate : exchangeRateList) {
-                if (isThere(baseCurrency, exchangeRate)) {
-                    exchangeRateSet.add(exchangeRate);
-                }
+        for (ExchangeRate exchangeRate : exchangeRateList) {
+            if (isThere(baseCurrency, exchangeRate)) {
+                exchangeRateSet.add(exchangeRate);
             }
+        }
 
-            for (ExchangeRate exchangeRate: exchangeRateSet) {
-                Currency transCurrency = getAnotherCurrency(baseCurrency, exchangeRate);
+        for (ExchangeRate exchangeRate : exchangeRateSet) {
+            Currency transCurrency = getAnotherCurrency(baseCurrency, exchangeRate);
 
-                for (ExchangeRate targetExchangeRate : exchangeRateList) {
-                    if (isGoal(targetCurrency, transCurrency, targetExchangeRate)) {
-                        goalExchangeRate = targetExchangeRate;
-                        transExchangeRate = exchangeRate;
-                        break;
-                    }
-                }
-
-                if (goalExchangeRate != null) {
+            for (ExchangeRate targetExchangeRate : exchangeRateList) {
+                if (isGoal(targetCurrency, transCurrency, targetExchangeRate)) {
+                    goalExchangeRate = targetExchangeRate;
+                    transExchangeRate = exchangeRate;
                     break;
                 }
             }
 
-            if (goalExchangeRate == null) {
-                throw new SQLBadRequestException("There is no suitable exchange rate in the database for these currency pairs."
-                , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+            if (goalExchangeRate != null) {
+                break;
             }
-            else {
-                BigDecimal goalRate = getGoalRate(baseCurrency, targetCurrency, transExchangeRate, goalExchangeRate);
-                ExchangeRate exchangeRate = new ExchangeRate(baseCurrency, targetCurrency, goalRate);
+        }
 
-                return getExchangeDtoWithConvertedAmount(baseCurrency, amount, exchangeRate);
-            }
+        if (goalExchangeRate == null) {
+            throw new SQLBadRequestException("There is no suitable exchange rate in the database for these currency pairs."
+                    , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+        }
+        else {
+            BigDecimal goalRate = getGoalRate(baseCurrency, targetCurrency, transExchangeRate, goalExchangeRate);
+            ExchangeRate exchangeRate = new ExchangeRate(baseCurrency, targetCurrency, goalRate);
+
+            return getExchangeDtoWithConvertedAmount(baseCurrency, amount, exchangeRate);
+        }
     }
 
     private static BigDecimal getGoalRate(Currency baseCurrency, Currency targetCurrency
@@ -167,7 +168,6 @@ public class Exchange_Service implements com.ddevus.currencyExchange.services.in
     private ExchangeDTO getExchangeDtoWithConvertedAmount(Currency fromCurrency, BigDecimal amount
             , ExchangeRate exchangeRate) {
         BigDecimal convertAmount;
-
 
         if (exchangeRate.getBaseCurrency().getId() == fromCurrency.getId()) {
             convertAmount = amount.multiply(exchangeRate.getRate());

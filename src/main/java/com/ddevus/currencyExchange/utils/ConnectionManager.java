@@ -13,7 +13,8 @@ public class ConnectionManager {
     private final static String URL_KEY = "db.url";
     private static final Logger logger = Logger.getLogger(ConnectionManager.class.getName());
 
-    private ConnectionManager() {}
+    private ConnectionManager() {
+    }
 
     public static Connection open() {
         try {

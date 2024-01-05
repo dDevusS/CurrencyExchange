@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebFilter ("/exchange")
+@WebFilter("/exchange")
 public class Exchange_Filter_ForCheckingRequestParameters implements Filter {
 
     @Override
@@ -18,7 +18,7 @@ public class Exchange_Filter_ForCheckingRequestParameters implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-       // GET /exchange?from=BASE_CURRENCY_CODE&to=TARGET_CURRENCY_CODE&amount=$AMOUNT
+        // GET /exchange?from=BASE_CURRENCY_CODE&to=TARGET_CURRENCY_CODE&amount=$AMOUNT
         var res = (HttpServletResponse) response;
         String baseCurrencyCode = request.getParameter("from");
         String targetCurrencyCode = request.getParameter("to");

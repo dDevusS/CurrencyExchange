@@ -42,9 +42,9 @@ public class Currencies_Servlet extends HttpServlet {
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sing = req.getParameter("sing");
-        var newCurrency = new Currency( name, code, sing);
+        var newCurrency = new Currency(name, code, sing);
 
-            newCurrency = currencyService.save(newCurrency);
+        newCurrency = currencyService.save(newCurrency);
         logger.info("JSON Response: " + newCurrency);
 
         try (var writer = resp.getWriter()) {

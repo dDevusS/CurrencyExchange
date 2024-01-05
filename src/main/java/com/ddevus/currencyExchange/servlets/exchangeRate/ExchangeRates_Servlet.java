@@ -53,7 +53,7 @@ public class ExchangeRates_Servlet extends HttpServlet {
         Currency baseCurrency = currencyService.findByCode(baseCurrencyCode);
         Currency targetCurrency = currencyService.findByCode(targetCurrencyCode);
 
-        var newExchangeRate = new ExchangeRate( baseCurrency, targetCurrency, rate);
+        var newExchangeRate = new ExchangeRate(baseCurrency, targetCurrency, rate);
         newExchangeRate = exchangeRateService.save(newExchangeRate);
         logger.info("JSON Response: " + newExchangeRate);
 

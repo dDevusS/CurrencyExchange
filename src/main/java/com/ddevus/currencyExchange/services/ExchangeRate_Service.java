@@ -17,9 +17,10 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
 
     private static final IExchangeRateDAO exchangeRateDAO = ExchangeRateDAO.getINSTANCE();
     private static final ICurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
-    private static final IExchangeRate_Service INSTANCE= new ExchangeRate_Service();
+    private static final IExchangeRate_Service INSTANCE = new ExchangeRate_Service();
 
-    private ExchangeRate_Service() {}
+    private ExchangeRate_Service() {
+    }
 
     public static IExchangeRate_Service getINSTANCE() {
         return INSTANCE;
@@ -44,7 +45,7 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
         }
         catch (SQLBadRequestException e) {
             throw new SQLBadRequestException("There is no currency or currencies with those codes."
-            , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
+                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
         }
 
         return exchangeRateDAO.findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
@@ -72,7 +73,7 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
         }
         catch (SQLBadRequestException e) {
             throw new SQLBadRequestException("There is no currency pair with those codes in the database."
-            , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
+                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
         }
 
         return exchangeRate;

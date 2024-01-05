@@ -3,6 +3,7 @@ package com.ddevus.currencyExchange.exceptions;
 import java.util.logging.Logger;
 
 public abstract class WrapperException extends RuntimeException {
+
     protected String errorMessage;
     protected ErrorReason errorReason;
 
@@ -30,18 +31,26 @@ public abstract class WrapperException extends RuntimeException {
     public int getSTATUS_CODE_HTTP_RESPONSE() {
         int STATUS_CODE_HTTP_RESPONSE = 500;
         switch (errorReason) {
-            case FAILED_INSERT -> {return 409;}
+            case FAILED_INSERT -> {
+                return 409;
+            }
 
             case MISSING_PARAMETERS
-                    , INCORRECT_PARAMETERS -> {return 400;}
+                    , INCORRECT_PARAMETERS -> {
+                return 400;
+            }
 
             case FAILED_FIND_CURRENCY_IN_DB
-                    , FAILED_FIND_EXCHANGE_RATE_IN_DB -> {return 404;}
+                    , FAILED_FIND_EXCHANGE_RATE_IN_DB -> {
+                return 404;
+            }
 
             case FAILED_GET_LAST_OPERATION_ID
                     , FAILED_READ_PROPERTIES
                     , FAILED_FIND_JDBC_DRIVER
-                    , UNKNOWN_ERROR_CONNECTING_TO_DB -> {return  500;}
+                    , UNKNOWN_ERROR_CONNECTING_TO_DB -> {
+                return 500;
+            }
         }
 
         return STATUS_CODE_HTTP_RESPONSE;

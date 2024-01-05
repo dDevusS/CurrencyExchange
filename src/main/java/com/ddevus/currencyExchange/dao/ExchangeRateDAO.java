@@ -17,7 +17,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     private static final CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
     private static final ExchangeRateDAO INSTANCE = new ExchangeRateDAO();
 
-    private ExchangeRateDAO() {}
+    private ExchangeRateDAO() {
+    }
 
     public static ExchangeRateDAO getINSTANCE() {
         return INSTANCE;
@@ -49,12 +50,13 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
 
             try (var statement = connection.createStatement();
                  var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
-                    if (resultSet.next()) {
-                        exchangeRate.setId(resultSet.getInt(1));
-                    } else {
-                        throw new SQLBadRequestException("Inserting currency failed, no ID obtained."
-                                , WrapperException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
-                    }
+                if (resultSet.next()) {
+                    exchangeRate.setId(resultSet.getInt(1));
+                }
+                else {
+                    throw new SQLBadRequestException("Inserting currency failed, no ID obtained."
+                            , WrapperException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
+                }
             }
 
             return exchangeRate;
@@ -83,7 +85,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             }
             else {
                 throw new SQLBadRequestException("There is not currency pair with those codes in database"
-                        , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB );
+                        , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
             }
         }
         catch (SQLException e) {
@@ -108,9 +110,9 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
                         = currencyDAO.findById(resultSet.getInt("TargetCurrencyID"));
 
                 ExchangeRate exchangeRate = new ExchangeRate(resultSet.getInt("ID")
-                , baseCurrency
-                , targetCurrency
-                , resultSet.getBigDecimal("Rate"));
+                        , baseCurrency
+                        , targetCurrency
+                        , resultSet.getBigDecimal("Rate"));
 
                 exchangeRates.add(exchangeRate);
             }

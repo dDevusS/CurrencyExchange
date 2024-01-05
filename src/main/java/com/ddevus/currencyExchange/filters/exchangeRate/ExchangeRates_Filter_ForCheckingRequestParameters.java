@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebFilter ("/exchangeRates")
+@WebFilter("/exchangeRates")
 public class ExchangeRates_Filter_ForCheckingRequestParameters implements Filter {
 
     @Override
