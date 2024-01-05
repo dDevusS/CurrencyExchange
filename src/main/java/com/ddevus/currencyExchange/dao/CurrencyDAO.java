@@ -136,13 +136,13 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
     }
 
     @Override
-    public boolean delete(int id) {
-        String sql = "DELETE FROM currencies WHERE ID = ?";
+    public boolean deleteByCode(String code) {
+        String sql = "DELETE FROM currencies WHERE Code = ?";
 
         try (var connection = ConnectionManager.open();
              var preparedStatement
                      = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, code);
 
             return preparedStatement.executeUpdate() > 0;
         }

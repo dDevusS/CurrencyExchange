@@ -44,8 +44,8 @@ public class Currency_Service implements com.ddevus.currencyExchange.services.in
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean deleteByCode(String code) {
 
-        return currencyDAO.delete(id);
+        return currencyDAO.deleteByCode(code);
     }
 }

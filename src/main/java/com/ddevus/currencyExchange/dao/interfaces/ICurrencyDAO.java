@@ -14,5 +14,5 @@ public interface ICurrencyDAO {
 
     public List<Currency> findAll();
 
-    public boolean delete(int id);
+    public boolean deleteByCode(String code);
 }

@@ -1,5 +1,7 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import jakarta.servlet.ServletException;
@@ -32,5 +34,25 @@ public class Currency_Servlet extends HttpServlet {
             writer.write(currency.toString());
         }
         logger.info("Finished processing GET request.");
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        logger.info("Processing the client's DELETE request.");
+        String servletPath = req.getPathInfo();
+        String[] pathParts = servletPath.split("/");
+
+        if (currencyService.deleteByCode(pathParts[1])) {
+            logger.info("JSON Response: " + "{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}");
+        }
+        else {
+            throw new SQLBadRequestException("There is no currency wit this code in the database."
+            , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
+        }
+
+        try (var writer = resp.getWriter()) {
+            writer.write("{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}");
+        }
+        logger.info("Finished processing Delete request.");
     }
 }
