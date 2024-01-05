@@ -82,7 +82,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             }
             else {
                 throw new SQLBadRequestException("There is not currency pair with those codes in database"
-                        , WrapperException.ErrorReason.FAILED_FIND_OBJECT_IN_DB );
+                        , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB );
             }
         }
         catch (SQLException e) {

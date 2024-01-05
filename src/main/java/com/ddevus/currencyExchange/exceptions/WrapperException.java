@@ -10,7 +10,8 @@ public abstract class WrapperException extends RuntimeException {
 
     public enum ErrorReason {
         FAILED_INSERT, FAILED_GET_LAST_OPERATION_ID, FAILED_READ_PROPERTIES, FAILED_FIND_JDBC_DRIVER,
-        UNKNOWN_ERROR_CONNECTING_TO_DB, MISSING_PARAMETERS, INCORRECT_PARAMETERS, FAILED_FIND_OBJECT_IN_DB
+        UNKNOWN_ERROR_CONNECTING_TO_DB, MISSING_PARAMETERS, INCORRECT_PARAMETERS, FAILED_FIND_CURRENCY_IN_DB,
+        FAILED_FIND_EXCHANGE_RATE_IN_DB
     }
 
     @Override
@@ -34,7 +35,8 @@ public abstract class WrapperException extends RuntimeException {
             case MISSING_PARAMETERS
                     , INCORRECT_PARAMETERS -> {return 400;}
 
-            case FAILED_FIND_OBJECT_IN_DB -> {return 404;}
+            case FAILED_FIND_CURRENCY_IN_DB
+                    , FAILED_FIND_EXCHANGE_RATE_IN_DB -> {return 404;}
 
             case FAILED_GET_LAST_OPERATION_ID
                     , FAILED_READ_PROPERTIES
@@ -43,5 +45,9 @@ public abstract class WrapperException extends RuntimeException {
         }
 
         return STATUS_CODE_HTTP_RESPONSE;
+    }
+
+    public ErrorReason getErrorReason() {
+        return errorReason;
     }
 }

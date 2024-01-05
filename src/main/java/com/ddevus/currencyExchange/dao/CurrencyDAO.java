@@ -78,7 +78,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
             }
             else {
                 throw new SQLBadRequestException("There is no currency with this ID."
-                        , SQLBadRequestException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
+                        , SQLBadRequestException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
             }
         }
         catch (SQLException e) {
@@ -103,7 +103,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.C
             }
             else {
                 throw new SQLBadRequestException("There is no currency with this Code."
-                        , SQLBadRequestException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
+                        , SQLBadRequestException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
             }
         }
         catch (SQLException e) {
