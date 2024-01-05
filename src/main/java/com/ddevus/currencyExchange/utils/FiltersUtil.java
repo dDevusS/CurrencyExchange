@@ -20,27 +20,35 @@ public class FiltersUtil {
         }
     }
 
-    public static boolean isCorrectParameter(String pathInfo) {
+    public static boolean isCorrectCodePairParameter(String pathInfo) {
         String[] pathParts = pathInfo.split("/");
 
         return (pathParts.length == 2 && pathParts[1].length() == 6);
     }
 
-    public static void checkRateFormat(String rate, HttpServletResponse res) {
+    public static void checkNumberFormat(String number) {
         try {
-            Float.parseFloat(rate);
+            Float.parseFloat(number);
         }
         catch (NumberFormatException exception) {
-            var e = new IncorrectParametersException("Required parameters are incorrect."
+            throw new IncorrectParametersException("Required parameters are incorrect."
                     , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
-
-            FiltersUtil.handleException(res, e);
         }
         catch (NullPointerException exception) {
-            var e = new IncorrectParametersException("Required parameter is missed."
+            throw new IncorrectParametersException("Required parameter is missed."
                     , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
+        }
+    }
 
-            FiltersUtil.handleException(res, e);
+    public static void checkSentCodeParameters(String baseCurrencyCode, String targetCurrencyCode) {
+
+        if (baseCurrencyCode == null || targetCurrencyCode == null) {
+            throw new IncorrectParametersException("Required parameter is missed."
+                    , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
+        }
+        else if (baseCurrencyCode.length() != 3 || targetCurrencyCode.length() != 3) {
+            throw new IncorrectParametersException("Required parameters are incorrect."
+                    , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
         }
     }
 }

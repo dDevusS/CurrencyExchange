@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.filters.exchangeRate;
 
 import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -27,20 +26,20 @@ public class ExchangeRates_Filter_ForCheckingRequestParameters implements Filter
         if (("POST").equals(req.getMethod())) {
             String baseCurrencyCode = req.getParameter("baseCurrencyCode");
             String targetCurrencyCode = req.getParameter("targetCurrencyCode");
+            String rate = req.getParameter("rate");
 
-            FiltersUtil.checkRateFormat(req.getParameter("rate"), res);
-
-            if (baseCurrencyCode == null || targetCurrencyCode == null) {
-                var e = new IncorrectParametersException("Required parameter is missed."
-                        , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
-
+            try {
+                FiltersUtil.checkNumberFormat(rate);
+            }
+            catch (IncorrectParametersException e) {
                 FiltersUtil.handleException(res, e);
             }
-            else if (baseCurrencyCode.length() != 3 || targetCurrencyCode.length() != 3) {
-                var exception = new IncorrectParametersException("Required parameters are incorrect."
-                        , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
 
-                FiltersUtil.handleException(res, exception);
+            try {
+                FiltersUtil.checkSentCodeParameters(baseCurrencyCode, targetCurrencyCode);
+            }
+            catch (IncorrectParametersException e) {
+                FiltersUtil.handleException(res, e);
             }
         }
 

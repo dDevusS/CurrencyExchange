@@ -24,9 +24,10 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
         var req = ((HttpServletRequest) request);
         var res = ((HttpServletResponse) response);
         var pathInfo = req.getPathInfo();
+        String rate = req.getParameter("rate");
 
         if (("GET").equals(req.getMethod())) {
-            if (FiltersUtil.isCorrectParameter(pathInfo)) {
+            if (FiltersUtil.isCorrectCodePairParameter(pathInfo)) {
                 chain.doFilter(request, response);
             }
             else {
@@ -38,7 +39,7 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
         }
 
         if (("PATCH").equals(req.getMethod())) {
-            if (!FiltersUtil.isCorrectParameter(pathInfo)) {
+            if (!FiltersUtil.isCorrectCodePairParameter(pathInfo)) {
                 var exception
                         = new IncorrectParametersException("Required parameters are incorrect."
                         , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
@@ -46,7 +47,12 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
                 FiltersUtil.handleException(res, exception);
             }
 
-            FiltersUtil.checkRateFormat(req.getParameter("rate"), res);
+            try {
+                FiltersUtil.checkNumberFormat(rate);
+            }
+            catch (IncorrectParametersException e) {
+                FiltersUtil.handleException(res, e);
+            }
         }
 
         chain.doFilter(request, response);
