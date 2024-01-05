@@ -1,6 +1,7 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
-import com.ddevus.currencyExchange.services.interfaces.Currency_Service;
+import com.ddevus.currencyExchange.services.Currency_Service;
+import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +16,7 @@ import java.io.IOException;
 public class Currency_Servlet extends HttpServlet {
 
     private final Logger logger = LoggerFactory.getLogger(Currency_Servlet.class.getName());
-    private final Currency_Service currencyService = com.ddevus.currencyExchange.services.Currency_Service.getINSTANCE();
+    private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

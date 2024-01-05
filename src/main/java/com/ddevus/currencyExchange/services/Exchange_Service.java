@@ -5,21 +5,22 @@ import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
-import com.ddevus.currencyExchange.services.interfaces.Currencies_ExchangerService;
-import com.ddevus.currencyExchange.services.interfaces.Currency_Service;
-import com.ddevus.currencyExchange.services.interfaces.ExchangeRate_Service;
+import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
+import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public class Exchange_Service implements Currencies_ExchangerService {
+public class Exchange_Service implements com.ddevus.currencyExchange.services.interfaces.IExchange_Service {
 
-    private final Currency_Service currencyService
-            = com.ddevus.currencyExchange.services.Currency_Service.getINSTANCE();
-    private final ExchangeRate_Service exchangeRateService
-            = com.ddevus.currencyExchange.services.ExchangeRate_Service.getINSTANCE();
+    private final ICurrency_Service currencyService
+            = Currency_Service.getINSTANCE();
+    private final IExchangeRate_Service exchangeRateService
+            = ExchangeRate_Service.getINSTANCE();
     private final Logger logger = Logger.getLogger(Exchange_Service.class.getName());
     private static final Exchange_Service INSTANCE = new Exchange_Service();
 
@@ -30,10 +31,11 @@ public class Exchange_Service implements Currencies_ExchangerService {
     }
 
     @Override
-    public ExchangeDTO exchangeAmount(String baseCurrencyCode, String targetCurrencyCode, float amount) {
+    public ExchangeDTO exchangeAmount(String baseCurrencyCode, String targetCurrencyCode, BigDecimal amount) {
         Currency baseCurrency;
         Currency targetCurrency;
 
+        logger.info("Getting currency.");
         try {
             baseCurrency = currencyService.findByCode(baseCurrencyCode);
             targetCurrency = currencyService.findByCode(targetCurrencyCode);
@@ -43,12 +45,12 @@ public class Exchange_Service implements Currencies_ExchangerService {
             throw e;
         }
 
-        ExchangeDTO exchangeDTO = tryFirstScript(baseCurrency, targetCurrency, amount);
-
-        return exchangeDTO;
+        return tryFirstScript(baseCurrency, targetCurrency, amount);
     }
 
-    private ExchangeDTO tryFirstScript(Currency baseCurrency, Currency targetCurrency, float amount) {
+    private ExchangeDTO tryFirstScript(Currency baseCurrency, Currency targetCurrency, BigDecimal amount) {
+        logger.info("Running first script for exchanging.");
+
         try {
             var exchangeRate
                     = exchangeRateService.findByBaseAndTargetCurrenciesCode(baseCurrency.getCode()
@@ -62,7 +64,9 @@ public class Exchange_Service implements Currencies_ExchangerService {
         }
     }
 
-    private ExchangeDTO trySecondScript(Currency baseCurrency, Currency targetCurrency, float amount) {
+    private ExchangeDTO trySecondScript(Currency baseCurrency, Currency targetCurrency, BigDecimal amount) {
+        logger.info("Running second script for exchanging.");
+
         try {
             var inverseExchangeRate = exchangeRateService
                     .findByBaseAndTargetCurrenciesCode(targetCurrency.getCode()
@@ -76,14 +80,12 @@ public class Exchange_Service implements Currencies_ExchangerService {
         }
     }
 
-    private ExchangeDTO tryThirdScript(Currency baseCurrency, Currency targetCurrency, float amount) {
+    private ExchangeDTO tryThirdScript(Currency baseCurrency, Currency targetCurrency, BigDecimal amount) {
+        logger.info("Running third script for exchanging.");
 
         List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
-        int baseID = baseCurrency.getId();
-        int targetID = targetCurrency.getId();
         ExchangeRate transExchangeRate = null;
         ExchangeRate goalExchangeRate = null;
-        ExchangeDTO exchangeDTO;
 
         Set<ExchangeRate> exchangeRateSet = new LinkedHashSet<>();
 
@@ -114,29 +116,31 @@ public class Exchange_Service implements Currencies_ExchangerService {
                 , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
             }
             else {
-                float goalRate = getGoalRate(baseCurrency, targetCurrency, transExchangeRate, goalExchangeRate);
+                BigDecimal goalRate = getGoalRate(baseCurrency, targetCurrency, transExchangeRate, goalExchangeRate);
                 ExchangeRate exchangeRate = new ExchangeRate(baseCurrency, targetCurrency, goalRate);
 
                 return getExchangeDtoWithConvertedAmount(baseCurrency, amount, exchangeRate);
             }
     }
 
-    private static float getGoalRate(Currency baseCurrency, Currency targetCurrency
+    private static BigDecimal getGoalRate(Currency baseCurrency, Currency targetCurrency
             , ExchangeRate transExchangeRate, ExchangeRate goalExchangeRate) {
-        float goalRate = 0;
+        BigDecimal goalRate;
 
         if (baseCurrency.getId() == transExchangeRate.getBaseCurrency().getId()) {
             goalRate = transExchangeRate.getRate();
         }
         else {
-            goalRate = 1 / transExchangeRate.getRate();
+            goalRate = BigDecimal.valueOf(1).divide(transExchangeRate.getRate()
+                    , 6, RoundingMode.HALF_UP);
         }
 
         if (targetCurrency.getId() == goalExchangeRate.getTargetCurrency().getId()) {
-            goalRate = goalRate * goalExchangeRate.getRate();
+            goalRate = goalRate.multiply(goalExchangeRate.getRate());
+            goalRate = goalRate.setScale(6, RoundingMode.HALF_UP);
         }
         else {
-            goalRate = goalRate / goalExchangeRate.getRate();
+            goalRate = goalRate.divide(goalExchangeRate.getRate(), 6, RoundingMode.HALF_UP);
         }
 
         return goalRate;
@@ -160,20 +164,19 @@ public class Exchange_Service implements Currencies_ExchangerService {
         }
     }
 
-    private ExchangeDTO getExchangeDtoWithConvertedAmount(Currency fromCurrency, float amount
+    private ExchangeDTO getExchangeDtoWithConvertedAmount(Currency fromCurrency, BigDecimal amount
             , ExchangeRate exchangeRate) {
-        float convertAmount;
+        BigDecimal convertAmount;
+
 
         if (exchangeRate.getBaseCurrency().getId() == fromCurrency.getId()) {
-            convertAmount = amount * exchangeRate.getRate();
+            convertAmount = amount.multiply(exchangeRate.getRate());
+            convertAmount = convertAmount.setScale(2, RoundingMode.HALF_UP);
         }
         else {
-            convertAmount = amount / exchangeRate.getRate();
+            convertAmount = amount.divide(exchangeRate.getRate(), 2, RoundingMode.HALF_UP);
         }
 
-        var currencyExchanger
-                = new ExchangeDTO(exchangeRate, amount, convertAmount);
-
-        return currencyExchanger;
+        return new ExchangeDTO(exchangeRate, amount, convertAmount);
     }
 }

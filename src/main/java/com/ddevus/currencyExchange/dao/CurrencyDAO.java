@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO {
+public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.ICurrencyDAO {
 
     private static final CurrencyDAO INSTANCE = new CurrencyDAO();
 

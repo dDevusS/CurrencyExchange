@@ -7,11 +7,12 @@ import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO {
+public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO {
 
     private static CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
     private static final ExchangeRateDAO INSTANCE = new ExchangeRateDAO();
@@ -31,7 +32,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
                      = connection.prepareStatement(sql, new String[]{"ID"})) {
             preparedStatement.setInt(1, exchangeRate.getBaseCurrency().getId());
             preparedStatement.setInt(2, exchangeRate.getTargetCurrency().getId());
-            preparedStatement.setFloat(3, exchangeRate.getRate());
+            preparedStatement.setBigDecimal(3, exchangeRate.getRate());
 
             try {
                 preparedStatement.executeUpdate();
@@ -78,7 +79,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
                 return new ExchangeRate(resultSet.getInt("ID")
                         , baseCurrency
                         , targetCurrency
-                        , resultSet.getFloat("Rate"));
+                        , resultSet.getBigDecimal("Rate"));
             }
             else {
                 throw new SQLBadRequestException("There is not currency pair with those codes in database"
@@ -109,7 +110,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
                 ExchangeRate exchangeRate = new ExchangeRate(resultSet.getInt("ID")
                 , baseCurrency
                 , targetCurrency
-                , resultSet.getFloat("Rate"));
+                , resultSet.getBigDecimal("Rate"));
 
                 exchangeRates.add(exchangeRate);
             }
@@ -123,12 +124,12 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     }
 
     @Override
-    public boolean update(int id, float rate) {
+    public boolean update(int id, BigDecimal rate) {
         String sql = "UPDATE exchangeRates SET Rate=? WHERE ID=?";
 
         try (var connection = ConnectionManager.open();
              var preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setFloat(1, rate);
+            preparedStatement.setBigDecimal(1, rate);
             preparedStatement.setInt(2, id);
             var result = preparedStatement.executeUpdate() > 0;
 

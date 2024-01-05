@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @WebServlet("/exchange")
 public class Exchange_Servlet extends HttpServlet {
@@ -22,14 +23,14 @@ public class Exchange_Servlet extends HttpServlet {
         logger.info("Processing the client's GET request.");
         String baseCurrencyCode = req.getParameter("from");
         String targetCurrencyCode = req.getParameter("to");
-        float amount = Float.parseFloat(req.getParameter("amount"));
+        BigDecimal amount = new BigDecimal(req.getParameter("amount"));
 
-        var currencyExchangerDTO
+        var exchangeDTO
                 = exchangeService.exchangeAmount(baseCurrencyCode, targetCurrencyCode, amount);
-        logger.info("JSON Response: " + currencyExchangerDTO);
+        logger.info("JSON Response: " + exchangeDTO);
 
         try (var writer = resp.getWriter()) {
-            writer.write(currencyExchangerDTO.toString());
+            writer.write(exchangeDTO.toString());
         }
         logger.info("Finished processing GET request.");
     }

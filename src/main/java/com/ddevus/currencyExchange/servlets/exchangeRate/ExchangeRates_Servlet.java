@@ -2,8 +2,10 @@ package com.ddevus.currencyExchange.servlets.exchangeRate;
 
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
-import com.ddevus.currencyExchange.services.interfaces.Currency_Service;
-import com.ddevus.currencyExchange.services.interfaces.ExchangeRate_Service;
+import com.ddevus.currencyExchange.services.Currency_Service;
+import com.ddevus.currencyExchange.services.ExchangeRate_Service;
+import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
+import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,14 +15,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @WebServlet("/exchangeRates")
 public class ExchangeRates_Servlet extends HttpServlet {
 
     private final Logger logger = LoggerFactory.getLogger(ExchangeRates_Servlet.class.getName());
-    private final ExchangeRate_Service exchangeRateService = com.ddevus.currencyExchange.services.ExchangeRate_Service.getINSTANCE();
-    private final Currency_Service currencyService = com.ddevus.currencyExchange.services.Currency_Service.getINSTANCE();
+    private final IExchangeRate_Service exchangeRateService = ExchangeRate_Service.getINSTANCE();
+    private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -43,7 +47,8 @@ public class ExchangeRates_Servlet extends HttpServlet {
         logger.info("Processing the client's POST request.");
         String baseCurrencyCode = req.getParameter("baseCurrencyCode");
         String targetCurrencyCode = req.getParameter("targetCurrencyCode");
-        float rate = Float.parseFloat(req.getParameter("rate"));
+        BigDecimal rate = new BigDecimal(req.getParameter("rate"));
+        rate = rate.setScale(6, RoundingMode.HALF_UP);
 
         Currency baseCurrency = currencyService.findByCode(baseCurrencyCode);
         Currency targetCurrency = currencyService.findByCode(targetCurrencyCode);

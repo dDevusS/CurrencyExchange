@@ -2,13 +2,15 @@ package com.ddevus.currencyExchange.dto;
 
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 
+import java.math.BigDecimal;
+
 public class ExchangeDTO {
 
     private ExchangeRate exchangeRate;
-    private float amount;
-    private float convertedAmount;
+    private BigDecimal amount;
+    private BigDecimal convertedAmount;
 
-    public ExchangeDTO(ExchangeRate exchangeRate, float amount, float convertedAmount) {
+    public ExchangeDTO(ExchangeRate exchangeRate, BigDecimal amount, BigDecimal convertedAmount) {
         this.exchangeRate = exchangeRate;
         this.amount = amount;
         this.convertedAmount = convertedAmount;
@@ -18,11 +20,11 @@ public class ExchangeDTO {
         return exchangeRate;
     }
 
-    public float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public float getConvertedAmount() {
+    public BigDecimal getConvertedAmount() {
         return convertedAmount;
     }
 

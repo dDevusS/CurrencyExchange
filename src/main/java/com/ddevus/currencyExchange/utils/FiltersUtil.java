@@ -6,6 +6,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class FiltersUtil {
 
@@ -28,7 +29,7 @@ public class FiltersUtil {
 
     public static void checkNumberFormat(String number) {
         try {
-            Float.parseFloat(number);
+            new BigDecimal(number);
         }
         catch (NumberFormatException exception) {
             throw new IncorrectParametersException("Required parameters are incorrect."

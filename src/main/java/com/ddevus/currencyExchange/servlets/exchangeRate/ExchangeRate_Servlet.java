@@ -1,7 +1,9 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
-import com.ddevus.currencyExchange.services.interfaces.Currency_Service;
-import com.ddevus.currencyExchange.services.interfaces.ExchangeRate_Service;
+import com.ddevus.currencyExchange.services.Currency_Service;
+import com.ddevus.currencyExchange.services.ExchangeRate_Service;
+import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
+import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,13 +13,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @WebServlet("/exchangeRate/*")
 public class ExchangeRate_Servlet extends HttpServlet {
 
     private final Logger logger = LoggerFactory.getLogger(ExchangeRate_Servlet.class.getName());
-    private final ExchangeRate_Service exchangeRateService = com.ddevus.currencyExchange.services.ExchangeRate_Service.getINSTANCE();
-    private final Currency_Service currencyService = com.ddevus.currencyExchange.services.Currency_Service.getINSTANCE();
+    private final IExchangeRate_Service exchangeRateService = ExchangeRate_Service.getINSTANCE();
+    private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -52,8 +56,8 @@ public class ExchangeRate_Servlet extends HttpServlet {
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("Processing the client's PATCH request.");
-        float rate = Float.parseFloat(req.getParameter("rate"));
-        String servletPath = req.getPathInfo();
+        BigDecimal rate = new BigDecimal(req.getParameter("rate"));
+        rate = rate.setScale(6, RoundingMode.HALF_UP);
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
         var exchangeRate
