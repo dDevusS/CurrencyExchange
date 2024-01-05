@@ -12,11 +12,15 @@ import com.ddevus.currencyExchange.services.interfaces.ExchangeRate_Service;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class Exchange_Service implements Currencies_ExchangerService {
 
-    private final Currency_Service currencyService = com.ddevus.currencyExchange.services.Currency_Service.getINSTANCE();
-    private final ExchangeRate_Service exchangeRateService = com.ddevus.currencyExchange.services.ExchangeRate_Service.getINSTANCE();
+    private final Currency_Service currencyService
+            = com.ddevus.currencyExchange.services.Currency_Service.getINSTANCE();
+    private final ExchangeRate_Service exchangeRateService
+            = com.ddevus.currencyExchange.services.ExchangeRate_Service.getINSTANCE();
+    private final Logger logger = Logger.getLogger(Exchange_Service.class.getName());
     private static final Exchange_Service INSTANCE = new Exchange_Service();
 
     private Exchange_Service() {}
@@ -50,7 +54,7 @@ public class Exchange_Service implements Currencies_ExchangerService {
                     = exchangeRateService.findByBaseAndTargetCurrenciesCode(baseCurrency.getCode()
                     , targetCurrency.getCode());
 
-            return convertBaseCurrencyToTargetCurrency(baseCurrency, amount, exchangeRate);
+            return getExchangeDtoWithConvertedAmount(baseCurrency, amount, exchangeRate);
         }
         catch (SQLBadRequestException e) {
 
@@ -64,7 +68,7 @@ public class Exchange_Service implements Currencies_ExchangerService {
                     .findByBaseAndTargetCurrenciesCode(targetCurrency.getCode()
                             , baseCurrency.getCode());
 
-            return convertBaseCurrencyToTargetCurrency(baseCurrency, amount, inverseExchangeRate);
+            return getExchangeDtoWithConvertedAmount(baseCurrency, amount, inverseExchangeRate);
         }
         catch (SQLBadRequestException e) {
 
@@ -84,16 +88,16 @@ public class Exchange_Service implements Currencies_ExchangerService {
         Set<ExchangeRate> exchangeRateSet = new LinkedHashSet<>();
 
             for (ExchangeRate exchangeRate : exchangeRateList) {
-                if (isThere(baseID, exchangeRate)) {
+                if (isThere(baseCurrency, exchangeRate)) {
                     exchangeRateSet.add(exchangeRate);
                 }
             }
 
             for (ExchangeRate exchangeRate: exchangeRateSet) {
-                int transID = getAnotherID(baseID, exchangeRate);
+                Currency transCurrency = getAnotherCurrency(baseCurrency, exchangeRate);
 
                 for (ExchangeRate targetExchangeRate : exchangeRateList) {
-                    if (isGoal(targetID, transID, targetExchangeRate)) {
+                    if (isGoal(targetCurrency, transCurrency, targetExchangeRate)) {
                         goalExchangeRate = targetExchangeRate;
                         transExchangeRate = exchangeRate;
                         break;
@@ -113,7 +117,7 @@ public class Exchange_Service implements Currencies_ExchangerService {
                 float goalRate = getGoalRate(baseCurrency, targetCurrency, transExchangeRate, goalExchangeRate);
                 ExchangeRate exchangeRate = new ExchangeRate(baseCurrency, targetCurrency, goalRate);
 
-                return convertBaseCurrencyToTargetCurrency(baseCurrency, amount, exchangeRate);
+                return getExchangeDtoWithConvertedAmount(baseCurrency, amount, exchangeRate);
             }
     }
 
@@ -138,24 +142,25 @@ public class Exchange_Service implements Currencies_ExchangerService {
         return goalRate;
     }
 
-    private static boolean isThere(int baseID, ExchangeRate exchangeRate) {
-        return baseID == exchangeRate.getBaseCurrency().getId() || baseID == exchangeRate.getTargetCurrency().getId();
+    private static boolean isThere(Currency baseCurrency, ExchangeRate exchangeRate) {
+        return baseCurrency.getId() == exchangeRate.getBaseCurrency().getId() || baseCurrency.getId() == exchangeRate.getTargetCurrency().getId();
     }
 
-    private static boolean isGoal(int baseID, int targetID, ExchangeRate exchangeRate) {
-        return isThere(baseID, exchangeRate) && isThere(targetID, exchangeRate);
+    private static boolean isGoal(Currency baseCurrency, Currency targetCurrency, ExchangeRate exchangeRate) {
+        return isThere(baseCurrency, exchangeRate) && isThere(targetCurrency, exchangeRate);
     }
 
-    private static int getAnotherID(int id, ExchangeRate exchangeRate) {
-        if (id != exchangeRate.getBaseCurrency().getId()) {
-            return exchangeRate.getBaseCurrency().getId();
+    private static Currency getAnotherCurrency(Currency currency, ExchangeRate exchangeRate) {
+        if (currency.getId() != exchangeRate.getBaseCurrency().getId()) {
+            return exchangeRate.getBaseCurrency();
         }
         else {
-            return exchangeRate.getTargetCurrency().getId();
+
+            return exchangeRate.getTargetCurrency();
         }
     }
 
-    private ExchangeDTO convertBaseCurrencyToTargetCurrency (Currency fromCurrency, float amount
+    private ExchangeDTO getExchangeDtoWithConvertedAmount(Currency fromCurrency, float amount
             , ExchangeRate exchangeRate) {
         float convertAmount;
 
