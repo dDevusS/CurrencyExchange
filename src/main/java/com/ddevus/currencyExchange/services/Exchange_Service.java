@@ -1,89 +1,98 @@
 package com.ddevus.currencyExchange.services;
 
 import com.ddevus.currencyExchange.dto.CurrencyExchangerDTO;
+import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.services.interfaces.CurrenciesExchangerService;
 import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 
-public class CurrencyExchanger_Service implements CurrenciesExchangerService {
+import java.util.List;
+
+public class Exchange_Service implements CurrenciesExchangerService {
 
     private final CurrencyService currencyService = Currency_Service.getINSTANCE();
     private final ExchangeRateService exchangeRateService = ExchangeRate_Service.getINSTANCE();
-    private static final CurrenciesExchangerService INSTANCE = new CurrencyExchanger_Service();
+    private static final Exchange_Service INSTANCE = new Exchange_Service();
 
-    private CurrencyExchanger_Service() {}
+    private Exchange_Service() {}
 
-    public static CurrenciesExchangerService getINSTANCE() {
+    public static Exchange_Service getINSTANCE() {
         return INSTANCE;
     }
 
     @Override
     public CurrencyExchangerDTO exchangeAmount(String baseCurrencyCode, String targetCurrencyCode, float amount) {
-        try {
-            var currencyExchangerDTO
-                    = tryFirstScript(baseCurrencyCode, targetCurrencyCode, amount);
-            return currencyExchangerDTO;
-        }
-        catch (Exception e) {
-
-        }
+        Currency baseCurrency;
+        Currency targetCurrency;
 
         try {
-            var currencyExchangerDTO
-                    = trySecondScript(baseCurrencyCode, targetCurrencyCode, amount);
-            return currencyExchangerDTO;
+            baseCurrency = currencyService.findByCode(baseCurrencyCode);
+            targetCurrency = currencyService.findByCode(targetCurrencyCode);
         }
-        catch (Exception e) {
+        catch (SQLBadRequestException e) {
+            e.setErrorMessage("There are no currencies with those codes in the database.");
+            throw e;
+        }
 
-        }
+        CurrencyExchangerDTO currencyExchangerDTO = tryFirstScript(baseCurrency, targetCurrency, amount);
 
-        try {
-            var currencyExchangerDTO
-                    = tryThirdScript(baseCurrencyCode, targetCurrencyCode, amount);
-            return currencyExchangerDTO;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return currencyExchangerDTO;
     }
 
-    private CurrencyExchangerDTO tryFirstScript(String baseCurrencyCode, String targetCurrencyCode, float amount) {
+    private CurrencyExchangerDTO tryFirstScript(Currency baseCurrency, Currency targetCurrency, float amount) {
         try {
             var exchangeRate
-                    = exchangeRateService.findByBaseAndTargetCurrenciesCode(baseCurrencyCode, targetCurrencyCode);
-            return convertBaseCurrencyToTargetCurrency(exchangeRate, amount);
+                    = exchangeRateService.findByBaseAndTargetCurrenciesCode(baseCurrency.getCode()
+                    , targetCurrency.getCode());
+
+            return convertBaseCurrencyToTargetCurrency(exchangeRate, amount, false);
         }
-        catch (Exception e) {
-            throw new RuntimeException(e);
+        catch (SQLBadRequestException e) {
+
+            return trySecondScript(baseCurrency, targetCurrency, amount);
         }
     }
 
-    private CurrencyExchangerDTO trySecondScript(String baseCurrencyCode, String targetCurrencyCode, float amount) {
+    private CurrencyExchangerDTO trySecondScript(Currency baseCurrency, Currency targetCurrency, float amount) {
         try {
-            var inverseExchangeRate
-                    = exchangeRateService.findByBaseAndTargetCurrenciesCode(targetCurrencyCode, baseCurrencyCode);
-            return convertBaseCurrencyToTargetCurrency(inverseExchangeRate, amount);
+            var inverseExchangeRate = exchangeRateService
+                    .findByBaseAndTargetCurrenciesCode(targetCurrency.getCode()
+                            , baseCurrency.getCode());
+
+            return convertBaseCurrencyToTargetCurrency(inverseExchangeRate, amount, true);
         }
-        catch (Exception e) {
-            throw new RuntimeException(e);
+        catch (SQLBadRequestException e) {
+
+            return tryThirdScript(baseCurrency, targetCurrency, amount);
         }
     }
 
-    private CurrencyExchangerDTO tryThirdScript(String baseCurrencyCode, String targetCurrencyCode, float amount) {
-        try {
-            var baseCurrencyDTO = currencyService.findByCode(baseCurrencyCode);
-            var targetCurrencyDTO = currencyService.findByCode(targetCurrencyCode);
+    private CurrencyExchangerDTO tryThirdScript(Currency baseCurrency, Currency targetCurrency, float amount) {
 
-            return null;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
+
+        //TODO: Realize logic seaching optimal pair for exchanging
+
+
+
+
+
+        return null;
     }
 
-    private CurrencyExchangerDTO convertBaseCurrencyToTargetCurrency (ExchangeRate exchangeRate, float amount) {
-        float convertAmount = amount * exchangeRate.getRate();
+    private CurrencyExchangerDTO convertBaseCurrencyToTargetCurrency (ExchangeRate exchangeRate
+            , float amount, boolean isInverted) {
+        float convertAmount;
+
+        if (!isInverted) {
+            convertAmount = amount * exchangeRate.getRate();
+        }
+        else {
+            convertAmount = amount / exchangeRate.getRate();
+        }
+
         var currencyExchanger
                 = new CurrencyExchangerDTO(exchangeRate, amount, convertAmount);
 

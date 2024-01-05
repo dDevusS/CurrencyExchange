@@ -41,7 +41,7 @@ public class ExchangeRate_Service implements ExchangeRateService {
         }
         catch (SQLBadRequestException e) {
             throw new SQLBadRequestException("There is no currency or currencies with those codes."
-            , WrapperException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
+            , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
         }
 
         return exchangeRateDAO.findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
@@ -69,7 +69,7 @@ public class ExchangeRate_Service implements ExchangeRateService {
         }
         catch (SQLBadRequestException e) {
             throw new SQLBadRequestException("There is no currency pair with those codes in the database."
-            , WrapperException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
+            , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
         }
 
         return exchangeRate;
