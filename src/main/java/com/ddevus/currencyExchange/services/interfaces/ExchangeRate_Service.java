@@ -4,7 +4,7 @@ import com.ddevus.currencyExchange.entity.ExchangeRate;
 
 import java.util.List;
 
-public interface ExchangeRateService {
+public interface ExchangeRate_Service {
 
     public ExchangeRate save(ExchangeRate exchangeRate);
 

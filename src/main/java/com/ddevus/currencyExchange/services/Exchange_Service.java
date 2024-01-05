@@ -1,19 +1,19 @@
 package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dto.CurrencyExchangerDTO;
+import com.ddevus.currencyExchange.dto.ExchangeDTO;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
-import com.ddevus.currencyExchange.services.interfaces.CurrenciesExchangerService;
-import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
-import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
+import com.ddevus.currencyExchange.services.interfaces.Currencies_ExchangerService;
+import com.ddevus.currencyExchange.services.interfaces.Currency_Service;
+import com.ddevus.currencyExchange.services.interfaces.ExchangeRate_Service;
 
 import java.util.List;
 
-public class Exchange_Service implements CurrenciesExchangerService {
+public class Exchange_Service implements Currencies_ExchangerService {
 
-    private final CurrencyService currencyService = Currency_Service.getINSTANCE();
-    private final ExchangeRateService exchangeRateService = ExchangeRate_Service.getINSTANCE();
+    private final Currency_Service currencyService = com.ddevus.currencyExchange.services.Currency_Service.getINSTANCE();
+    private final ExchangeRate_Service exchangeRateService = com.ddevus.currencyExchange.services.ExchangeRate_Service.getINSTANCE();
     private static final Exchange_Service INSTANCE = new Exchange_Service();
 
     private Exchange_Service() {}
@@ -23,7 +23,7 @@ public class Exchange_Service implements CurrenciesExchangerService {
     }
 
     @Override
-    public CurrencyExchangerDTO exchangeAmount(String baseCurrencyCode, String targetCurrencyCode, float amount) {
+    public ExchangeDTO exchangeAmount(String baseCurrencyCode, String targetCurrencyCode, float amount) {
         Currency baseCurrency;
         Currency targetCurrency;
 
@@ -36,12 +36,12 @@ public class Exchange_Service implements CurrenciesExchangerService {
             throw e;
         }
 
-        CurrencyExchangerDTO currencyExchangerDTO = tryFirstScript(baseCurrency, targetCurrency, amount);
+        ExchangeDTO exchangeDTO = tryFirstScript(baseCurrency, targetCurrency, amount);
 
-        return currencyExchangerDTO;
+        return exchangeDTO;
     }
 
-    private CurrencyExchangerDTO tryFirstScript(Currency baseCurrency, Currency targetCurrency, float amount) {
+    private ExchangeDTO tryFirstScript(Currency baseCurrency, Currency targetCurrency, float amount) {
         try {
             var exchangeRate
                     = exchangeRateService.findByBaseAndTargetCurrenciesCode(baseCurrency.getCode()
@@ -55,7 +55,7 @@ public class Exchange_Service implements CurrenciesExchangerService {
         }
     }
 
-    private CurrencyExchangerDTO trySecondScript(Currency baseCurrency, Currency targetCurrency, float amount) {
+    private ExchangeDTO trySecondScript(Currency baseCurrency, Currency targetCurrency, float amount) {
         try {
             var inverseExchangeRate = exchangeRateService
                     .findByBaseAndTargetCurrenciesCode(targetCurrency.getCode()
@@ -69,7 +69,7 @@ public class Exchange_Service implements CurrenciesExchangerService {
         }
     }
 
-    private CurrencyExchangerDTO tryThirdScript(Currency baseCurrency, Currency targetCurrency, float amount) {
+    private ExchangeDTO tryThirdScript(Currency baseCurrency, Currency targetCurrency, float amount) {
 
         List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
 
@@ -82,7 +82,7 @@ public class Exchange_Service implements CurrenciesExchangerService {
         return null;
     }
 
-    private CurrencyExchangerDTO convertBaseCurrencyToTargetCurrency (ExchangeRate exchangeRate
+    private ExchangeDTO convertBaseCurrencyToTargetCurrency (ExchangeRate exchangeRate
             , float amount, boolean isInverted) {
         float convertAmount;
 
@@ -94,7 +94,7 @@ public class Exchange_Service implements CurrenciesExchangerService {
         }
 
         var currencyExchanger
-                = new CurrencyExchangerDTO(exchangeRate, amount, convertAmount);
+                = new ExchangeDTO(exchangeRate, amount, convertAmount);
 
         return currencyExchanger;
     }

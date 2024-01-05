@@ -6,19 +6,18 @@ import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
-import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 
 import java.util.List;
 
-public class ExchangeRate_Service implements ExchangeRateService {
+public class ExchangeRate_Service implements com.ddevus.currencyExchange.services.interfaces.ExchangeRate_Service {
 
     private static final com.ddevus.currencyExchange.dao.interfaces.ExchangeRateDAO exchangeRateDAO = ExchangeRateDAO.getINSTANCE();
     private static final com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
-    private static final ExchangeRateService INSTANCE= new ExchangeRate_Service();
+    private static final com.ddevus.currencyExchange.services.interfaces.ExchangeRate_Service INSTANCE= new ExchangeRate_Service();
 
     private ExchangeRate_Service() {}
 
-    public static ExchangeRateService getINSTANCE() {
+    public static com.ddevus.currencyExchange.services.interfaces.ExchangeRate_Service getINSTANCE() {
         return INSTANCE;
     }
 

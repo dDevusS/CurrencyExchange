@@ -2,13 +2,13 @@ package com.ddevus.currencyExchange.dto;
 
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 
-public class CurrencyExchangerDTO {
+public class ExchangeDTO {
 
     private ExchangeRate exchangeRate;
     private float amount;
     private float convertedAmount;
 
-    public CurrencyExchangerDTO(ExchangeRate exchangeRate, float amount, float convertedAmount) {
+    public ExchangeDTO(ExchangeRate exchangeRate, float amount, float convertedAmount) {
         this.exchangeRate = exchangeRate;
         this.amount = amount;
         this.convertedAmount = convertedAmount;

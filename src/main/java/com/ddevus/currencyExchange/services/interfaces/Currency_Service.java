@@ -4,7 +4,7 @@ import com.ddevus.currencyExchange.entity.Currency;
 
 import java.util.List;
 
-public interface CurrencyService {
+public interface Currency_Service {
 
     public Currency save(Currency currency);
 

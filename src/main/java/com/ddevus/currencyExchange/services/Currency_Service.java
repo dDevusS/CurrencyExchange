@@ -2,18 +2,17 @@ package com.ddevus.currencyExchange.services;
 
 import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.entity.Currency;
-import com.ddevus.currencyExchange.services.interfaces.CurrencyService;
 
 import java.util.List;
 
-public class Currency_Service implements CurrencyService {
+public class Currency_Service implements com.ddevus.currencyExchange.services.interfaces.Currency_Service {
 
     private static final com.ddevus.currencyExchange.dao.interfaces.CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
-    private static final CurrencyService INSTANCE = new Currency_Service();
+    private static final com.ddevus.currencyExchange.services.interfaces.Currency_Service INSTANCE = new Currency_Service();
 
     private Currency_Service() {}
 
-    public static CurrencyService getINSTANCE() {
+    public static com.ddevus.currencyExchange.services.interfaces.Currency_Service getINSTANCE() {
         return INSTANCE;
     }
 
