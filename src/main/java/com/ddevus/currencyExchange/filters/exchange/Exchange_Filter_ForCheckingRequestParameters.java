@@ -1,5 +1,6 @@
 package com.ddevus.currencyExchange.filters.exchange;
 
+import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
 import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -23,8 +24,21 @@ public class Exchange_Filter_ForCheckingRequestParameters implements Filter {
         String targetCurrencyCode = request.getParameter("to");
         String amount = request.getParameter("amount");
 
-        FiltersUtil.checkNumberFormat(amount);
-        FiltersUtil.checkSentCodeParameters(baseCurrencyCode, targetCurrencyCode);
+        try {
+            FiltersUtil.checkNumberFormat(amount);
+        }
+        catch (IncorrectParametersException e) {
+            FiltersUtil.handleException(res, e);
+        }
+
+        try {
+            FiltersUtil.checkSentCodeParameters(baseCurrencyCode, targetCurrencyCode);
+        }
+        catch (IncorrectParametersException e) {
+            FiltersUtil.handleException(res, e);
+        }
+
+        chain.doFilter(request, response);
     }
 
     @Override
