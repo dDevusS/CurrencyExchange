@@ -14,7 +14,7 @@ public class ExchangeDTO {
         this.convertedAmount = convertedAmount;
     }
 
-    public ExchangeRate getExchangeRateDTO() {
+    public ExchangeRate getExchangeRate() {
         return exchangeRate;
     }
 
