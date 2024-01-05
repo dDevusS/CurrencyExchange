@@ -31,9 +31,9 @@ public class CurrencyExchangerDTO {
         return "{" +
                 "\"baseCurrency\":" + exchangeRate.getBaseCurrency() +
                 ",\"targetCurrency\":" + exchangeRate.getTargetCurrency() +
-                ",\"rate\":" + exchangeRate.getRate() +
-                ",\"amount\":" + amount +
-                ",\"convertedAmount\":" + convertedAmount +
-                "}";
+                ",\"rate\":\"" + exchangeRate.getRate() +
+                "\",\"amount\":\"" + amount +
+                "\",\"convertedAmount\":\"" + convertedAmount +
+                "\"}";
     }
 }
