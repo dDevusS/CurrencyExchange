@@ -19,8 +19,8 @@ public class Currency_Service implements CurrencyService {
 
     @Override
     public Currency save(Currency currency) {
-            currency = currencyDAO.save(currency);
-            currency.setId(currency.getId());
+        currency = currencyDAO.save(currency);
+        currency.setId(currency.getId());
 
             return currency;
     }

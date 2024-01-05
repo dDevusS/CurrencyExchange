@@ -4,6 +4,7 @@ import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.ExchangeRateService;
 
@@ -38,9 +39,9 @@ public class ExchangeRate_Service implements ExchangeRateService {
             baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
             targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
         }
-        catch (WrapperException e) {
-            e.setErrorMessage("There is no currency or currencies with those codes.");
-            throw e;
+        catch (SQLBadRequestException e) {
+            throw new SQLBadRequestException("There is no currency or currencies with those codes."
+            , WrapperException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
         }
 
         return exchangeRateDAO.findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
@@ -66,9 +67,9 @@ public class ExchangeRate_Service implements ExchangeRateService {
 
             exchangeRateDAO.update(exchangeRate.getId(), rate);
         }
-        catch (WrapperException e) {
-            e.setErrorMessage("There is no currency pair with those codes in the database.");
-            throw e;
+        catch (SQLBadRequestException e) {
+            throw new SQLBadRequestException("There is no currency pair with those codes in the database."
+            , WrapperException.ErrorReason.FAILED_FIND_OBJECT_IN_DB);
         }
 
         return exchangeRate;
