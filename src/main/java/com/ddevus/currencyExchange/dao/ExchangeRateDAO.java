@@ -33,10 +33,6 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             preparedStatement.setInt(2, exchangeRate.getTargetCurrency().getId());
             preparedStatement.setFloat(3, exchangeRate.getRate());
 
-            // TODO: Add checking existed inverted pair
-
-
-
             try {
                 preparedStatement.executeUpdate();
             }
