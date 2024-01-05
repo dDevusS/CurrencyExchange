@@ -23,8 +23,7 @@ public class Currency_Servlet extends HttpServlet {
             throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
         String servletPath = req.getPathInfo();
-        String[] pathParts;
-        pathParts = servletPath.split("/");
+        String[] pathParts = servletPath.split("/");
 
         var currency = currencyService.findByCode(pathParts[1]);
         logger.info("JSON Response: " + currency);

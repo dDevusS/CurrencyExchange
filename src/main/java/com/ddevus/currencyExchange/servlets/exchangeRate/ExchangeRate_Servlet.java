@@ -1,8 +1,6 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
-import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
-import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,7 +19,6 @@ public class ExchangeRate_Servlet extends HttpServlet {
 
     private final Logger logger = LoggerFactory.getLogger(ExchangeRate_Servlet.class.getName());
     private final IExchangeRate_Service exchangeRateService = ExchangeRate_Service.getINSTANCE();
-    private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

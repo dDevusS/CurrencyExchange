@@ -21,7 +21,6 @@ public class ExchangeRates_Filter_ForCheckingRequestParameters implements Filter
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         var req = ((HttpServletRequest) request);
         var res = ((HttpServletResponse) response);
-        var pathInfo = req.getPathInfo();
 
         if (("POST").equals(req.getMethod())) {
             String baseCurrencyCode = req.getParameter("baseCurrencyCode");

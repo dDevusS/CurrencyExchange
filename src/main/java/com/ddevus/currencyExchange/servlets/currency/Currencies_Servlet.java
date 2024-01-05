@@ -24,8 +24,7 @@ public class Currencies_Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
-        List<Currency> currencies = null;
-             currencies = currencyService.findAll();
+        List<Currency> currencies = currencyService.findAll();
 
         var json = convertListToJson(currencies);
         logger.info("JSON Response: " + json);

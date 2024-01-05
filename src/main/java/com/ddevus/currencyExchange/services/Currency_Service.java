@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Currency_Service implements com.ddevus.currencyExchange.services.interfaces.ICurrency_Service {
 
-    private static final CurrencyDAO I_CURRENCY_DAO = CurrencyDAO.getINSTANCE();
+    private static final CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
     private static final com.ddevus.currencyExchange.services.interfaces.ICurrency_Service INSTANCE = new Currency_Service();
 
     private Currency_Service() {}
@@ -18,37 +18,33 @@ public class Currency_Service implements com.ddevus.currencyExchange.services.in
 
     @Override
     public Currency save(Currency currency) {
-        currency = I_CURRENCY_DAO.save(currency);
+        currency = currencyDAO.save(currency);
         currency.setId(currency.getId());
 
-            return currency;
+        return currency;
     }
 
     @Override
     public Currency findById(int id) {
-        var currency = I_CURRENCY_DAO.findById(id);
 
-        return currency;
+        return currencyDAO.findById(id);
     }
 
     @Override
     public Currency findByCode(String code) {
-        var currency = I_CURRENCY_DAO.findByCode(code);
 
-        return currency;
+        return currencyDAO.findByCode(code);
     }
 
     @Override
     public List<Currency> findAll() {
-        var currencyList = I_CURRENCY_DAO.findAll();
 
-        return currencyList;
+        return currencyDAO.findAll();
     }
 
     @Override
     public boolean delete(int id) {
-            var isDeleted = I_CURRENCY_DAO.delete(id);
 
-            return isDeleted;
+            return currencyDAO.delete(id);
     }
 }

@@ -21,9 +21,8 @@ public class ConnectionManager {
             Class.forName("org.sqlite.JDBC");
 
             logger.info("Connecting to the database.");
-            var connection = DriverManager.getConnection(PropertiesReader.read(URL_KEY));
 
-            return connection;
+            return DriverManager.getConnection(PropertiesReader.read(URL_KEY));
         }
         catch (ClassNotFoundException e) {
             throw new DatabaseException("Database driver was not found."

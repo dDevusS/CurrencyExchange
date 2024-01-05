@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @WebServlet("/exchange")
 public class Exchange_Servlet extends HttpServlet {
@@ -24,6 +25,7 @@ public class Exchange_Servlet extends HttpServlet {
         String baseCurrencyCode = req.getParameter("from");
         String targetCurrencyCode = req.getParameter("to");
         BigDecimal amount = new BigDecimal(req.getParameter("amount"));
+        amount = amount.setScale(6, RoundingMode.HALF_UP);
 
         var exchangeDTO
                 = exchangeService.exchangeAmount(baseCurrencyCode, targetCurrencyCode, amount);

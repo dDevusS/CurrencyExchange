@@ -74,7 +74,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
             if (resultSet.next()) {
                Currency currency = createCurrency(resultSet);
 
-                return Optional.ofNullable(currency).get();
+                return Optional.of(currency).get();
             }
             else {
                 throw new SQLBadRequestException("There is no currency with this ID."
@@ -99,7 +99,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
             if (resultSet.next()) {
                 Currency currency = createCurrency(resultSet);
 
-                return Optional.ofNullable(currency).get();
+                return Optional.of(currency).get();
             }
             else {
                 throw new SQLBadRequestException("There is no currency with this Code."

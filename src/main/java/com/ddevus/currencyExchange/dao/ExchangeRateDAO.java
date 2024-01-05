@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO {
 
-    private static CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
+    private static final CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
     private static final ExchangeRateDAO INSTANCE = new ExchangeRateDAO();
 
     private ExchangeRateDAO() {}
@@ -131,9 +131,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setBigDecimal(1, rate);
             preparedStatement.setInt(2, id);
-            var result = preparedStatement.executeUpdate() > 0;
 
-            return result;
+            return preparedStatement.executeUpdate() > 0;
         }
         catch (SQLException e) {
             throw new DatabaseException("Couldn't to connect to the database."
