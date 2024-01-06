@@ -7,6 +7,7 @@ import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
+import com.ddevus.currencyExchange.services.interfaces.IExchange_Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public class Exchange_Service implements com.ddevus.currencyExchange.services.interfaces.IExchange_Service {
+public class Exchange_Service implements IExchange_Service {
 
     private final ICurrency_Service currencyService
             = Currency_Service.getINSTANCE();
