@@ -3,6 +3,9 @@
 CurrencyExchange is a REST API web application that implements CRUD interface over a database. It provides methods to create, read and update currencies and exchange rates in the DB.
 The application returns jsone response after getting request from a client.
 
+#### It is a project of the special course for studying backend developing by Sergey Zhukov.
+You can find out more information about the terms of reference for this project here: https://zhukovsd.github.io/java-backend-learning-course/Projects/CurrencyExchange/
+
 #### You can check in realization of this application there: http://45.95.203.87:8080/CurrencyExchange
 I advice you to use Postman for checking the application.
 
