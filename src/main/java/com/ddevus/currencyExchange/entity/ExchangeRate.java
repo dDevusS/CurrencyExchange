@@ -54,13 +54,4 @@ public class ExchangeRate {
         this.rate = rate;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "\"id\":\"" + id +
-                "\",\"baseCurrency\":" + baseCurrency +
-                ",\"targetCurrency\":" + targetCurrency +
-                ",\"rate\":\"" + rate +
-                "\"}";
-    }
 }

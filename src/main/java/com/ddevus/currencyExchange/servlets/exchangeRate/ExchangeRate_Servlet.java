@@ -2,6 +2,7 @@ package com.ddevus.currencyExchange.servlets.exchangeRate;
 
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
+import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -30,10 +31,11 @@ public class ExchangeRate_Servlet extends HttpServlet {
                 = exchangeRateService.findByBaseAndTargetCurrenciesCode(currenciesCodes[0]
                 , currenciesCodes[1]);
 
-        logger.info("JSON Response: " + exchangeRate);
+        String json = JsonConvertor.getJson(exchangeRate);
+        logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
-            writer.write(exchangeRate.toString());
+            writer.write(json);
         }
         logger.info("Finished processing GET request.");
     }
@@ -62,10 +64,11 @@ public class ExchangeRate_Servlet extends HttpServlet {
                 , currenciesCodes[1]
                 , rate);
 
-        logger.info("JSON response: " + exchangeRate);
+        String json = JsonConvertor.getJson(exchangeRate);
+        logger.info("JSON response: " + json);
 
         try (var writer = resp.getWriter()) {
-            writer.write(exchangeRate.toString());
+            writer.write(json);
         }
         logger.info("Finished processing PATCH request.");
     }

@@ -1,6 +1,7 @@
 package com.ddevus.currencyExchange.servlets;
 
 import com.ddevus.currencyExchange.services.Exchange_Service;
+import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -29,10 +30,12 @@ public class Exchange_Servlet extends HttpServlet {
 
         var exchangeDTO
                 = exchangeService.exchangeAmount(baseCurrencyCode, targetCurrencyCode, amount);
-        logger.info("JSON Response: " + exchangeDTO);
+
+        String json = JsonConvertor.getJson(exchangeDTO);
+        logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
-            writer.write(exchangeDTO.toString());
+            writer.write(json);
         }
         logger.info("Finished processing GET request.");
     }

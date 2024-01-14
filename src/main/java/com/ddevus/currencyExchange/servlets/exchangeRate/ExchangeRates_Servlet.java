@@ -6,6 +6,7 @@ import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
+import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -32,7 +33,7 @@ public class ExchangeRates_Servlet extends HttpServlet {
         logger.info("Processing the client's GET request.");
         List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
 
-        var json = convertListToJson(exchangeRateList);
+        String json = JsonConvertor.getJson(exchangeRateList);
         logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
@@ -55,28 +56,14 @@ public class ExchangeRates_Servlet extends HttpServlet {
 
         var newExchangeRate = new ExchangeRate(baseCurrency, targetCurrency, rate);
         newExchangeRate = exchangeRateService.save(newExchangeRate);
-        logger.info("JSON Response: " + newExchangeRate);
+
+        String json = JsonConvertor.getJson(newExchangeRate);
+        logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
-            writer.write(newExchangeRate.toString());
+            writer.write(json);
         }
         logger.info("Finished processing POST request.");
     }
 
-    private String convertListToJson(List<ExchangeRate> exchangeRateList) {
-        StringBuilder json = new StringBuilder("[");
-
-        for (ExchangeRate exchangeRate : exchangeRateList) {
-            json.append(exchangeRate).append(",");
-        }
-
-        if (json.length() > 1) {
-            json.setCharAt(json.length() - 1, ']');
-        }
-        else {
-            json.append("]");
-        }
-
-        return json.toString();
-    }
 }

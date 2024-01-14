@@ -3,6 +3,7 @@ package com.ddevus.currencyExchange.servlets.currency;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
+import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -26,7 +27,7 @@ public class Currencies_Servlet extends HttpServlet {
         logger.info("Processing the client's GET request.");
         List<Currency> currencies = currencyService.findAll();
 
-        var json = convertListToJson(currencies);
+        var json = JsonConvertor.getJson(currencies);
         logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
@@ -45,28 +46,13 @@ public class Currencies_Servlet extends HttpServlet {
         var newCurrency = new Currency(name, code, sign);
 
         newCurrency = currencyService.save(newCurrency);
-        logger.info("JSON Response: " + newCurrency);
+        String json = JsonConvertor.getJson(newCurrency);
+        logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
-            writer.write(newCurrency.toString());
+            writer.write(json);
         }
         logger.info("Finished processing POST request.");
     }
 
-    private String convertListToJson(List<Currency> currencies) {
-        StringBuilder json = new StringBuilder("[");
-
-        for (Currency currency : currencies) {
-            json.append(currency).append(",");
-        }
-
-        if (json.length() > 1) {
-            json.setCharAt(json.length() - 1, ']');
-        }
-        else {
-            json.append("]");
-        }
-
-        return json.toString();
-    }
 }

@@ -4,6 +4,7 @@ import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
+import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,10 +29,11 @@ public class Currency_Servlet extends HttpServlet {
         String[] pathParts = servletPath.split("/");
 
         var currency = currencyService.findByCode(pathParts[1]);
-        logger.info("JSON Response: " + currency);
+        String json = JsonConvertor.getJson(currency);
+        logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
-            writer.write(currency.toString());
+            writer.write(json);
         }
         logger.info("Finished processing GET request.");
     }
@@ -41,9 +43,11 @@ public class Currency_Servlet extends HttpServlet {
         logger.info("Processing the client's DELETE request.");
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
+        String json = null;
 
         if (currencyService.deleteByCode(pathParts[1])) {
-            logger.info("JSON Response: " + "{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}");
+            json = JsonConvertor.getJson(pathParts[1]);
+            logger.info("JSON Response: " + "{\"message\":\"currency with code " + json + " was deleted\"}");
         }
         else {
             throw new SQLBadRequestException("There is no currency wit this code in the database."
@@ -51,7 +55,7 @@ public class Currency_Servlet extends HttpServlet {
         }
 
         try (var writer = resp.getWriter()) {
-            writer.write("{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}");
+            writer.write("{\"message\":\"currency with code " + json + " was deleted\"}");
         }
         logger.info("Finished processing Delete request.");
     }

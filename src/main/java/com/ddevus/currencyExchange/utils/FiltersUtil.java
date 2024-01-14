@@ -13,6 +13,7 @@ public class FiltersUtil {
     public static void handleException(ServletResponse response, WrapperException exception) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setStatus(exception.getSTATUS_CODE_HTTP_RESPONSE());
+
         try (var writer = response.getWriter()) {
             writer.write(exception.toString());
         }

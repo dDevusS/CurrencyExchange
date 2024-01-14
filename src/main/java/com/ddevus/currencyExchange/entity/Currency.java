@@ -52,12 +52,4 @@ public class Currency {
         this.sign = sign;
     }
 
-    @Override
-    public String toString() {
-        return "{\"id\":\"" + id
-                + "\",\"name\":\"" + name
-                + "\",\"code\":\"" + code
-                + "\",\"sing\":\"" + sign
-                + "\"}";
-    }
 }

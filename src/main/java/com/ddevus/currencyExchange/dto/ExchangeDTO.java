@@ -16,14 +16,16 @@ public class ExchangeDTO {
         this.convertedAmount = convertedAmount;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "\"baseCurrency\":" + exchangeRate.getBaseCurrency() +
-                ",\"targetCurrency\":" + exchangeRate.getTargetCurrency() +
-                ",\"rate\":\"" + exchangeRate.getRate() +
-                "\",\"amount\":\"" + amount +
-                "\",\"convertedAmount\":\"" + convertedAmount +
-                "\"}";
+    public ExchangeRate getExchangeRate() {
+        return exchangeRate;
     }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public BigDecimal getConvertedAmount() {
+        return convertedAmount;
+    }
+
 }
