@@ -16,4 +16,6 @@ public interface IExchangeRateDAO {
 
     public boolean update(int id, BigDecimal rate);
 
+    public ExchangeRate getRequiredExchangeRate(Currency baseCurrency, Currency targetCurrency);
+
 }

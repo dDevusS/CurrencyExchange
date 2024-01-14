@@ -141,4 +141,13 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
                     , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
         }
     }
+
+    @Override
+    public ExchangeRate getRequiredExchangeRate(Currency baseCurrency, Currency targetCurrency) {
+
+
+
+
+        return null;
+    }
 }
