@@ -6,7 +6,7 @@ The application returns jsone response after getting request from a client.
 #### It is my realization of project from the special course for studying backend development by Sergey Zhukov.
 You can find out more information about the terms of reference for this project here: https://zhukovsd.github.io/java-backend-learning-course/Projects/CurrencyExchange/
 
-#### You can check in realization of this application there: http://45.95.203.87:8080/CurrencyExchange
+#### You can check in realization of this application there: http://45.95.203.87/CurrencyExchange
 I advice you to use Postman for checking the application.
 
 ## API Endpoints
