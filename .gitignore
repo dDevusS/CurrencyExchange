@@ -6,3 +6,5 @@ out/
 
 ### IntelliJ IDEA ###
 .idea/
+
+**/src/main/resources/ResetDB.sql
