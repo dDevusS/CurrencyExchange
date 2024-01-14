@@ -2,7 +2,9 @@ package com.ddevus.currencyExchange.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class JsonConvertor {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();

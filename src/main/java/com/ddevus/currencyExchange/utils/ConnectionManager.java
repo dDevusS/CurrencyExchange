@@ -2,19 +2,18 @@ package com.ddevus.currencyExchange.utils;
 
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
+import lombok.experimental.UtilityClass;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+@UtilityClass
 public class ConnectionManager {
 
     private final static String URL_KEY = "db.url";
     private static final Logger logger = Logger.getLogger(ConnectionManager.class.getName());
-
-    private ConnectionManager() {
-    }
 
     public static Connection open() {
         try {

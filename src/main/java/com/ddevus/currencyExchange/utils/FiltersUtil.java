@@ -4,10 +4,12 @@ import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
+@UtilityClass
 public class FiltersUtil {
 
     public static void handleException(ServletResponse response, WrapperException exception) {

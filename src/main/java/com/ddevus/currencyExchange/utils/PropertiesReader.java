@@ -2,22 +2,18 @@ package com.ddevus.currencyExchange.utils;
 
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
+import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.util.Properties;
 
+@UtilityClass
 public class PropertiesReader {
 
     private final static Properties PROPERTIES = new Properties();
     private final static String PROPERTIES_PATH = "application.properties";
 
-    private PropertiesReader() {
-    }
-
     static {
-        //TODO: ?
-        // Can't catch exception if PROPERTIES_PATH is wrong.
-
         loadPropertiesFile();
     }
 

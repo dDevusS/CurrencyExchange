@@ -1,5 +1,12 @@
 package com.ddevus.currencyExchange.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
 public class Currency {
 
     private int id;
@@ -10,45 +17,6 @@ public class Currency {
     public Currency(String name, String code, String sign) {
         this.code = code;
         this.name = name;
-        this.sign = sign;
-    }
-
-    public Currency(int id, String code, String name, String sign) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
-        this.sign = sign;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
         this.sign = sign;
     }
 
