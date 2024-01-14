@@ -8,9 +8,12 @@ import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO {
 
@@ -143,11 +146,104 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     }
 
     @Override
-    public ExchangeRate getRequiredExchangeRate(Currency baseCurrency, Currency targetCurrency) {
+    public ExchangeRate getRequiredExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {
+        Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
+        Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
+        ExchangeRate exchangeRate = findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
 
+        if (0 == 0) {
+            return exchangeRate;
+        }
 
+        exchangeRate = findByBaseAndTargetCurrencies(targetCurrency, baseCurrency);
 
-        return null;
+        if (0 == 0) {
+            var goalRate = BigDecimal.valueOf(1).divide(exchangeRate.getRate()
+                    , 6, RoundingMode.HALF_UP);
+
+            return new ExchangeRate(baseCurrency, targetCurrency, goalRate);
+        }
+
+        //TODO: finish it.
+
+        List<ExchangeRate> exchangeRateList = findAll();
+        ExchangeRate transExchangeRate = null;
+        ExchangeRate goalExchangeRate = null;
+
+        Set<ExchangeRate> exchangeRateSet = new LinkedHashSet<>();
+
+        for (ExchangeRate exchangeRateFromList : exchangeRateList) {
+            if (isThere(baseCurrency, exchangeRateFromList)) {
+                exchangeRateSet.add(exchangeRateFromList);
+            }
+        }
+
+        for (ExchangeRate exchangeRateFromSet : exchangeRateSet) {
+            Currency transCurrency = getAnotherCurrency(baseCurrency, exchangeRateFromSet);
+
+            for (ExchangeRate targetExchangeRate : exchangeRateList) {
+                if (isGoal(targetCurrency, transCurrency, targetExchangeRate)) {
+                    goalExchangeRate = targetExchangeRate;
+                    transExchangeRate = exchangeRateFromSet;
+                    break;
+                }
+            }
+
+            if (goalExchangeRate != null) {
+                break;
+            }
+        }
+
+        if (goalExchangeRate == null) {
+            return null;
+        }
+        else {
+            BigDecimal goalRate = getGoalRate(baseCurrency, targetCurrency, transExchangeRate, goalExchangeRate);
+            exchangeRate = new ExchangeRate(baseCurrency, targetCurrency, goalRate);
+
+            return exchangeRate;
+        }
+    }
+
+    private static BigDecimal getGoalRate(Currency baseCurrency, Currency targetCurrency
+            , ExchangeRate transExchangeRate, ExchangeRate goalExchangeRate) {
+        BigDecimal goalRate;
+
+        if (baseCurrency.getId() == transExchangeRate.getBaseCurrency().getId()) {
+            goalRate = transExchangeRate.getRate();
+        }
+        else {
+            goalRate = BigDecimal.valueOf(1).divide(transExchangeRate.getRate()
+                    , 6, RoundingMode.HALF_UP);
+        }
+
+        if (targetCurrency.getId() == goalExchangeRate.getTargetCurrency().getId()) {
+            goalRate = goalRate.multiply(goalExchangeRate.getRate());
+            goalRate = goalRate.setScale(6, RoundingMode.HALF_UP);
+        }
+        else {
+            goalRate = goalRate.divide(goalExchangeRate.getRate(), 6, RoundingMode.HALF_UP);
+        }
+
+        return goalRate;
+    }
+
+    private static boolean isThere(Currency baseCurrency, ExchangeRate exchangeRate) {
+        return baseCurrency.getId() == exchangeRate.getBaseCurrency().getId() || baseCurrency.getId() == exchangeRate.getTargetCurrency().getId();
+    }
+
+    private static boolean isGoal(Currency baseCurrency, Currency targetCurrency, ExchangeRate exchangeRate) {
+        return isThere(baseCurrency, exchangeRate) && isThere(targetCurrency, exchangeRate);
+    }
+
+    private static Currency getAnotherCurrency(Currency currency, ExchangeRate exchangeRate) {
+        if (currency.getId() != exchangeRate.getBaseCurrency().getId()) {
+            return exchangeRate.getBaseCurrency();
+        }
+        else {
+
+            return exchangeRate.getTargetCurrency();
+        }
     }
 }
