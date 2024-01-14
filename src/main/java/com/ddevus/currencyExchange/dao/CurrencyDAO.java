@@ -25,7 +25,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
 
     @Override
     public Currency save(Currency currency) {
-        String sql = "INSERT INTO currencies (Code, FullName, Sing) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO currencies (Code, FullName, Sign) VALUES (?, ?, ?)";
 
         try (var connection = ConnectionManager.open();
              var preparedStatement
@@ -157,7 +157,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
                 resultSet.getInt("ID"),
                 resultSet.getString("Code"),
                 resultSet.getString("FullName"),
-                resultSet.getString("Sing")
+                resultSet.getString("Sign")
         );
     }
 }

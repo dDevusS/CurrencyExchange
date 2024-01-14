@@ -173,11 +173,20 @@ public class Exchange_Service implements IExchange_Service {
         if (exchangeRate.getBaseCurrency().getId() == fromCurrency.getId()) {
             convertAmount = amount.multiply(exchangeRate.getRate());
             convertAmount = convertAmount.setScale(2, RoundingMode.HALF_UP);
+
+            return new ExchangeDTO(exchangeRate.getBaseCurrency()
+                    , exchangeRate.getTargetCurrency()
+                    , exchangeRate.getRate()
+                    , amount, convertAmount);
         }
         else {
             convertAmount = amount.divide(exchangeRate.getRate(), 2, RoundingMode.HALF_UP);
-        }
 
-        return new ExchangeDTO(exchangeRate, amount, convertAmount);
+            return new ExchangeDTO(exchangeRate.getTargetCurrency()
+                    , exchangeRate.getBaseCurrency()
+                    , exchangeRate.getRate()
+                    , amount, convertAmount);
+        }
     }
+
 }

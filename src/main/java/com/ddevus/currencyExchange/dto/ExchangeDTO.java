@@ -1,18 +1,19 @@
 package com.ddevus.currencyExchange.dto;
 
-import com.ddevus.currencyExchange.entity.ExchangeRate;
+import com.ddevus.currencyExchange.entity.Currency;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Value;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
-@Value
 @AllArgsConstructor
+@Getter
 public class ExchangeDTO {
 
-    ExchangeRate exchangeRate;
-    BigDecimal amount;
-    BigDecimal convertedAmount;
+    private Currency baseCurrency;
+    private Currency targetCurrency;
+    private BigDecimal rate;
+    private BigDecimal amount;
+    private BigDecimal convertedAmount;
 
 }
