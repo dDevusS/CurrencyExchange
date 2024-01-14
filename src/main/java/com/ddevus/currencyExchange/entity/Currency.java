@@ -5,19 +5,19 @@ public class Currency {
     private int id;
     private String code;
     private String name;
-    private String sing;
+    private String sign;
 
-    public Currency(String name, String code, String sing) {
+    public Currency(String name, String code, String sign) {
         this.code = code;
         this.name = name;
-        this.sing = sing;
+        this.sign = sign;
     }
 
-    public Currency(int id, String code, String name, String sing) {
+    public Currency(int id, String code, String name, String sign) {
         this.id = id;
         this.code = code;
         this.name = name;
-        this.sing = sing;
+        this.sign = sign;
     }
 
     public int getId() {
@@ -44,12 +44,12 @@ public class Currency {
         this.name = name;
     }
 
-    public String getSing() {
-        return sing;
+    public String getSign() {
+        return sign;
     }
 
-    public void setSing(String sing) {
-        this.sing = sing;
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class Currency {
         return "{\"id\":\"" + id
                 + "\",\"name\":\"" + name
                 + "\",\"code\":\"" + code
-                + "\",\"sing\":\"" + sing
+                + "\",\"sing\":\"" + sign
                 + "\"}";
     }
 }

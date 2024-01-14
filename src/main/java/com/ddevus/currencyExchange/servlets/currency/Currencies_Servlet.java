@@ -41,8 +41,8 @@ public class Currencies_Servlet extends HttpServlet {
         logger.info("Processing the client's POST request.");
         String name = req.getParameter("name");
         String code = req.getParameter("code");
-        String sing = req.getParameter("sing");
-        var newCurrency = new Currency(name, code, sing);
+        String sign = req.getParameter("sign");
+        var newCurrency = new Currency(name, code, sign);
 
         newCurrency = currencyService.save(newCurrency);
         logger.info("JSON Response: " + newCurrency);

@@ -25,14 +25,14 @@ public class Currencies_Filter_ForCheckingRequestParameters implements Filter {
 
         String name = request.getParameter("name");
         String code = request.getParameter("code");
-        String sing = request.getParameter("sing");
+        String sign = request.getParameter("sign");
 
-        if (name == null || code == null || sing == null) {
+        if (name == null || code == null || sign == null) {
             var exception = new IncorrectParametersException("Required parameters are missing."
                     , WrapperException.ErrorReason.MISSING_PARAMETERS);
             FiltersUtil.handleException(response, exception);
         }
-        else if (code.length() != 3 || sing.length() > 3) {
+        else if (code.length() != 3 || sign.length() > 3) {
             var exception = new IncorrectParametersException("Required parameters are incorrect."
                     , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
             FiltersUtil.handleException(response, exception);

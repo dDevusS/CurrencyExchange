@@ -33,7 +33,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
 
             preparedStatement.setString(1, currency.getCode());
             preparedStatement.setString(2, currency.getName());
-            preparedStatement.setString(3, currency.getSing());
+            preparedStatement.setString(3, currency.getSign());
 
             try {
                 preparedStatement.executeUpdate();
