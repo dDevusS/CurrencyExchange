@@ -1,11 +1,13 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
+import com.ddevus.currencyExchange.servlets.BasicServlet;
 import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -16,7 +18,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @WebServlet("/exchangeRate/*")
-public class ExchangeRate_Servlet extends HttpServlet {
+public class ExchangeRate_Servlet extends BasicServlet {
 
     private final Logger logger = LoggerFactory.getLogger(ExchangeRate_Servlet.class.getName());
     private final IExchangeRate_Service exchangeRateService = ExchangeRate_Service.getINSTANCE();
@@ -30,6 +32,13 @@ public class ExchangeRate_Servlet extends HttpServlet {
         var exchangeRate
                 = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
                 , currenciesCodes[1]);
+
+        if (exchangeRate == null) {
+            var exception = new SQLBadRequestException("There is no exchange rate with those currencies codes."
+            , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+
+            handleException(resp, exception);
+        }
 
         String json = JsonConvertor.getJson(exchangeRate);
         logger.info("JSON Response: " + json);
@@ -63,6 +72,13 @@ public class ExchangeRate_Servlet extends HttpServlet {
                 = exchangeRateService.update(currenciesCodes[0]
                 , currenciesCodes[1]
                 , rate);
+
+        if (exchangeRate == null) {
+            var exception = new SQLBadRequestException("There is no exchange rate with those currencies codes."
+                    , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+
+            handleException(resp, exception);
+        }
 
         String json = JsonConvertor.getJson(exchangeRate);
         logger.info("JSON response: " + json);

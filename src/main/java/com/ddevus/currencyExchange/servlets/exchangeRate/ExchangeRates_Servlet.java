@@ -2,14 +2,16 @@ package com.ddevus.currencyExchange.servlets.exchangeRate;
 
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
+import com.ddevus.currencyExchange.servlets.BasicServlet;
 import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -21,7 +23,7 @@ import java.math.RoundingMode;
 import java.util.List;
 
 @WebServlet("/exchangeRates")
-public class ExchangeRates_Servlet extends HttpServlet {
+public class ExchangeRates_Servlet extends BasicServlet {
 
     private final Logger logger = LoggerFactory.getLogger(ExchangeRates_Servlet.class.getName());
     private final IExchangeRate_Service exchangeRateService = ExchangeRate_Service.getINSTANCE();
@@ -56,6 +58,13 @@ public class ExchangeRates_Servlet extends HttpServlet {
 
         var newExchangeRate = new ExchangeRate(baseCurrency, targetCurrency, rate);
         newExchangeRate = exchangeRateService.save(newExchangeRate);
+
+        if (newExchangeRate == null) {
+            var exception = new SQLBadRequestException("There is no exchange rate with those currencies codes."
+                    , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+
+            handleException(resp, exception);
+        }
 
         String json = JsonConvertor.getJson(newExchangeRate);
         logger.info("JSON Response: " + json);

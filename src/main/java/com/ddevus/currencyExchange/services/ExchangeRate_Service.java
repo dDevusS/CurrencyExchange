@@ -59,9 +59,11 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
             exchangeRate = findByBaseAndTargetCurrenciesCodes(baseCurrencyCode,
                             targetCurrencyCode);
 
-            if (!exchangeRateDAO.update(exchangeRate.getId(), rate)) {
+            if (exchangeRate == null) {
                 return null;
             }
+
+            exchangeRateDAO.update(exchangeRate.getId(), rate);
             exchangeRate.setRate(rate);
 
         return exchangeRate;
