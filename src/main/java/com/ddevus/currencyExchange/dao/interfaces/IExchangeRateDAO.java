@@ -10,7 +10,7 @@ public interface IExchangeRateDAO {
 
     public ExchangeRate save(ExchangeRate exchangeRate);
 
-    public ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency);
+    public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode);
 
     public List<ExchangeRate> findAll();
 

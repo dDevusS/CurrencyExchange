@@ -3,7 +3,6 @@ package com.ddevus.currencyExchange.dao;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
-import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
@@ -41,54 +40,22 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             try {
                 preparedStatement.executeUpdate();
             }
-            catch (DatabaseException e) {
-                throw new DatabaseException("Couldn't to connect to the database."
-                        , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
-            }
             catch (SQLException e) {
-                throw new SQLBadRequestException("Inserting currency pair failed" +
-                        " due to currency with this code or sing exist in the database."
-                        , WrapperException.ErrorReason.FAILED_INSERT);
+                return null;
             }
 
             try (var statement = connection.createStatement();
                  var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
                 if (resultSet.next()) {
-                    exchangeRate.setId(resultSet.getInt(1));
+                    exchangeRate.setId(resultSet.getInt("ID"));
                 }
                 else {
-                    throw new SQLBadRequestException("Inserting currency failed, no ID obtained."
+                    throw new DatabaseException("Inserting currency failed, no ID obtained."
                             , WrapperException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
                 }
             }
 
             return exchangeRate;
-        }
-        catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
-        }
-    }
-
-    @Override
-    public ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency) {
-        String sql = "SELECT * FROM exchangeRates WHERE BaseCurrencyID=? AND TargetCurrencyID=?";
-
-        try (var connection = ConnectionManager.open();
-             var preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, baseCurrency.getId());
-            preparedStatement.setInt(2, targetCurrency.getId());
-            var resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return new ExchangeRate(resultSet.getInt("ID")
-                        , baseCurrency
-                        , targetCurrency
-                        , resultSet.getBigDecimal("Rate"));
-            }
-            else {
-                return null;
-            }
         }
         catch (SQLException e) {
             throw new DatabaseException("Couldn't to connect to the database."
@@ -200,6 +167,39 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             exchangeRate = new ExchangeRate(baseCurrency, targetCurrency, goalRate);
 
             return exchangeRate;
+        }
+    }
+
+    @Override
+    public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode) {
+        Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
+        Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
+
+        return findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
+    }
+
+    private ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency) {
+        String sql = "SELECT * FROM exchangeRates WHERE BaseCurrencyID=? AND TargetCurrencyID=?";
+
+        try (var connection = ConnectionManager.open();
+             var preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, baseCurrency.getId());
+            preparedStatement.setInt(2, targetCurrency.getId());
+            var resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return new ExchangeRate(resultSet.getInt("ID")
+                        , baseCurrency
+                        , targetCurrency
+                        , resultSet.getBigDecimal("Rate"));
+            }
+            else {
+                return null;
+            }
+        }
+        catch (SQLException e) {
+            throw new DatabaseException("Couldn't to connect to the database."
+                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
         }
     }
 
