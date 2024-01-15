@@ -87,8 +87,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
                         , resultSet.getBigDecimal("Rate"));
             }
             else {
-                throw new SQLBadRequestException("There is not currency pair with those codes in database"
-                        , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+                return null;
             }
         }
         catch (SQLException e) {
@@ -152,20 +151,18 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
 
         ExchangeRate exchangeRate = findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
 
-        if (0 == 0) {
+        if (exchangeRate != null) {
             return exchangeRate;
         }
 
         exchangeRate = findByBaseAndTargetCurrencies(targetCurrency, baseCurrency);
 
-        if (0 == 0) {
+        if (exchangeRate != null) {
             var goalRate = BigDecimal.valueOf(1).divide(exchangeRate.getRate()
                     , 6, RoundingMode.HALF_UP);
 
             return new ExchangeRate(baseCurrency, targetCurrency, goalRate);
         }
-
-        //TODO: finish it.
 
         List<ExchangeRate> exchangeRateList = findAll();
         ExchangeRate transExchangeRate = null;
