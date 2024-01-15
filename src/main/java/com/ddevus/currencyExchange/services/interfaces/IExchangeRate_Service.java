@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IExchangeRate_Service {
 
-    public ExchangeRate save(ExchangeRate exchangeRate);
+    public ExchangeRate save(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate);
 
     public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode);
 

@@ -26,11 +26,9 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
     }
 
     @Override
-    public ExchangeRate save(ExchangeRate exchangeRate) {
-        var savedExchangeRateEntity = exchangeRateDAO.save(exchangeRate);
-        exchangeRate.setId(savedExchangeRateEntity.getId());
+    public ExchangeRate save(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
 
-        return exchangeRate;
+        return exchangeRateDAO.save(baseCurrencyCode, targetCurrencyCode, rate);
     }
 
     @Override

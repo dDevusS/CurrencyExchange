@@ -29,9 +29,9 @@ public class ExchangeRate_Servlet extends BasicServlet {
         logger.info("Processing the client's GET request.");
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
-        var exchangeRate
-                = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
-                , currenciesCodes[1]);
+            var exchangeRate
+                    = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
+                    , currenciesCodes[1]);
 
         if (exchangeRate == null) {
             var exception = new SQLBadRequestException("There is no exchange rate with those currencies codes."

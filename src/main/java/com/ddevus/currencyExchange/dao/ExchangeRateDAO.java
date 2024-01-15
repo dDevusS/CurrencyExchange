@@ -27,15 +27,18 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     }
 
     @Override
-    public ExchangeRate save(ExchangeRate exchangeRate) {
+    public ExchangeRate save(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         String sql = "INSERT INTO exchangeRates (BaseCurrencyID, TargetCurrencyID, Rate) VALUES (?, ?, ?)";
+
+        Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
+        Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
         try (var connection = ConnectionManager.open();
              var preparedStatement
                      = connection.prepareStatement(sql, new String[]{"ID"})) {
-            preparedStatement.setInt(1, exchangeRate.getBaseCurrency().getId());
-            preparedStatement.setInt(2, exchangeRate.getTargetCurrency().getId());
-            preparedStatement.setBigDecimal(3, exchangeRate.getRate());
+            preparedStatement.setInt(1, baseCurrency.getId());
+            preparedStatement.setInt(2, targetCurrency.getId());
+            preparedStatement.setBigDecimal(3, rate);
 
             try {
                 preparedStatement.executeUpdate();
@@ -47,15 +50,16 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             try (var statement = connection.createStatement();
                  var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
                 if (resultSet.next()) {
-                    exchangeRate.setId(resultSet.getInt("ID"));
+                   return new ExchangeRate(resultSet.getInt("ID")
+                            , baseCurrency
+                            , targetCurrency
+                            , rate);
                 }
                 else {
                     throw new DatabaseException("Inserting currency failed, no ID obtained."
                             , WrapperException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
                 }
             }
-
-            return exchangeRate;
         }
         catch (SQLException e) {
             throw new DatabaseException("Couldn't to connect to the database."

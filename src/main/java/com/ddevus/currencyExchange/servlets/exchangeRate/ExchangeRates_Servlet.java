@@ -1,6 +1,5 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
-import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
@@ -53,11 +52,8 @@ public class ExchangeRates_Servlet extends BasicServlet {
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
         rate = rate.setScale(6, RoundingMode.HALF_UP);
 
-        Currency baseCurrency = currencyService.findByCode(baseCurrencyCode);
-        Currency targetCurrency = currencyService.findByCode(targetCurrencyCode);
-
-        var newExchangeRate = new ExchangeRate(baseCurrency, targetCurrency, rate);
-        newExchangeRate = exchangeRateService.save(newExchangeRate);
+        var newExchangeRate
+                = exchangeRateService.save(baseCurrencyCode, targetCurrencyCode, rate);
 
         if (newExchangeRate == null) {
             var exception = new SQLBadRequestException("There is no exchange rate with those currencies codes."
