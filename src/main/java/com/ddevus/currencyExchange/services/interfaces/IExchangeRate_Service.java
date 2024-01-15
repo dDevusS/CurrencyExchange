@@ -9,7 +9,7 @@ public interface IExchangeRate_Service {
 
     public ExchangeRate save(ExchangeRate exchangeRate);
 
-    public ExchangeRate findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode);
+    public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode);
 
     public List<ExchangeRate> findAll();
 

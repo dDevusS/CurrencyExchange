@@ -4,7 +4,6 @@ import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dao.interfaces.ICurrencyDAO;
 import com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO;
-import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
@@ -35,20 +34,16 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
     }
 
     @Override
-    public ExchangeRate findByBaseAndTargetCurrenciesCode(String baseCurrencyCode, String targetCurrencyCode) {
-        Currency baseCurrency;
-        Currency targetCurrency;
+    public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode) {
 
         try {
-            baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
-            targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
+
+            return exchangeRateDAO.findByBaseAndTargetCurrenciesCodes(baseCurrencyCode, targetCurrencyCode);
         }
         catch (SQLBadRequestException e) {
             throw new SQLBadRequestException("There is no currency or currencies with those codes."
                     , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
         }
-
-        return exchangeRateDAO.findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
     }
 
     @Override
@@ -61,20 +56,13 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
     public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         ExchangeRate exchangeRate;
 
-        try {
-            Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
-            Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
-            exchangeRate = exchangeRateDAO
-                    .findByBaseAndTargetCurrencies(baseCurrency,
-                            targetCurrency);
+            exchangeRate = findByBaseAndTargetCurrenciesCodes(baseCurrencyCode,
+                            targetCurrencyCode);
 
-            exchangeRateDAO.update(exchangeRate.getId(), rate);
+            if (!exchangeRateDAO.update(exchangeRate.getId(), rate)) {
+                return null;
+            }
             exchangeRate.setRate(rate);
-        }
-        catch (SQLBadRequestException e) {
-            throw new SQLBadRequestException("There is no currency pair with those codes in the database."
-                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
-        }
 
         return exchangeRate;
     }

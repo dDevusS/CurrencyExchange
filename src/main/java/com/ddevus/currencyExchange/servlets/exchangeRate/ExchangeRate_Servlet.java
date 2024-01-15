@@ -28,7 +28,7 @@ public class ExchangeRate_Servlet extends HttpServlet {
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
         var exchangeRate
-                = exchangeRateService.findByBaseAndTargetCurrenciesCode(currenciesCodes[0]
+                = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
                 , currenciesCodes[1]);
 
         String json = JsonConvertor.getJson(exchangeRate);
