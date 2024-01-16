@@ -9,15 +9,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 @WebServlet("/currency/*")
 public class Currency_Servlet extends BasicServlet {
 
-    private final Logger logger = LoggerFactory.getLogger(Currency_Servlet.class.getName());
+    private final Logger logger = Logger.getLogger(Currency_Servlet.class.getName());
     private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
 
     @Override

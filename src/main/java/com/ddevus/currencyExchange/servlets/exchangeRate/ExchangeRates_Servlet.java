@@ -3,27 +3,24 @@ package com.ddevus.currencyExchange.servlets.exchangeRate;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
-import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
-import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.logging.Logger;
 
 @WebServlet("/exchangeRates")
 public class ExchangeRates_Servlet extends BasicServlet {
 
-    private final Logger logger = LoggerFactory.getLogger(ExchangeRates_Servlet.class.getName());
+    private final Logger logger = Logger.getLogger(ExchangeRates_Servlet.class.getName());
     private final IExchangeRate_Service exchangeRateService = ExchangeRate_Service.getINSTANCE();
 
     @Override
