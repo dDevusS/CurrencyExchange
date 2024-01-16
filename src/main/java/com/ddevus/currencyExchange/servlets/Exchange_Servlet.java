@@ -1,10 +1,8 @@
 package com.ddevus.currencyExchange.servlets;
 
 import com.ddevus.currencyExchange.services.Exchange_Service;
-import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -15,7 +13,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @WebServlet("/exchange")
-public class Exchange_Servlet extends HttpServlet {
+public class Exchange_Servlet extends BasicServlet {
 
     private final Logger logger = LoggerFactory.getLogger(Exchange_Servlet.class.getName());
     private final Exchange_Service exchangeService = Exchange_Service.getINSTANCE();
@@ -31,7 +29,7 @@ public class Exchange_Servlet extends HttpServlet {
         var exchangeDTO
                 = exchangeService.exchangeAmount(baseCurrencyCode, targetCurrencyCode, amount);
 
-        String json = JsonConvertor.getJson(exchangeDTO);
+        String json = getJson(exchangeDTO);
         logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {

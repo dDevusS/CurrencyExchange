@@ -6,7 +6,6 @@ import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
-import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +28,7 @@ public class Currencies_Servlet extends BasicServlet {
         logger.info("Processing the client's GET request.");
         List<Currency> currencies = currencyService.findAll();
 
-        var json = JsonConvertor.getJson(currencies);
+        var json = getJson(currencies);
         logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
@@ -56,7 +55,7 @@ public class Currencies_Servlet extends BasicServlet {
             handleException(resp, exception);
         }
 
-        String json = JsonConvertor.getJson(newCurrency);
+        String json = getJson(newCurrency);
         logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {

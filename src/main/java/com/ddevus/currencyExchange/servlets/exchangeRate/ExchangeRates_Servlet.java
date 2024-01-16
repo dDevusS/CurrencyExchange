@@ -8,7 +8,6 @@ import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
-import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +33,7 @@ public class ExchangeRates_Servlet extends BasicServlet {
         logger.info("Processing the client's GET request.");
         List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
 
-        String json = JsonConvertor.getJson(exchangeRateList);
+        String json = getJson(exchangeRateList);
         logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
@@ -62,7 +61,7 @@ public class ExchangeRates_Servlet extends BasicServlet {
             handleException(resp, exception);
         }
 
-        String json = JsonConvertor.getJson(newExchangeRate);
+        String json = getJson(newExchangeRate);
         logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {

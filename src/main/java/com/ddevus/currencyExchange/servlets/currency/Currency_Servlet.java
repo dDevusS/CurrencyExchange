@@ -5,7 +5,6 @@ import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
-import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +36,7 @@ public class Currency_Servlet extends BasicServlet {
             handleException(resp, exception);
         }
 
-        String json = JsonConvertor.getJson(currency);
+        String json = getJson(currency);
         logger.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
@@ -54,7 +53,7 @@ public class Currency_Servlet extends BasicServlet {
         String json = null;
 
         if (currencyService.deleteByCode(pathParts[1])) {
-            json = JsonConvertor.getJson(pathParts[1]);
+            json = getJson(pathParts[1]);
             logger.info("JSON Response: " + "{\"message\":\"currency with code " + json + " was deleted\"}");
         }
         else {
