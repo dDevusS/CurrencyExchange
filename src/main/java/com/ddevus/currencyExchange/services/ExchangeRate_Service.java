@@ -5,8 +5,6 @@ import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dao.interfaces.ICurrencyDAO;
 import com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
-import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 
 import java.math.BigDecimal;
@@ -34,7 +32,7 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
     @Override
     public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode) {
 
-            return exchangeRateDAO.findByBaseAndTargetCurrenciesCodes(baseCurrencyCode, targetCurrencyCode);
+        return exchangeRateDAO.findByBaseAndTargetCurrenciesCodes(baseCurrencyCode, targetCurrencyCode);
     }
 
     @Override
@@ -46,14 +44,14 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
     @Override
     public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         ExchangeRate exchangeRate = findByBaseAndTargetCurrenciesCodes(baseCurrencyCode,
-                            targetCurrencyCode);
+                targetCurrencyCode);
 
-            if (exchangeRate == null) {
-                return null;
-            }
+        if (exchangeRate == null) {
+            return null;
+        }
 
-            exchangeRateDAO.update(exchangeRate.getId(), rate);
-            exchangeRate.setRate(rate);
+        exchangeRateDAO.update(exchangeRate.getId(), rate);
+        exchangeRate.setRate(rate);
 
         return exchangeRate;
     }

@@ -28,13 +28,13 @@ public class ExchangeRate_Servlet extends BasicServlet {
 
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
-            var exchangeRate
-                    = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
-                    , currenciesCodes[1]);
+        var exchangeRate
+                = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
+                , currenciesCodes[1]);
 
         if (exchangeRate == null) {
             var exception = new SQLBadRequestException("There is no exchange rate with those currencies codes."
-            , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+                    , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
 
             handleException(resp, exception);
         }

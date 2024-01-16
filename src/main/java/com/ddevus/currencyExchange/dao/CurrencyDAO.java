@@ -43,13 +43,13 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
 
             try (var statement = connection.createStatement();
                  var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
-                    if (resultSet.next()) {
-                        currency.setId(resultSet.getInt(1));
-                        return currency;
-                    }
-                    else {
-                        return null;
-                    }
+                if (resultSet.next()) {
+                    currency.setId(resultSet.getInt(1));
+                    return currency;
+                }
+                else {
+                    return null;
+                }
             }
         }
         catch (SQLException e) {

@@ -47,7 +47,7 @@ public class Currency_Servlet extends BasicServlet {
         String[] pathParts = servletPath.split("/");
 
         if (!currencyService.deleteByCode(pathParts[1])) {
-            var exception = new SQLBadRequestException("There is no currency wit this code in the database."
+            var exception = new SQLBadRequestException("There is no currency with this code in the database."
                     , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
 
             handleException(resp, exception);

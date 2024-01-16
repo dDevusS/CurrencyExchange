@@ -54,7 +54,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             try (var statement = connection.createStatement();
                  var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
                 if (resultSet.next()) {
-                   return new ExchangeRate(resultSet.getInt("ID")
+                    return new ExchangeRate(resultSet.getInt("ID")
                             , baseCurrency
                             , targetCurrency
                             , rate);
