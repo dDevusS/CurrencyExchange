@@ -21,6 +21,7 @@ public class Exchange_Servlet extends BasicServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
+
         String baseCurrencyCode = req.getParameter("from");
         String targetCurrencyCode = req.getParameter("to");
         BigDecimal amount = new BigDecimal(req.getParameter("amount"));
@@ -29,12 +30,6 @@ public class Exchange_Servlet extends BasicServlet {
         var exchangeDTO
                 = exchangeService.exchangeAmount(baseCurrencyCode, targetCurrencyCode, amount);
 
-        String json = getJson(exchangeDTO);
-        logger.info("JSON Response: " + json);
-
-        try (var writer = resp.getWriter()) {
-            writer.write(json);
-        }
-        logger.info("Finished processing GET request.");
+        doResponse(exchangeDTO, resp);
     }
 }

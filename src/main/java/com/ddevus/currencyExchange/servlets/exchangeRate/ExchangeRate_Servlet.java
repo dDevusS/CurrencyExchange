@@ -26,6 +26,7 @@ public class ExchangeRate_Servlet extends BasicServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
+
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
             var exchangeRate
@@ -39,13 +40,7 @@ public class ExchangeRate_Servlet extends BasicServlet {
             handleException(resp, exception);
         }
 
-        String json = getJson(exchangeRate);
-        logger.info("JSON Response: " + json);
-
-        try (var writer = resp.getWriter()) {
-            writer.write(json);
-        }
-        logger.info("Finished processing GET request.");
+        doResponse(exchangeRate, resp);
     }
 
     @Override
@@ -63,6 +58,7 @@ public class ExchangeRate_Servlet extends BasicServlet {
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("Processing the client's PATCH request.");
+
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
         rate = rate.setScale(6, RoundingMode.HALF_UP);
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
@@ -79,13 +75,7 @@ public class ExchangeRate_Servlet extends BasicServlet {
             handleException(resp, exception);
         }
 
-        String json = getJson(exchangeRate);
-        logger.info("JSON response: " + json);
-
-        try (var writer = resp.getWriter()) {
-            writer.write(json);
-        }
-        logger.info("Finished processing PATCH request.");
+        doResponse(exchangeRate, resp);
     }
 
     private static String[] extractCurrenciesCodes(String pathInfo) {

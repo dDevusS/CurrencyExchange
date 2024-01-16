@@ -24,6 +24,7 @@ public class Currency_Servlet extends BasicServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
+
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
 
@@ -36,36 +37,28 @@ public class Currency_Servlet extends BasicServlet {
             handleException(resp, exception);
         }
 
-        String json = getJson(currency);
-        logger.info("JSON Response: " + json);
-
-        try (var writer = resp.getWriter()) {
-            writer.write(json);
-        }
-        logger.info("Finished processing GET request.");
+        doResponse(currency, resp);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         logger.info("Processing the client's DELETE request.");
+
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
-        String json = null;
 
-        if (currencyService.deleteByCode(pathParts[1])) {
-            json = getJson(pathParts[1]);
-            logger.info("JSON Response: " + "{\"message\":\"currency with code " + json + " was deleted\"}");
-        }
-        else {
+        if (!currencyService.deleteByCode(pathParts[1])) {
             var exception = new SQLBadRequestException("There is no currency wit this code in the database."
                     , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
 
             handleException(resp, exception);
         }
 
+        String json = "{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}";
+        logger.info("Json response: " + json);
+
         try (var writer = resp.getWriter()) {
-            writer.write("{\"message\":\"currency with code " + json + " was deleted\"}");
+            writer.write(json);
         }
-        logger.info("Finished processing Delete request.");
     }
 }

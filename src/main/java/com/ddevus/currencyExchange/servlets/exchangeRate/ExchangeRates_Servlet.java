@@ -25,27 +25,22 @@ public class ExchangeRates_Servlet extends BasicServlet {
 
     private final Logger logger = LoggerFactory.getLogger(ExchangeRates_Servlet.class.getName());
     private final IExchangeRate_Service exchangeRateService = ExchangeRate_Service.getINSTANCE();
-    private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
+
         List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
 
-        String json = getJson(exchangeRateList);
-        logger.info("JSON Response: " + json);
-
-        try (var writer = resp.getWriter()) {
-            writer.write(json);
-        }
-        logger.info("Finished processing GET request.");
+        doResponse(exchangeRateList, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("Processing the client's POST request.");
+
         String baseCurrencyCode = req.getParameter("baseCurrencyCode");
         String targetCurrencyCode = req.getParameter("targetCurrencyCode");
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
@@ -61,13 +56,7 @@ public class ExchangeRates_Servlet extends BasicServlet {
             handleException(resp, exception);
         }
 
-        String json = getJson(newExchangeRate);
-        logger.info("JSON Response: " + json);
-
-        try (var writer = resp.getWriter()) {
-            writer.write(json);
-        }
-        logger.info("Finished processing POST request.");
+        doResponse(newExchangeRate, resp);
     }
 
 }

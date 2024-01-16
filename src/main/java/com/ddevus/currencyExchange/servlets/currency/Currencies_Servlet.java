@@ -26,21 +26,17 @@ public class Currencies_Servlet extends BasicServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
+
         List<Currency> currencies = currencyService.findAll();
 
-        var json = getJson(currencies);
-        logger.info("JSON Response: " + json);
-
-        try (var writer = resp.getWriter()) {
-            writer.write(json);
-        }
-        logger.info("Finished processing GET request.");
+        doResponse(currencies, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("Processing the client's POST request.");
+
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sign = req.getParameter("sign");
@@ -55,13 +51,7 @@ public class Currencies_Servlet extends BasicServlet {
             handleException(resp, exception);
         }
 
-        String json = getJson(newCurrency);
-        logger.info("JSON Response: " + json);
-
-        try (var writer = resp.getWriter()) {
-            writer.write(json);
-        }
-        logger.info("Finished processing POST request.");
+        doResponse(newCurrency, resp);
     }
 
 }
