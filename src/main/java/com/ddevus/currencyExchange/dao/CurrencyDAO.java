@@ -45,13 +45,12 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
                  var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
                     if (resultSet.next()) {
                         currency.setId(resultSet.getInt(1));
+                        return currency;
                     }
                     else {
                         return null;
                     }
             }
-
-            return currency;
         }
         catch (SQLException e) {
             throw new DatabaseException("Couldn't to connect to the database."

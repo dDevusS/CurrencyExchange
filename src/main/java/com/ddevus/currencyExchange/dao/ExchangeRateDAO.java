@@ -33,6 +33,10 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
+        if (baseCurrency == null || targetCurrency == null) {
+            return null;
+        }
+
         try (var connection = ConnectionManager.open();
              var preparedStatement
                      = connection.prepareStatement(sql, new String[]{"ID"})) {
@@ -56,8 +60,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
                             , rate);
                 }
                 else {
-                    throw new DatabaseException("Inserting currency failed, no ID obtained."
-                            , WrapperException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
+                    return null;
                 }
             }
         }
@@ -120,6 +123,10 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
+        if (baseCurrency == null || targetCurrency == null) {
+            return null;
+        }
+
         ExchangeRate exchangeRate = findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
 
         if (exchangeRate != null) {
@@ -178,6 +185,10 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode) {
         Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
+
+        if (baseCurrency == null || targetCurrency == null) {
+            return null;
+        }
 
         return findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
     }

@@ -17,7 +17,6 @@ public class ConnectionManager {
 
     public static Connection open() {
         try {
-            logger.info("Finding JDBC driver.");
             Class.forName("org.sqlite.JDBC");
 
             logger.info("Connecting to the database.");

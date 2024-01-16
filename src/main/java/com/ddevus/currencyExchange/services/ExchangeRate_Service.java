@@ -34,14 +34,7 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
     @Override
     public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode) {
 
-        try {
-
             return exchangeRateDAO.findByBaseAndTargetCurrenciesCodes(baseCurrencyCode, targetCurrencyCode);
-        }
-        catch (SQLBadRequestException e) {
-            throw new SQLBadRequestException("There is no currency or currencies with those codes."
-                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
-        }
     }
 
     @Override
@@ -52,9 +45,7 @@ public class ExchangeRate_Service implements IExchangeRate_Service {
 
     @Override
     public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
-        ExchangeRate exchangeRate;
-
-            exchangeRate = findByBaseAndTargetCurrenciesCodes(baseCurrencyCode,
+        ExchangeRate exchangeRate = findByBaseAndTargetCurrenciesCodes(baseCurrencyCode,
                             targetCurrencyCode);
 
             if (exchangeRate == null) {
