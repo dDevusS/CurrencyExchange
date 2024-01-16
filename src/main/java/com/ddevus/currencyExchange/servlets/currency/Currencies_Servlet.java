@@ -1,12 +1,14 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.entity.Currency;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
+import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
+import com.ddevus.currencyExchange.servlets.BasicServlet;
 import com.ddevus.currencyExchange.utils.JsonConvertor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -16,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/currencies")
-public class Currencies_Servlet extends HttpServlet {
+public class Currencies_Servlet extends BasicServlet {
 
     private final Logger logger = LoggerFactory.getLogger(Currencies_Servlet.class.getName());
     private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
@@ -46,6 +48,14 @@ public class Currencies_Servlet extends HttpServlet {
         var newCurrency = new Currency(name, code, sign);
 
         newCurrency = currencyService.save(newCurrency);
+
+        if (newCurrency == null) {
+            var exception = new SQLBadRequestException("There is exist currency with those parameters in the database."
+                    , WrapperException.ErrorReason.FAILED_INSERT);
+
+            handleException(resp, exception);
+        }
+
         String json = JsonConvertor.getJson(newCurrency);
         logger.info("JSON Response: " + json);
 

@@ -2,7 +2,6 @@ package com.ddevus.currencyExchange.dao;
 
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
-import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
@@ -39,21 +38,17 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
                 preparedStatement.executeUpdate();
             }
             catch (SQLException e) {
-                throw new SQLBadRequestException("Inserting currency failed" +
-                        " due to currency with this code or sing exist in the database."
-                        , SQLBadRequestException.ErrorReason.FAILED_INSERT);
+                return null;
             }
 
-            try (var statement = connection.createStatement()) {
-                try (var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
+            try (var statement = connection.createStatement();
+                 var resultSet = statement.executeQuery("SELECT last_insert_rowid()")) {
                     if (resultSet.next()) {
                         currency.setId(resultSet.getInt(1));
                     }
                     else {
-                        throw new SQLBadRequestException("Inserting currency failed, no ID obtained."
-                                , SQLBadRequestException.ErrorReason.FAILED_GET_LAST_OPERATION_ID);
+                        return null;
                     }
-                }
             }
 
             return currency;
@@ -79,8 +74,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
                 return Optional.of(currency).get();
             }
             else {
-                throw new SQLBadRequestException("There is no currency with this ID."
-                        , SQLBadRequestException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+                return null;
             }
         }
         catch (SQLException e) {
@@ -104,8 +98,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
                 return Optional.of(currency).get();
             }
             else {
-                throw new SQLBadRequestException("There is no currency with this Code."
-                        , SQLBadRequestException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+                return null;
             }
         }
         catch (SQLException e) {
