@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.filters.exchangeRate;
 
 import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -31,27 +30,25 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
                 chain.doFilter(request, response);
             }
             else {
-                var exception = new IncorrectParametersException("Required parameters are incorrect."
-                        , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
+                var exception = new IncorrectParametersException("Required parameters are incorrect.");
 
-                FiltersUtil.handleException(res, exception);
+                FiltersUtil.handleException(res, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
             }
         }
 
         if (("PATCH").equals(req.getMethod())) {
             if (!FiltersUtil.isCorrectCodePairParameter(pathInfo)) {
                 var exception
-                        = new IncorrectParametersException("Required parameters are incorrect."
-                        , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
+                        = new IncorrectParametersException("Required parameters are incorrect.");
 
-                FiltersUtil.handleException(res, exception);
+                FiltersUtil.handleException(res, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
             }
 
             try {
                 FiltersUtil.checkNumberFormat(rate);
             }
-            catch (IncorrectParametersException e) {
-                FiltersUtil.handleException(res, e);
+            catch (IncorrectParametersException exception) {
+                FiltersUtil.handleException(res, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
             }
         }
 

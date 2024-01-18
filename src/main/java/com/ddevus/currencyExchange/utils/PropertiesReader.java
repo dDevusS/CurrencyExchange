@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.utils;
 
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
@@ -28,8 +27,7 @@ public class PropertiesReader {
             PROPERTIES.load(inputStream);
         }
         catch (IOException e) {
-            throw new DatabaseException("File application.properties was not found in resources root directory."
-                    , WrapperException.ErrorReason.FAILED_READ_PROPERTIES);
+            throw new DatabaseException("File application.properties was not found in resources root directory.");
         }
     }
 }

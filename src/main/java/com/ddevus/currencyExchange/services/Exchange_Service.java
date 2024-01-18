@@ -4,8 +4,7 @@ import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO;
 import com.ddevus.currencyExchange.dto.ExchangeDTO;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
-import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
+import com.ddevus.currencyExchange.exceptions.NoResultException;
 import com.ddevus.currencyExchange.services.interfaces.IExchange_Service;
 
 import java.math.BigDecimal;
@@ -34,8 +33,7 @@ public class Exchange_Service implements IExchange_Service {
                 = exchangeRateDAO.getRequiredExchangeRate(baseCurrencyCode, targetCurrencyCode);
 
         if (requiredExchangeRate == null) {
-            throw new SQLBadRequestException("There is no suitable exchange rate in the database for these currency pairs."
-                    , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+            throw new NoResultException("There is no suitable exchange rate in the database for these currency pairs.");
         }
 
         return getExchangeDtoWithConvertedAmount(amount, requiredExchangeRate);

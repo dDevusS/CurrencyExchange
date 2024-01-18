@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.filters.currency;
 
 import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -25,9 +24,8 @@ public class Currency_Filter_ForCheckingRequestParameters implements Filter {
         String[] pathParts = servletPath.split("/");
 
         if (pathParts.length != 2 | pathParts[1].length() != 3) {
-            var exception = new IncorrectParametersException("Required parameters are incorrect."
-                    , WrapperException.ErrorReason.INCORRECT_PARAMETERS);
-            FiltersUtil.handleException(response, exception);
+            var exception = new IncorrectParametersException("Required parameters are incorrect.");
+            FiltersUtil.handleException(response, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
         }
 
         chain.doFilter(request, response);

@@ -26,16 +26,10 @@ public class Exchange_Filter_ForCheckingRequestParameters implements Filter {
 
         try {
             FiltersUtil.checkNumberFormat(amount);
-        }
-        catch (IncorrectParametersException e) {
-            FiltersUtil.handleException(res, e);
-        }
-
-        try {
             FiltersUtil.checkSentCodeParameters(baseCurrencyCode, targetCurrencyCode);
         }
         catch (IncorrectParametersException e) {
-            FiltersUtil.handleException(res, e);
+            FiltersUtil.handleException(res, e.getErrorMessage(), e.getHTTP_CODE_STATUS());
         }
 
         chain.doFilter(request, response);

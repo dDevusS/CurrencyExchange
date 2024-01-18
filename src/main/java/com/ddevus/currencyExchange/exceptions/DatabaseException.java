@@ -1,10 +1,9 @@
 package com.ddevus.currencyExchange.exceptions;
 
-public class DatabaseException extends WrapperException {
+public class DatabaseException extends BasicApplicationException {
 
-    public DatabaseException(String message, ErrorReason errorReason) {
-        logger.warning(message);
-        super.errorMessage = message;
-        super.errorReason = errorReason;
+    public DatabaseException(String errorMassage) {
+        super.errorMessage = errorMassage;
+        super.HTTP_CODE_STATUS = 500;
     }
 }

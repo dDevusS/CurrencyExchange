@@ -1,8 +1,7 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.entity.Currency;
-import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
+import com.ddevus.currencyExchange.exceptions.NoResultException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
@@ -31,8 +30,7 @@ public class Currency_Servlet extends BasicServlet {
         Currency currency = currencyService.findByCode(pathParts[1]);
 
         if (currency == null) {
-            throw new SQLBadRequestException("There is no currency with this code in the database."
-                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
+            throw new NoResultException("There is no currency with this code in the database.");
         }
 
         doResponse(currency, resp);
@@ -46,8 +44,7 @@ public class Currency_Servlet extends BasicServlet {
         String[] pathParts = servletPath.split("/");
 
         if (!currencyService.deleteByCode(pathParts[1])) {
-            throw new SQLBadRequestException("There is no currency with this code in the database."
-                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
+            throw new NoResultException("There is no currency with this code in the database.");
         }
 
         String json = "{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}";

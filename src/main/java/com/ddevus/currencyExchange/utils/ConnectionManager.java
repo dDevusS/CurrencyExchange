@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.utils;
 
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import lombok.experimental.UtilityClass;
 
 import java.sql.Connection;
@@ -24,12 +23,10 @@ public class ConnectionManager {
             return DriverManager.getConnection(PropertiesReader.read(URL_KEY));
         }
         catch (ClassNotFoundException e) {
-            throw new DatabaseException("Database driver was not found."
-                    , WrapperException.ErrorReason.FAILED_FIND_JDBC_DRIVER);
+            throw new DatabaseException("Database driver was not found.");
         }
         catch (SQLException e) {
-            throw new DatabaseException("Error connecting to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Error connecting to the database.");
         }
     }
 }

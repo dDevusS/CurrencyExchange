@@ -2,7 +2,6 @@ package com.ddevus.currencyExchange.dao;
 
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
 import java.sql.ResultSet;
@@ -53,8 +52,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
             }
         }
         catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 
@@ -77,8 +75,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
             }
         }
         catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 
@@ -101,8 +98,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
             }
         }
         catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 
@@ -122,8 +118,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
             return currencies;
         }
         catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 
@@ -139,8 +134,7 @@ public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.I
             return preparedStatement.executeUpdate() > 0;
         }
         catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 

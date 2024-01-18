@@ -1,9 +1,10 @@
 package com.ddevus.currencyExchange.exceptions;
 
-public class IncorrectParametersException extends WrapperException {
+public class IncorrectParametersException extends BasicApplicationException {
 
-    public IncorrectParametersException(String errorMassage, ErrorReason errorReason) {
+    public IncorrectParametersException(String errorMassage) {
         super.errorMessage = errorMassage;
-        super.errorReason = errorReason;
+        super.HTTP_CODE_STATUS = 400;
     }
+
 }

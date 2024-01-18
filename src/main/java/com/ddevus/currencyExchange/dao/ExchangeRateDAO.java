@@ -3,8 +3,8 @@ package com.ddevus.currencyExchange.dao;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
-import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
+import com.ddevus.currencyExchange.exceptions.InsertFailedException;
+import com.ddevus.currencyExchange.exceptions.NoResultException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
 import java.math.BigDecimal;
@@ -35,8 +35,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
-            throw new SQLBadRequestException("There are no currencies with those codes in the database."
-            , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
+            throw new InsertFailedException("There are no currencies with those codes in the database." +
+                    " Inserting new exchange rate was failed.");
         }
 
         try (var connection = ConnectionManager.open();
@@ -67,8 +67,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             }
         }
         catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 
@@ -98,8 +97,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             return exchangeRates;
         }
         catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 
@@ -115,8 +113,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             return preparedStatement.executeUpdate() > 0;
         }
         catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 
@@ -126,8 +123,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
-            throw new SQLBadRequestException("There are no currencies with those codes in the database."
-                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
+            throw new NoResultException("There are no currencies with those codes in the database.");
         }
 
         ExchangeRate exchangeRate = findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
@@ -190,8 +186,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
-            throw new SQLBadRequestException("There are no currencies with those codes in the database."
-                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
+            throw new NoResultException("There are no currencies with those codes in the database.");
         }
 
         return findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
@@ -217,8 +212,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             }
         }
         catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database."
-                    , WrapperException.ErrorReason.UNKNOWN_ERROR_CONNECTING_TO_DB);
+            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 

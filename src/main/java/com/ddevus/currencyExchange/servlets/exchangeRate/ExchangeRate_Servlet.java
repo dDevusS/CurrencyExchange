@@ -1,8 +1,7 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
 import com.ddevus.currencyExchange.entity.ExchangeRate;
-import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
-import com.ddevus.currencyExchange.exceptions.WrapperException;
+import com.ddevus.currencyExchange.exceptions.NoResultException;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
@@ -34,8 +33,7 @@ public class ExchangeRate_Servlet extends BasicServlet {
                     , currenciesCodes[1]);
 
         if (exchangeRate == null) {
-            throw new SQLBadRequestException("There is no exchange rate with those currencies codes."
-                    , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+            throw new NoResultException("There is no exchange rate with those currencies codes.");
         }
 
         doResponse(exchangeRate, resp);
@@ -67,8 +65,7 @@ public class ExchangeRate_Servlet extends BasicServlet {
                     , rate);
 
         if (exchangeRate == null) {
-            throw new SQLBadRequestException("There is no exchange rate with those currencies codes."
-                    , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
+            throw new NoResultException("There is no exchange rate with those currencies codes.");
         }
 
         doResponse(exchangeRate, resp);
