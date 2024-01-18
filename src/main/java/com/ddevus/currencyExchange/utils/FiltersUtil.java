@@ -8,15 +8,19 @@ import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.logging.Logger;
 
 @UtilityClass
 public class FiltersUtil {
+    private final static Logger logger = Logger.getLogger(FiltersUtil.class.getName());
 
     public static void handleException(ServletResponse response
             , BasicApplicationException exception) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setStatus(exception.getHTTP_CODE_STATUS());
+
         String json = "{\"errorMessage\":\"" + exception.getErrorMessage() + "\"}";
+        logger.warning(json);
 
         try (var writer = response.getWriter()) {
             writer.write(json);
