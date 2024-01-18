@@ -10,12 +10,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.logging.Logger;
 
 @WebServlet("/exchange")
 public class Exchange_Servlet extends BasicServlet {
 
-    private final Logger logger = Logger.getLogger(Exchange_Servlet.class.getName());
     private final Exchange_Service exchangeService = Exchange_Service.getINSTANCE();
 
     @Override

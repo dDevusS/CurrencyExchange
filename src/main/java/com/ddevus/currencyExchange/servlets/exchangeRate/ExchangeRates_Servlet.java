@@ -14,12 +14,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.logging.Logger;
 
 @WebServlet("/exchangeRates")
 public class ExchangeRates_Servlet extends BasicServlet {
 
-    private final Logger logger = Logger.getLogger(ExchangeRates_Servlet.class.getName());
     private final IExchangeRate_Service exchangeRateService = ExchangeRate_Service.getINSTANCE();
 
     @Override

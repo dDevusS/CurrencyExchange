@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 @WebServlet("/currency/*")
 public class Currency_Servlet extends BasicServlet {
 
-    private final Logger logger = Logger.getLogger(Currency_Servlet.class.getName());
     private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
 
     @Override

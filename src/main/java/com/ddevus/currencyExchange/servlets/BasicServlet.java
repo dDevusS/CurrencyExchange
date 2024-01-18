@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public abstract class BasicServlet extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(BasicServlet.class.getName());
+    protected static final Logger logger = Logger.getLogger(BasicServlet.class.getName());
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static String getJson(Object object) throws JsonProcessingException {

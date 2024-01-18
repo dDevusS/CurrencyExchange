@@ -12,12 +12,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Logger;
 
 @WebServlet("/currencies")
 public class Currencies_Servlet extends BasicServlet {
 
-    private final Logger logger = Logger.getLogger(Currencies_Servlet.class.getName());
     private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
 
     @Override
