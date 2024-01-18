@@ -1,7 +1,7 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.entity.Currency;
-import com.ddevus.currencyExchange.exceptions.NoResultException;
+import com.ddevus.currencyExchange.exceptions.InsertFailedException;
 import com.ddevus.currencyExchange.services.Currency_Service;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
@@ -43,7 +43,7 @@ public class Currencies_Servlet extends BasicServlet {
             newCurrency = currencyService.save(newCurrency);
 
         if (newCurrency == null) {
-            throw new NoResultException("There is exist currency with those parameters in the database.");
+            throw new InsertFailedException("There is a currency in the database with the following parameters.");
         }
 
         doResponse(newCurrency, resp);

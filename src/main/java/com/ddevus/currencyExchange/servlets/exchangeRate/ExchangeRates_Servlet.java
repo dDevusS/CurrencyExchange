@@ -1,7 +1,7 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
 import com.ddevus.currencyExchange.entity.ExchangeRate;
-import com.ddevus.currencyExchange.exceptions.NoResultException;
+import com.ddevus.currencyExchange.exceptions.InsertFailedException;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
@@ -46,7 +46,7 @@ public class ExchangeRates_Servlet extends BasicServlet {
                     = exchangeRateService.save(baseCurrencyCode, targetCurrencyCode, rate);
 
         if (newExchangeRate == null) {
-            throw new NoResultException("There is no exchange rate with those currencies codes.");
+            throw new InsertFailedException("There is a exchange rate in the database with those currencies codes.");
         }
 
         doResponse(newExchangeRate, resp);
