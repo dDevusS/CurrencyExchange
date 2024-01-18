@@ -32,7 +32,7 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
             else {
                 var exception = new IncorrectParametersException("Required parameters are incorrect.");
 
-                FiltersUtil.handleException(res, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
+                FiltersUtil.handleException(res, exception);
             }
         }
 
@@ -41,14 +41,14 @@ public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter 
                 var exception
                         = new IncorrectParametersException("Required parameters are incorrect.");
 
-                FiltersUtil.handleException(res, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
+                FiltersUtil.handleException(res, exception);
             }
 
             try {
                 FiltersUtil.checkNumberFormat(rate);
             }
             catch (IncorrectParametersException exception) {
-                FiltersUtil.handleException(res, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
+                FiltersUtil.handleException(res, exception);
             }
         }
 

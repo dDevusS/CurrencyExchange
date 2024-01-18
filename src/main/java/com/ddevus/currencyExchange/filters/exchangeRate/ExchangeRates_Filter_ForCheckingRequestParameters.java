@@ -29,16 +29,10 @@ public class ExchangeRates_Filter_ForCheckingRequestParameters implements Filter
 
             try {
                 FiltersUtil.checkNumberFormat(rate);
-            }
-            catch (IncorrectParametersException exception) {
-                FiltersUtil.handleException(res, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
-            }
-
-            try {
                 FiltersUtil.checkSentCodeParameters(baseCurrencyCode, targetCurrencyCode);
             }
             catch (IncorrectParametersException exception) {
-                FiltersUtil.handleException(res, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
+                FiltersUtil.handleException(res, exception);
             }
         }
 

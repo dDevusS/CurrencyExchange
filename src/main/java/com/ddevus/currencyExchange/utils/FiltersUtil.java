@@ -1,5 +1,6 @@
 package com.ddevus.currencyExchange.utils;
 
+import com.ddevus.currencyExchange.exceptions.BasicApplicationException;
 import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,13 +13,13 @@ import java.math.BigDecimal;
 public class FiltersUtil {
 
     public static void handleException(ServletResponse response
-            , String errorMessage, int HTTP_CODE_STATUS) {
+            , BasicApplicationException exception) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setStatus(HTTP_CODE_STATUS);
-        errorMessage = "{\"errorMessage\":\"" + errorMessage + "\"}";
+        httpServletResponse.setStatus(exception.getHTTP_CODE_STATUS());
+        String json = "{\"errorMessage\":\"" + exception.getErrorMessage() + "\"}";
 
         try (var writer = response.getWriter()) {
-            writer.write(errorMessage);
+            writer.write(json);
         }
         catch (IOException e) {
             throw new RuntimeException(e);

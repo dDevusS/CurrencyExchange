@@ -21,7 +21,7 @@ public class ExceptionHandler_For_Servlet implements Filter {
             chain.doFilter(request, response);
         }
         catch (BasicApplicationException exception) {
-            FiltersUtil.handleException(response, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
+            FiltersUtil.handleException(response, exception);
         }
     }
 

@@ -25,7 +25,7 @@ public class Currency_Filter_ForCheckingRequestParameters implements Filter {
 
         if (pathParts.length != 2 | pathParts[1].length() != 3) {
             var exception = new IncorrectParametersException("Required parameters are incorrect.");
-            FiltersUtil.handleException(response, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
+            FiltersUtil.handleException(response, exception);
         }
 
         chain.doFilter(request, response);

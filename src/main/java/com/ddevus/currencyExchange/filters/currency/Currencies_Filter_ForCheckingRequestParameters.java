@@ -28,11 +28,11 @@ public class Currencies_Filter_ForCheckingRequestParameters implements Filter {
 
         if (name == null || code == null || sign == null) {
             var exception = new IncorrectParametersException("Required parameters are missing.");
-            FiltersUtil.handleException(response, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
+            FiltersUtil.handleException(response, exception);
         }
         else if (code.length() != 3 || sign.length() > 3) {
             var exception = new IncorrectParametersException("Required parameters are incorrect.");
-            FiltersUtil.handleException(response, exception.getErrorMessage(), exception.getHTTP_CODE_STATUS());
+            FiltersUtil.handleException(response, exception);
         }
         else {
             chain.doFilter(request, response);
