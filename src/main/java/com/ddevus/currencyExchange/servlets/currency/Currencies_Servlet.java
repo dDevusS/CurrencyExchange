@@ -27,13 +27,7 @@ public class Currencies_Servlet extends BasicServlet {
             throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
 
-        List<Currency> currencies = null;
-        try {
-            currencies = currencyService.findAll();
-        }
-        catch (DatabaseException e) {
-            handleException(resp, e);
-        }
+        List<Currency> currencies = currencyService.findAll();
 
         doResponse(currencies, resp);
     }
@@ -48,18 +42,11 @@ public class Currencies_Servlet extends BasicServlet {
         String sign = req.getParameter("sign");
         var newCurrency = new Currency(name, code, sign);
 
-        try {
             newCurrency = currencyService.save(newCurrency);
-        }
-        catch (DatabaseException e) {
-            handleException(resp, e);
-        }
 
         if (newCurrency == null) {
-            var exception = new SQLBadRequestException("There is exist currency with those parameters in the database."
+            throw new SQLBadRequestException("There is exist currency with those parameters in the database."
                     , WrapperException.ErrorReason.FAILED_INSERT);
-
-            handleException(resp, exception);
         }
 
         doResponse(newCurrency, resp);

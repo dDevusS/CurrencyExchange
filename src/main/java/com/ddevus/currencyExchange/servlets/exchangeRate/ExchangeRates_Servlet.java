@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
 import com.ddevus.currencyExchange.entity.ExchangeRate;
-import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
@@ -29,13 +28,7 @@ public class ExchangeRates_Servlet extends BasicServlet {
             throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
 
-        List<ExchangeRate> exchangeRateList = null;
-        try {
-            exchangeRateList = exchangeRateService.findAll();
-        }
-        catch (DatabaseException e) {
-            handleException(resp, e);
-        }
+        List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
 
         doResponse(exchangeRateList, resp);
     }
@@ -50,20 +43,12 @@ public class ExchangeRates_Servlet extends BasicServlet {
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
         rate = rate.setScale(6, RoundingMode.HALF_UP);
 
-        ExchangeRate newExchangeRate = null;
-        try {
-            newExchangeRate
+        ExchangeRate newExchangeRate
                     = exchangeRateService.save(baseCurrencyCode, targetCurrencyCode, rate);
-        }
-        catch (DatabaseException | SQLBadRequestException e) {
-            handleException(resp, e);
-        }
 
         if (newExchangeRate == null) {
-            var exception = new SQLBadRequestException("There is no exchange rate with those currencies codes."
+            throw new SQLBadRequestException("There is no exchange rate with those currencies codes."
                     , WrapperException.ErrorReason.FAILED_FIND_EXCHANGE_RATE_IN_DB);
-
-            handleException(resp, exception);
         }
 
         doResponse(newExchangeRate, resp);

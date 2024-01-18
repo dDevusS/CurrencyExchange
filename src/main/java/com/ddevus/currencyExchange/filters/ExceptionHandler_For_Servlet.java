@@ -1,6 +1,7 @@
 package com.ddevus.currencyExchange.filters;
 
-import com.ddevus.currencyExchange.exceptions.WrapperException;
+import com.ddevus.currencyExchange.exceptions.DatabaseException;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -20,7 +21,7 @@ public class ExceptionHandler_For_Servlet implements Filter {
         try {
             chain.doFilter(request, response);
         }
-        catch (WrapperException e) {
+        catch (DatabaseException | SQLBadRequestException e) {
             FiltersUtil.handleException(response, e);
         }
     }
@@ -29,4 +30,5 @@ public class ExceptionHandler_For_Servlet implements Filter {
     public void destroy() {
         Filter.super.destroy();
     }
+
 }

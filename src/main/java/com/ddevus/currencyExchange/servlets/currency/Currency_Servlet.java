@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.entity.Currency;
-import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
@@ -29,19 +28,11 @@ public class Currency_Servlet extends BasicServlet {
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
 
-        Currency currency = null;
-        try {
-            currency = currencyService.findByCode(pathParts[1]);
-        }
-        catch (DatabaseException e) {
-            handleException(resp, e);
-        }
+        Currency currency = currencyService.findByCode(pathParts[1]);
 
         if (currency == null) {
-            var exception = new SQLBadRequestException("There is no currency with this code in the database."
+            throw new SQLBadRequestException("There is no currency with this code in the database."
                     , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
-
-            handleException(resp, exception);
         }
 
         doResponse(currency, resp);
@@ -54,19 +45,9 @@ public class Currency_Servlet extends BasicServlet {
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
 
-        boolean isDeleted = false;
-        try {
-            isDeleted = currencyService.deleteByCode(pathParts[1]);
-        }
-        catch (DatabaseException e) {
-            handleException(resp, e);
-        }
-
-        if (!isDeleted) {
-            var exception = new SQLBadRequestException("There is no currency with this code in the database."
+        if (!currencyService.deleteByCode(pathParts[1])) {
+            throw new SQLBadRequestException("There is no currency with this code in the database."
                     , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
-
-            handleException(resp, exception);
         }
 
         String json = "{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}";
