@@ -3,7 +3,6 @@ package com.ddevus.currencyExchange.dao;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
-import com.ddevus.currencyExchange.exceptions.InsertFailedException;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
@@ -35,7 +34,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
-            throw new InsertFailedException("There are no currencies with those codes in the database." +
+            throw new NoResultException("There are no currencies with those codes in the database." +
                     " Inserting new exchange rate was failed.");
         }
 
