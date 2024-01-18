@@ -3,6 +3,7 @@ package com.ddevus.currencyExchange.dao;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
@@ -34,7 +35,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
-            return null;
+            throw new SQLBadRequestException("There are no currencies with those codes in the database."
+            , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
         }
 
         try (var connection = ConnectionManager.open();
@@ -124,7 +126,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
-            return null;
+            throw new SQLBadRequestException("There are no currencies with those codes in the database."
+                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
         }
 
         ExchangeRate exchangeRate = findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
@@ -187,7 +190,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
-            return null;
+            throw new SQLBadRequestException("There are no currencies with those codes in the database."
+                    , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
         }
 
         return findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);

@@ -1,5 +1,7 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
+import com.ddevus.currencyExchange.entity.Currency;
+import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
@@ -27,7 +29,13 @@ public class Currency_Servlet extends BasicServlet {
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
 
-        var currency = currencyService.findByCode(pathParts[1]);
+        Currency currency = null;
+        try {
+            currency = currencyService.findByCode(pathParts[1]);
+        }
+        catch (DatabaseException e) {
+            handleException(resp, e);
+        }
 
         if (currency == null) {
             var exception = new SQLBadRequestException("There is no currency with this code in the database."
@@ -46,7 +54,15 @@ public class Currency_Servlet extends BasicServlet {
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
 
-        if (!currencyService.deleteByCode(pathParts[1])) {
+        boolean isDeleted = false;
+        try {
+            isDeleted = currencyService.deleteByCode(pathParts[1]);
+        }
+        catch (DatabaseException e) {
+            handleException(resp, e);
+        }
+
+        if (!isDeleted) {
             var exception = new SQLBadRequestException("There is no currency with this code in the database."
                     , WrapperException.ErrorReason.FAILED_FIND_CURRENCY_IN_DB);
 

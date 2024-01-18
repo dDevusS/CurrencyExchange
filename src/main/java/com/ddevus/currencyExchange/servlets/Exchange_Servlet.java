@@ -1,5 +1,8 @@
 package com.ddevus.currencyExchange.servlets;
 
+import com.ddevus.currencyExchange.dto.ExchangeDTO;
+import com.ddevus.currencyExchange.exceptions.DatabaseException;
+import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.services.Exchange_Service;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,8 +29,14 @@ public class Exchange_Servlet extends BasicServlet {
         BigDecimal amount = new BigDecimal(req.getParameter("amount"));
         amount = amount.setScale(6, RoundingMode.HALF_UP);
 
-        var exchangeDTO
-                = exchangeService.exchangeAmount(baseCurrencyCode, targetCurrencyCode, amount);
+        ExchangeDTO exchangeDTO = null;
+        try {
+            exchangeDTO
+                    = exchangeService.exchangeAmount(baseCurrencyCode, targetCurrencyCode, amount);
+        }
+        catch (DatabaseException | SQLBadRequestException e) {
+            handleException(resp, e);
+        }
 
         doResponse(exchangeDTO, resp);
     }

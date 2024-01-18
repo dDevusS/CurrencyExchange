@@ -1,5 +1,7 @@
 package com.ddevus.currencyExchange.servlets.exchangeRate;
 
+import com.ddevus.currencyExchange.entity.ExchangeRate;
+import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.ExchangeRate_Service;
@@ -28,9 +30,15 @@ public class ExchangeRate_Servlet extends BasicServlet {
 
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
-        var exchangeRate
-                = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
-                , currenciesCodes[1]);
+        ExchangeRate exchangeRate = null;
+        try {
+            exchangeRate
+                    = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
+                    , currenciesCodes[1]);
+        }
+        catch (SQLBadRequestException | DatabaseException e) {
+            handleException(resp, e);
+        }
 
         if (exchangeRate == null) {
             var exception = new SQLBadRequestException("There is no exchange rate with those currencies codes."
@@ -62,10 +70,16 @@ public class ExchangeRate_Servlet extends BasicServlet {
         rate = rate.setScale(6, RoundingMode.HALF_UP);
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
-        var exchangeRate
-                = exchangeRateService.update(currenciesCodes[0]
-                , currenciesCodes[1]
-                , rate);
+        ExchangeRate exchangeRate = null;
+        try {
+            exchangeRate
+                    = exchangeRateService.update(currenciesCodes[0]
+                    , currenciesCodes[1]
+                    , rate);
+        }
+        catch (SQLBadRequestException | DatabaseException e) {
+            handleException(resp, e);
+        }
 
         if (exchangeRate == null) {
             var exception = new SQLBadRequestException("There is no exchange rate with those currencies codes."

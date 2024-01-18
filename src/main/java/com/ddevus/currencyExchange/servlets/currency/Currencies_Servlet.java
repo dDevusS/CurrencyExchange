@@ -1,6 +1,7 @@
 package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.entity.Currency;
+import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.SQLBadRequestException;
 import com.ddevus.currencyExchange.exceptions.WrapperException;
 import com.ddevus.currencyExchange.services.Currency_Service;
@@ -26,7 +27,13 @@ public class Currencies_Servlet extends BasicServlet {
             throws ServletException, IOException {
         logger.info("Processing the client's GET request.");
 
-        List<Currency> currencies = currencyService.findAll();
+        List<Currency> currencies = null;
+        try {
+            currencies = currencyService.findAll();
+        }
+        catch (DatabaseException e) {
+            handleException(resp, e);
+        }
 
         doResponse(currencies, resp);
     }
@@ -41,7 +48,12 @@ public class Currencies_Servlet extends BasicServlet {
         String sign = req.getParameter("sign");
         var newCurrency = new Currency(name, code, sign);
 
-        newCurrency = currencyService.save(newCurrency);
+        try {
+            newCurrency = currencyService.save(newCurrency);
+        }
+        catch (DatabaseException e) {
+            handleException(resp, e);
+        }
 
         if (newCurrency == null) {
             var exception = new SQLBadRequestException("There is exist currency with those parameters in the database."
