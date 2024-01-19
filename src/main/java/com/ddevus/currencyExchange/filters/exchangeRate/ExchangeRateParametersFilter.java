@@ -31,7 +31,6 @@ public class ExchangeRateParametersFilter implements Filter {
             }
             else {
                 var exception = new IncorrectParametersException("Required parameters are incorrect.");
-
                 FiltersUtil.handleException(res, exception);
             }
         }

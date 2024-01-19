@@ -16,6 +16,7 @@ public class FiltersUtil {
     private final static int CODE_LENGTH = 3;
     private final static int CODE_PAIR_LENGTH = 6;
     private final static int NUM_PARTS_PATH = 2;
+    private final static int SIGN_LENGTH = 3;
     private final static Logger LOG_EXCEPTION = Logger.getLogger(FiltersUtil.class.getName());
 
     public static void handleException(ServletResponse response
@@ -34,10 +35,40 @@ public class FiltersUtil {
         }
     }
 
+    public static void checkCurrencyParameters(String name, String code, String sign) {
+        if (name == null || code == null || sign == null) {
+            throw new IncorrectParametersException("Required parameters are missing.");
+        }
+        else if (!isCorrectCode(code) || !isCorrectSign(sign)) {
+           throw new IncorrectParametersException("Required parameters are incorrect.");
+        }
+    }
+
+    public static void checkCurrencyPathCode(String[] pathParts) {
+        if (!isPathCode(pathParts) || !isCorrectCode(pathParts[1])) {
+            throw new IncorrectParametersException("Required parameters are incorrect.");
+        }
+    }
+
+    private static boolean isCorrectCode (String code) {
+
+        return code.length() == CODE_LENGTH;
+    }
+
+    private static boolean isCorrectSign (String sing) {
+
+        return sing.length() == SIGN_LENGTH;
+    }
+
+    private static boolean isPathCode(String[] pathParts) {
+
+        return pathParts.length == NUM_PARTS_PATH;
+    }
+
     public static boolean isCorrectCodePairParameter(String pathInfo) {
         String[] pathParts = pathInfo.split("/");
 
-        return (pathParts.length == NUM_PARTS_PATH && pathParts[1].length() == CODE_PAIR_LENGTH);
+        return (isPathCode(pathParts) && pathParts[1].length() == CODE_PAIR_LENGTH);
     }
 
     public static void checkNumberFormat(String number) {
@@ -57,7 +88,7 @@ public class FiltersUtil {
         if (baseCurrencyCode == null || targetCurrencyCode == null) {
             throw new IncorrectParametersException("Required parameter is missed.");
         }
-        else if (baseCurrencyCode.length() != CODE_LENGTH || targetCurrencyCode.length() != CODE_LENGTH) {
+        else if (isCorrectCode(baseCurrencyCode) || isCorrectCode(targetCurrencyCode)) {
             throw new IncorrectParametersException("Required parameters are incorrect.");
         }
     }
