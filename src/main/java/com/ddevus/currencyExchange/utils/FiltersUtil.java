@@ -13,7 +13,10 @@ import java.util.logging.Logger;
 @UtilityClass
 public class FiltersUtil {
 
-    private final static Logger logger = Logger.getLogger(FiltersUtil.class.getName());
+    private final static int CODE_LENGTH = 3;
+    private final static int CODE_PAIR_LENGTH = 6;
+    private final static int NUM_PARTS_PATH = 2;
+    private final static Logger LOG_EXCEPTION = Logger.getLogger(FiltersUtil.class.getName());
 
     public static void handleException(ServletResponse response
             , BasicApplicationException exception) {
@@ -21,7 +24,7 @@ public class FiltersUtil {
         httpServletResponse.setStatus(exception.getHTTP_CODE_STATUS());
 
         String json = "{\"errorMessage\":\"" + exception.getErrorMessage() + "\"}";
-        logger.warning(json);
+        LOG_EXCEPTION.warning(json);
 
         try (var writer = response.getWriter()) {
             writer.write(json);
@@ -34,7 +37,7 @@ public class FiltersUtil {
     public static boolean isCorrectCodePairParameter(String pathInfo) {
         String[] pathParts = pathInfo.split("/");
 
-        return (pathParts.length == 2 && pathParts[1].length() == 6);
+        return (pathParts.length == NUM_PARTS_PATH && pathParts[1].length() == CODE_PAIR_LENGTH);
     }
 
     public static void checkNumberFormat(String number) {
@@ -54,7 +57,7 @@ public class FiltersUtil {
         if (baseCurrencyCode == null || targetCurrencyCode == null) {
             throw new IncorrectParametersException("Required parameter is missed.");
         }
-        else if (baseCurrencyCode.length() != 3 || targetCurrencyCode.length() != 3) {
+        else if (baseCurrencyCode.length() != CODE_LENGTH || targetCurrencyCode.length() != CODE_LENGTH) {
             throw new IncorrectParametersException("Required parameters are incorrect.");
         }
     }
