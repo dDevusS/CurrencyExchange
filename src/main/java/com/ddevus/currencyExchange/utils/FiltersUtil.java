@@ -40,7 +40,7 @@ public class FiltersUtil {
             throw new IncorrectParametersException("Required parameters are missing.");
         }
         else if (!isCorrectCode(code) || !isCorrectSign(sign)) {
-           throw new IncorrectParametersException("Required parameters are incorrect.");
+            throw new IncorrectParametersException("Required parameters are incorrect.");
         }
     }
 
@@ -82,12 +82,12 @@ public class FiltersUtil {
         }
     }
 
-    private static boolean isCorrectCode (String code) {
+    private static boolean isCorrectCode(String code) {
 
         return code.length() == CODE_LENGTH;
     }
 
-    private static boolean isCorrectSign (String sing) {
+    private static boolean isCorrectSign(String sing) {
 
         return sing.length() == SIGN_LENGTH;
     }

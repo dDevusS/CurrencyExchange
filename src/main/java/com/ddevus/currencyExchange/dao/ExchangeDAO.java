@@ -18,7 +18,6 @@ public class ExchangeDAO implements IExchangeDAO {
 
     private static final CurrencyDAO CURRENCY_DAO = CurrencyDAO.getINSTANCE();
     private static final ExchangeRateDAO EXCHANGE_RATE_DAO = ExchangeRateDAO.getINSTANCE();
-
     private static final ExchangeDAO INSTANCE = new ExchangeDAO();
 
     private ExchangeDAO() {
@@ -75,7 +74,7 @@ public class ExchangeDAO implements IExchangeDAO {
     }
 
     private ExchangeRate[] findGoalAndTransExchangeRates(Currency baseCurrency, Currency targetCurrency
-            , Set<ExchangeRate> exchangeRateSet, List<ExchangeRate> exchangeRateList){
+            , Set<ExchangeRate> exchangeRateSet, List<ExchangeRate> exchangeRateList) {
         ExchangeRate transExchangeRate = null;
         ExchangeRate goalExchangeRate = null;
 
@@ -95,10 +94,10 @@ public class ExchangeDAO implements IExchangeDAO {
             }
         }
 
-        return new ExchangeRate[] {goalExchangeRate, transExchangeRate};
+        return new ExchangeRate[]{goalExchangeRate, transExchangeRate};
     }
 
-    private void fillSetWithThisCurrencyFromList (Set<ExchangeRate> exchangeRateSet
+    private void fillSetWithThisCurrencyFromList(Set<ExchangeRate> exchangeRateSet
             , Currency currency, List<ExchangeRate> exchangeRateList) {
         for (ExchangeRate exchangeRateFromList : exchangeRateList) {
             if (isThere(currency, exchangeRateFromList)) {

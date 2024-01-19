@@ -28,7 +28,7 @@ public class CurrenciesParametersFilter implements Filter {
             try {
                 checkParameters(name, code, sign);
             }
-            catch (IncorrectParametersException exception){
+            catch (IncorrectParametersException exception) {
                 handleException(response, exception);
             }
         }
