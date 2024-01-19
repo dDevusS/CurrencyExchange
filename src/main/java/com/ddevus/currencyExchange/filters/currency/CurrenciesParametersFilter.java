@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 
-import static com.ddevus.currencyExchange.utils.FiltersUtil.checkCurrencyParameters;
+import static com.ddevus.currencyExchange.utils.FiltersUtil.checkParameters;
 import static com.ddevus.currencyExchange.utils.FiltersUtil.handleException;
 
 @WebFilter("/currencies")
@@ -26,7 +26,7 @@ public class CurrenciesParametersFilter implements Filter {
             String sign = request.getParameter("sign");
 
             try {
-                checkCurrencyParameters(name, code, sign);
+                checkParameters(name, code, sign);
             }
             catch (IncorrectParametersException exception){
                 handleException(response, exception);

@@ -35,7 +35,7 @@ public class FiltersUtil {
         }
     }
 
-    public static void checkCurrencyParameters(String name, String code, String sign) {
+    public static void checkParameters(String name, String code, String sign) {
         if (name == null || code == null || sign == null) {
             throw new IncorrectParametersException("Required parameters are missing.");
         }
@@ -44,9 +44,39 @@ public class FiltersUtil {
         }
     }
 
+    public static void checkParameters(String baseCurrencyCode, String targetCurrencyCode) {
+
+        if (baseCurrencyCode == null || targetCurrencyCode == null) {
+            throw new IncorrectParametersException("Required parameter is missed.");
+        }
+        else if (isCorrectCode(baseCurrencyCode) || isCorrectCode(targetCurrencyCode)) {
+            throw new IncorrectParametersException("Required parameters are incorrect.");
+        }
+    }
+
     public static void checkCurrencyPathCode(String[] pathParts) {
         if (!isPathCode(pathParts) || !isCorrectCode(pathParts[1])) {
             throw new IncorrectParametersException("Required parameters are incorrect.");
+        }
+    }
+
+    public static void checkExchangeRatePathCode(String pathInfo) {
+        String[] pathParts = pathInfo.split("/");
+
+        if (!isPathCode(pathParts) || pathParts[1].length() != CODE_PAIR_LENGTH) {
+            throw new IncorrectParametersException("Required parameters are incorrect.");
+        }
+    }
+
+    public static void checkNumberFormat(String number) {
+        try {
+            new BigDecimal(number);
+        }
+        catch (NumberFormatException exception) {
+            throw new IncorrectParametersException("Required parameters are incorrect.");
+        }
+        catch (NullPointerException exception) {
+            throw new IncorrectParametersException("Required parameter is missed.");
         }
     }
 
@@ -63,33 +93,5 @@ public class FiltersUtil {
     private static boolean isPathCode(String[] pathParts) {
 
         return pathParts.length == NUM_PARTS_PATH;
-    }
-
-    public static boolean isCorrectCodePairParameter(String pathInfo) {
-        String[] pathParts = pathInfo.split("/");
-
-        return (isPathCode(pathParts) && pathParts[1].length() == CODE_PAIR_LENGTH);
-    }
-
-    public static void checkNumberFormat(String number) {
-        try {
-            new BigDecimal(number);
-        }
-        catch (NumberFormatException exception) {
-            throw new IncorrectParametersException("Required parameters are incorrect.");
-        }
-        catch (NullPointerException exception) {
-            throw new IncorrectParametersException("Required parameter is missed.");
-        }
-    }
-
-    public static void checkSentCodeParameters(String baseCurrencyCode, String targetCurrencyCode) {
-
-        if (baseCurrencyCode == null || targetCurrencyCode == null) {
-            throw new IncorrectParametersException("Required parameter is missed.");
-        }
-        else if (isCorrectCode(baseCurrencyCode) || isCorrectCode(targetCurrencyCode)) {
-            throw new IncorrectParametersException("Required parameters are incorrect.");
-        }
     }
 }

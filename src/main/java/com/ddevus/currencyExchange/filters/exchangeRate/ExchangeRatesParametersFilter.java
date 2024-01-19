@@ -29,7 +29,7 @@ public class ExchangeRatesParametersFilter implements Filter {
 
             try {
                 FiltersUtil.checkNumberFormat(rate);
-                FiltersUtil.checkSentCodeParameters(baseCurrencyCode, targetCurrencyCode);
+                FiltersUtil.checkParameters(baseCurrencyCode, targetCurrencyCode);
             }
             catch (IncorrectParametersException exception) {
                 FiltersUtil.handleException(res, exception);

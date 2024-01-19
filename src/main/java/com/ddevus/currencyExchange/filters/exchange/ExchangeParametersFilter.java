@@ -1,12 +1,13 @@
 package com.ddevus.currencyExchange.filters.exchange;
 
 import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
-import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+
+import static com.ddevus.currencyExchange.utils.FiltersUtil.*;
 
 @WebFilter("/exchange")
 public class ExchangeParametersFilter implements Filter {
@@ -25,11 +26,11 @@ public class ExchangeParametersFilter implements Filter {
         String amount = request.getParameter("amount");
 
         try {
-            FiltersUtil.checkNumberFormat(amount);
-            FiltersUtil.checkSentCodeParameters(baseCurrencyCode, targetCurrencyCode);
+            checkNumberFormat(amount);
+            checkParameters(baseCurrencyCode, targetCurrencyCode);
         }
         catch (IncorrectParametersException exception) {
-            FiltersUtil.handleException(res, exception);
+            handleException(res, exception);
         }
 
         chain.doFilter(request, response);

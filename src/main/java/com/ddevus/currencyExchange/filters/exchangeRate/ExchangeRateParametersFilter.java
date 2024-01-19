@@ -1,13 +1,14 @@
 package com.ddevus.currencyExchange.filters.exchangeRate;
 
 import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
-import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+
+import static com.ddevus.currencyExchange.utils.FiltersUtil.*;
 
 @WebFilter("/exchangeRate/*")
 public class ExchangeRateParametersFilter implements Filter {
@@ -23,31 +24,27 @@ public class ExchangeRateParametersFilter implements Filter {
         var req = ((HttpServletRequest) request);
         var res = ((HttpServletResponse) response);
         var pathInfo = req.getPathInfo();
-        String rate = req.getParameter("rate");
 
         if (("GET").equals(req.getMethod())) {
-            if (FiltersUtil.isCorrectCodePairParameter(pathInfo)) {
-                chain.doFilter(request, response);
+            try {
+                checkExchangeRatePathCode(pathInfo);
             }
-            else {
-                var exception = new IncorrectParametersException("Required parameters are incorrect.");
-                FiltersUtil.handleException(res, exception);
+            catch (IncorrectParametersException exception) {
+                handleException(res, exception);
             }
+
+            chain.doFilter(request, response);
         }
 
         if (("PATCH").equals(req.getMethod())) {
-            if (!FiltersUtil.isCorrectCodePairParameter(pathInfo)) {
-                var exception
-                        = new IncorrectParametersException("Required parameters are incorrect.");
-
-                FiltersUtil.handleException(res, exception);
-            }
+            String rate = req.getParameter("rate");
 
             try {
-                FiltersUtil.checkNumberFormat(rate);
+                checkNumberFormat(rate);
+                checkExchangeRatePathCode(pathInfo);
             }
             catch (IncorrectParametersException exception) {
-                FiltersUtil.handleException(res, exception);
+                handleException(res, exception);
             }
         }
 
