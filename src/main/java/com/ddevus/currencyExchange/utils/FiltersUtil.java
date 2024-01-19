@@ -49,7 +49,7 @@ public class FiltersUtil {
         if (baseCurrencyCode == null || targetCurrencyCode == null) {
             throw new IncorrectParametersException("Required parameter is missed.");
         }
-        else if (isCorrectCode(baseCurrencyCode) || isCorrectCode(targetCurrencyCode)) {
+        else if (!isCorrectCode(baseCurrencyCode) || !isCorrectCode(targetCurrencyCode)) {
             throw new IncorrectParametersException("Required parameters are incorrect.");
         }
     }
