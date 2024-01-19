@@ -25,7 +25,7 @@ public class FiltersUtil {
         httpServletResponse.setStatus(exception.getHttpCodeStatus());
 
         String json = "{\"errorMessage\":\"" + exception.getErrorMessage() + "\"}";
-        LOG_EXCEPTION.warning(json);
+        LOG_EXCEPTION.warning(exception.getErrorMessage());
 
         try (var writer = response.getWriter()) {
             writer.write(json);
