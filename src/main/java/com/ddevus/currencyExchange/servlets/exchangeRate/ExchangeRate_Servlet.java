@@ -27,8 +27,8 @@ public class ExchangeRate_Servlet extends BasicServlet {
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
         ExchangeRate exchangeRate
-                    = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
-                    , currenciesCodes[1]);
+                = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
+                , currenciesCodes[1]);
 
         if (exchangeRate == null) {
             throw new NoResultException("There is no exchange rate with those currencies codes.");
@@ -58,9 +58,9 @@ public class ExchangeRate_Servlet extends BasicServlet {
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
         ExchangeRate exchangeRate
-                    = exchangeRateService.update(currenciesCodes[0]
-                    , currenciesCodes[1]
-                    , rate);
+                = exchangeRateService.update(currenciesCodes[0]
+                , currenciesCodes[1]
+                , rate);
 
         if (exchangeRate == null) {
             throw new NoResultException("There is no exchange rate with those currencies codes.");

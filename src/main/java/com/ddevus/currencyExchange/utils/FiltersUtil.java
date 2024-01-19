@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 @UtilityClass
 public class FiltersUtil {
+
     private final static Logger logger = Logger.getLogger(FiltersUtil.class.getName());
 
     public static void handleException(ServletResponse response

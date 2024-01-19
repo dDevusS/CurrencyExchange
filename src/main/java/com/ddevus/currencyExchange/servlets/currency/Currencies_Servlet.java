@@ -38,7 +38,7 @@ public class Currencies_Servlet extends BasicServlet {
         String sign = req.getParameter("sign");
         var newCurrency = new Currency(name, code, sign);
 
-            newCurrency = currencyService.save(newCurrency);
+        newCurrency = currencyService.save(newCurrency);
 
         if (newCurrency == null) {
             throw new InsertFailedException("There is a currency in the database with the following parameters.");

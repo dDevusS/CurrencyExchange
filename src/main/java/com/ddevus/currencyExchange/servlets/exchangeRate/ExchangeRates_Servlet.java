@@ -41,7 +41,7 @@ public class ExchangeRates_Servlet extends BasicServlet {
         rate = rate.setScale(6, RoundingMode.HALF_UP);
 
         ExchangeRate newExchangeRate
-                    = exchangeRateService.save(baseCurrencyCode, targetCurrencyCode, rate);
+                = exchangeRateService.save(baseCurrencyCode, targetCurrencyCode, rate);
 
         if (newExchangeRate == null) {
             throw new InsertFailedException("There is a exchange rate in the database with those currencies codes.");

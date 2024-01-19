@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 @WebServlet("/currency/*")
 public class Currency_Servlet extends BasicServlet {
