@@ -14,18 +14,18 @@ import java.math.RoundingMode;
 @WebServlet("/exchange")
 public class ExchangeServlet extends BasicServlet {
 
-    private final ExchangeService exchangeService = ExchangeService.getINSTANCE();
+    private static final ExchangeService EXCHANGE_SERVICE = ExchangeService.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        logger.info("Processing the client's GET request.");
+        LOG_INFO.info("Processing the client's GET request.");
 
         String baseCurrencyCode = req.getParameter("from");
         String targetCurrencyCode = req.getParameter("to");
         BigDecimal amount = new BigDecimal(req.getParameter("amount"));
         amount = amount.setScale(6, RoundingMode.HALF_UP);
 
-        ExchangeDTO exchangeDTO = exchangeService.exchangeAmount(baseCurrencyCode, targetCurrencyCode, amount);
+        ExchangeDTO exchangeDTO = EXCHANGE_SERVICE.exchangeAmount(baseCurrencyCode, targetCurrencyCode, amount);
 
         doResponse(exchangeDTO, resp);
     }

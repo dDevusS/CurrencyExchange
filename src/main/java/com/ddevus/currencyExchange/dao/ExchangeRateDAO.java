@@ -7,16 +7,13 @@ import com.ddevus.currencyExchange.exceptions.NoResultException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO {
 
-    private static final CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
+    private static final CurrencyDAO CURRENCY_DAO = CurrencyDAO.getINSTANCE();
     private static final ExchangeRateDAO INSTANCE = new ExchangeRateDAO();
 
     private ExchangeRateDAO() {
@@ -30,8 +27,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     public ExchangeRate save(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         String sql = "INSERT INTO exchangeRates (BaseCurrencyID, TargetCurrencyID, Rate) VALUES (?, ?, ?)";
 
-        Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
-        Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
+        Currency baseCurrency = CURRENCY_DAO.findByCode(baseCurrencyCode);
+        Currency targetCurrency = CURRENCY_DAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
             throw new NoResultException("There are no currencies with those codes in the database." +
@@ -81,9 +78,9 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             List<ExchangeRate> exchangeRates = new ArrayList<>();
             while (resultSet.next()) {
                 var baseCurrency
-                        = currencyDAO.findById(resultSet.getInt("BaseCurrencyID"));
+                        = CURRENCY_DAO.findById(resultSet.getInt("BaseCurrencyID"));
                 var targetCurrency
-                        = currencyDAO.findById(resultSet.getInt("TargetCurrencyID"));
+                        = CURRENCY_DAO.findById(resultSet.getInt("TargetCurrencyID"));
 
                 ExchangeRate exchangeRate = new ExchangeRate(resultSet.getInt("ID")
                         , baseCurrency
@@ -118,94 +115,14 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
 
     @Override
     public ExchangeRate findByCodes(String baseCurrencyCode, String targetCurrencyCode) {
-        Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
-        Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
+        Currency baseCurrency = CURRENCY_DAO.findByCode(baseCurrencyCode);
+        Currency targetCurrency = CURRENCY_DAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
             throw new NoResultException("There are no currencies with those codes in the database.");
         }
 
         return findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
-    }
-
-    @Override
-    public ExchangeRate getRequiredExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {
-        Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
-        Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
-
-        if (baseCurrency == null || targetCurrency == null) {
-            throw new NoResultException("There are no currencies with those codes in the database.");
-        }
-
-        ExchangeRate exchangeRate = findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
-
-        if (exchangeRate != null) {
-            return exchangeRate;
-        }
-
-        exchangeRate = findByBaseAndTargetCurrencies(targetCurrency, baseCurrency);
-
-        if (exchangeRate != null) {
-            var goalRate = BigDecimal.valueOf(1).divide(exchangeRate.getRate()
-                    , 6, RoundingMode.HALF_UP);
-
-            return new ExchangeRate(baseCurrency, targetCurrency, goalRate);
-        }
-
-        return findCrossedExchangeRate(baseCurrency, targetCurrency);
-    }
-
-    private ExchangeRate findCrossedExchangeRate(Currency baseCurrency, Currency targetCurrency) {
-        List<ExchangeRate> exchangeRateList = findAll();
-        Set<ExchangeRate> exchangeRateSet = new LinkedHashSet<>();
-
-        fillSetWithThisCurrencyFromList(exchangeRateSet, baseCurrency, exchangeRateList);
-
-        ExchangeRate[] goalAndTransExchangeRates
-                = findGoalAndTransExchangeRates(baseCurrency, targetCurrency, exchangeRateSet, exchangeRateList);
-
-        if (goalAndTransExchangeRates[0] == null || goalAndTransExchangeRates[1] == null) {
-            return null;
-        }
-        else {
-            BigDecimal goalRate = getGoalRate(baseCurrency, targetCurrency
-                    , goalAndTransExchangeRates[1], goalAndTransExchangeRates[0]);
-
-            return new ExchangeRate(baseCurrency, targetCurrency, goalRate);
-        }
-    }
-
-    private ExchangeRate[] findGoalAndTransExchangeRates(Currency baseCurrency, Currency targetCurrency
-        , Set<ExchangeRate> exchangeRateSet, List<ExchangeRate> exchangeRateList){
-        ExchangeRate transExchangeRate = null;
-        ExchangeRate goalExchangeRate = null;
-
-        for (ExchangeRate exchangeRateFromSet : exchangeRateSet) {
-            Currency transCurrency = getAnotherCurrency(baseCurrency, exchangeRateFromSet);
-
-            for (ExchangeRate targetExchangeRate : exchangeRateList) {
-                if (isGoal(targetCurrency, transCurrency, targetExchangeRate)) {
-                    goalExchangeRate = targetExchangeRate;
-                    transExchangeRate = exchangeRateFromSet;
-                    break;
-                }
-            }
-
-            if (goalExchangeRate != null) {
-                break;
-            }
-        }
-
-        return new ExchangeRate[] {goalExchangeRate, transExchangeRate};
-    }
-
-    private void fillSetWithThisCurrencyFromList (Set<ExchangeRate> exchangeRateSet
-            , Currency currency, List<ExchangeRate> exchangeRateList) {
-        for (ExchangeRate exchangeRateFromList : exchangeRateList) {
-            if (isThere(currency, exchangeRateFromList)) {
-                exchangeRateSet.add(exchangeRateFromList);
-            }
-        }
     }
 
     private ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency) {
@@ -232,44 +149,4 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         }
     }
 
-    private static BigDecimal getGoalRate(Currency baseCurrency, Currency targetCurrency
-            , ExchangeRate transExchangeRate, ExchangeRate goalExchangeRate) {
-        BigDecimal goalRate;
-
-        if (baseCurrency.getId() == transExchangeRate.getBaseCurrency().getId()) {
-            goalRate = transExchangeRate.getRate();
-        }
-        else {
-            goalRate = BigDecimal.valueOf(1).divide(transExchangeRate.getRate()
-                    , 6, RoundingMode.HALF_UP);
-        }
-
-        if (targetCurrency.getId() == goalExchangeRate.getTargetCurrency().getId()) {
-            goalRate = goalRate.multiply(goalExchangeRate.getRate());
-            goalRate = goalRate.setScale(6, RoundingMode.HALF_UP);
-        }
-        else {
-            goalRate = goalRate.divide(goalExchangeRate.getRate(), 6, RoundingMode.HALF_UP);
-        }
-
-        return goalRate;
-    }
-
-    private static boolean isThere(Currency baseCurrency, ExchangeRate exchangeRate) {
-        return baseCurrency.getId() == exchangeRate.getBaseCurrency().getId() || baseCurrency.getId() == exchangeRate.getTargetCurrency().getId();
-    }
-
-    private static boolean isGoal(Currency baseCurrency, Currency targetCurrency, ExchangeRate exchangeRate) {
-        return isThere(baseCurrency, exchangeRate) && isThere(targetCurrency, exchangeRate);
-    }
-
-    private static Currency getAnotherCurrency(Currency currency, ExchangeRate exchangeRate) {
-        if (currency.getId() != exchangeRate.getBaseCurrency().getId()) {
-            return exchangeRate.getBaseCurrency();
-        }
-        else {
-
-            return exchangeRate.getTargetCurrency();
-        }
-    }
 }

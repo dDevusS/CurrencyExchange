@@ -18,14 +18,14 @@ import java.util.List;
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends BasicServlet {
 
-    private final IExchangeRate_Service exchangeRateService = ExchangeRateService.getINSTANCE();
+    private static final IExchangeRate_Service EXCHANGE_RATE_SERVICE = ExchangeRateService.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        logger.info("Processing the client's GET request.");
+        LOG_INFO.info("Processing the client's GET request.");
 
-        List<ExchangeRate> exchangeRateList = exchangeRateService.findAll();
+        List<ExchangeRate> exchangeRateList = EXCHANGE_RATE_SERVICE.findAll();
 
         doResponse(exchangeRateList, resp);
     }
@@ -33,7 +33,7 @@ public class ExchangeRatesServlet extends BasicServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        logger.info("Processing the client's POST request.");
+        LOG_INFO.info("Processing the client's POST request.");
 
         String baseCurrencyCode = req.getParameter("baseCurrencyCode");
         String targetCurrencyCode = req.getParameter("targetCurrencyCode");
@@ -41,7 +41,7 @@ public class ExchangeRatesServlet extends BasicServlet {
         rate = rate.setScale(6, RoundingMode.HALF_UP);
 
         ExchangeRate newExchangeRate
-                = exchangeRateService.save(baseCurrencyCode, targetCurrencyCode, rate);
+                = EXCHANGE_RATE_SERVICE.save(baseCurrencyCode, targetCurrencyCode, rate);
 
         if (newExchangeRate == null) {
             throw new InsertFailedException("There is a exchange rate in the database with those currencies codes.");

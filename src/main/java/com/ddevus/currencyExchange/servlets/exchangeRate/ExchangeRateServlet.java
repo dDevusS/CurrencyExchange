@@ -17,17 +17,17 @@ import java.math.RoundingMode;
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends BasicServlet {
 
-    private final IExchangeRate_Service exchangeRateService = ExchangeRateService.getINSTANCE();
+    private static final IExchangeRate_Service EXCHANGE_RATE_SERVICE = ExchangeRateService.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        logger.info("Processing the client's GET request.");
+        LOG_INFO.info("Processing the client's GET request.");
 
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
         ExchangeRate exchangeRate
-                = exchangeRateService.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
+                = EXCHANGE_RATE_SERVICE.findByBaseAndTargetCurrenciesCodes(currenciesCodes[0]
                 , currenciesCodes[1]);
 
         if (exchangeRate == null) {
@@ -51,14 +51,14 @@ public class ExchangeRateServlet extends BasicServlet {
 
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        logger.info("Processing the client's PATCH request.");
+        LOG_INFO.info("Processing the client's PATCH request.");
 
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
         rate = rate.setScale(6, RoundingMode.HALF_UP);
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
         ExchangeRate exchangeRate
-                = exchangeRateService.update(currenciesCodes[0]
+                = EXCHANGE_RATE_SERVICE.update(currenciesCodes[0]
                 , currenciesCodes[1]
                 , rate);
 

@@ -16,14 +16,14 @@ import java.util.List;
 @WebServlet("/currencies")
 public class CurrenciesServlet extends BasicServlet {
 
-    private final ICurrency_Service currencyService = CurrencyService.getINSTANCE();
+    private static final ICurrency_Service CURRENCY_SERVICE = CurrencyService.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        logger.info("Processing the client's GET request.");
+        LOG_INFO.info("Processing the client's GET request.");
 
-        List<Currency> currencies = currencyService.findAll();
+        List<Currency> currencies = CURRENCY_SERVICE.findAll();
 
         doResponse(currencies, resp);
     }
@@ -31,14 +31,14 @@ public class CurrenciesServlet extends BasicServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        logger.info("Processing the client's POST request.");
+        LOG_INFO.info("Processing the client's POST request.");
 
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sign = req.getParameter("sign");
         var newCurrency = new Currency(name, code, sign);
 
-        newCurrency = currencyService.save(newCurrency);
+        newCurrency = CURRENCY_SERVICE.save(newCurrency);
 
         if (newCurrency == null) {
             throw new InsertFailedException("There is a currency in the database with the following parameters.");

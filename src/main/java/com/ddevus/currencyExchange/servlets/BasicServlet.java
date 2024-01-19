@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public abstract class BasicServlet extends HttpServlet {
 
-    protected static final Logger logger = Logger.getLogger(BasicServlet.class.getName());
+    protected static final Logger LOG_INFO = Logger.getLogger(BasicServlet.class.getName());
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static String getJson(Object object) throws JsonProcessingException {
@@ -20,7 +20,7 @@ public abstract class BasicServlet extends HttpServlet {
 
     public static void doResponse(Object object, HttpServletResponse resp) throws IOException {
         String json = getJson(object);
-        logger.info("JSON Response: " + json);
+        LOG_INFO.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
             writer.write(json);

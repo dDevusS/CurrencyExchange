@@ -15,17 +15,17 @@ import java.io.IOException;
 @WebServlet("/currency/*")
 public class CurrencyServlet extends BasicServlet {
 
-    private final ICurrency_Service currencyService = CurrencyService.getINSTANCE();
+    private static final ICurrency_Service CURRENCY_SERVICE = CurrencyService.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        logger.info("Processing the client's GET request.");
+        LOG_INFO.info("Processing the client's GET request.");
 
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
 
-        Currency currency = currencyService.findByCode(pathParts[1]);
+        Currency currency = CURRENCY_SERVICE.findByCode(pathParts[1]);
 
         if (currency == null) {
             throw new NoResultException("There is no currency with this code in the database.");
@@ -36,17 +36,17 @@ public class CurrencyServlet extends BasicServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        logger.info("Processing the client's DELETE request.");
+        LOG_INFO.info("Processing the client's DELETE request.");
 
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
 
-        if (!currencyService.deleteByCode(pathParts[1])) {
+        if (!CURRENCY_SERVICE.deleteByCode(pathParts[1])) {
             throw new NoResultException("There is no currency with this code in the database.");
         }
 
         String json = "{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}";
-        logger.info("Json response: " + json);
+        LOG_INFO.info("Json response: " + json);
 
         try (var writer = resp.getWriter()) {
             writer.write(json);

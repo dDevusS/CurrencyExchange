@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CurrencyService implements ICurrency_Service {
 
-    private static final CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
+    private static final CurrencyDAO CURRENCY_DAO = CurrencyDAO.getINSTANCE();
     private static final ICurrency_Service INSTANCE = new CurrencyService();
 
     private CurrencyService() {
@@ -20,7 +20,7 @@ public class CurrencyService implements ICurrency_Service {
 
     @Override
     public Currency save(Currency currency) {
-        currency = currencyDAO.save(currency);
+        currency = CURRENCY_DAO.save(currency);
 
         return currency;
     }
@@ -28,24 +28,24 @@ public class CurrencyService implements ICurrency_Service {
     @Override
     public Currency findById(int id) {
 
-        return currencyDAO.findById(id);
+        return CURRENCY_DAO.findById(id);
     }
 
     @Override
     public Currency findByCode(String code) {
 
-        return currencyDAO.findByCode(code);
+        return CURRENCY_DAO.findByCode(code);
     }
 
     @Override
     public List<Currency> findAll() {
 
-        return currencyDAO.findAll();
+        return CURRENCY_DAO.findAll();
     }
 
     @Override
     public boolean deleteByCode(String code) {
 
-        return currencyDAO.deleteByCode(code);
+        return CURRENCY_DAO.deleteByCode(code);
     }
 }

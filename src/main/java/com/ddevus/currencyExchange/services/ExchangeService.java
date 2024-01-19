@@ -1,7 +1,7 @@
 package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
-import com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO;
+import com.ddevus.currencyExchange.dao.ExchangeDAO;
+import com.ddevus.currencyExchange.dao.interfaces.IExchangeDAO;
 import com.ddevus.currencyExchange.dto.ExchangeDTO;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
@@ -9,12 +9,10 @@ import com.ddevus.currencyExchange.services.interfaces.IExchange_Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.logging.Logger;
 
 public class ExchangeService implements IExchange_Service {
 
-    private static final IExchangeRateDAO exchangeRateDAO = ExchangeRateDAO.getINSTANCE();
-    private static final Logger logger = Logger.getLogger(ExchangeService.class.getName());
+    private static final IExchangeDAO EXCHANGE_DAO = ExchangeDAO.getINSTANCE();
     private static final ExchangeService INSTANCE = new ExchangeService();
 
     private ExchangeService() {
@@ -26,11 +24,8 @@ public class ExchangeService implements IExchange_Service {
 
     @Override
     public ExchangeDTO exchangeAmount(String baseCurrencyCode, String targetCurrencyCode, BigDecimal amount) {
-
-        logger.info("Getting currency.");
-
         var requiredExchangeRate
-                = exchangeRateDAO.getRequiredExchangeRate(baseCurrencyCode, targetCurrencyCode);
+                = EXCHANGE_DAO.getRequiredExchangeRate(baseCurrencyCode, targetCurrencyCode);
 
         if (requiredExchangeRate == null) {
             throw new NoResultException("There is no suitable exchange rate in the database for these currency pairs.");

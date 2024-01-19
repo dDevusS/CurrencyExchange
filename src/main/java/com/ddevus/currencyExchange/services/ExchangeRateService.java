@@ -1,8 +1,6 @@
 package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
-import com.ddevus.currencyExchange.dao.interfaces.ICurrencyDAO;
 import com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
@@ -12,8 +10,7 @@ import java.util.List;
 
 public class ExchangeRateService implements IExchangeRate_Service {
 
-    private static final IExchangeRateDAO exchangeRateDAO = ExchangeRateDAO.getINSTANCE();
-    private static final ICurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
+    private static final IExchangeRateDAO EXCHANGE_RATE_DAO = ExchangeRateDAO.getINSTANCE();
     private static final IExchangeRate_Service INSTANCE = new ExchangeRateService();
 
     private ExchangeRateService() {
@@ -26,19 +23,19 @@ public class ExchangeRateService implements IExchangeRate_Service {
     @Override
     public ExchangeRate save(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
 
-        return exchangeRateDAO.save(baseCurrencyCode, targetCurrencyCode, rate);
+        return EXCHANGE_RATE_DAO.save(baseCurrencyCode, targetCurrencyCode, rate);
     }
 
     @Override
     public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode) {
 
-        return exchangeRateDAO.findByCodes(baseCurrencyCode, targetCurrencyCode);
+        return EXCHANGE_RATE_DAO.findByCodes(baseCurrencyCode, targetCurrencyCode);
     }
 
     @Override
     public List<ExchangeRate> findAll() {
 
-        return exchangeRateDAO.findAll();
+        return EXCHANGE_RATE_DAO.findAll();
     }
 
     @Override
@@ -50,7 +47,7 @@ public class ExchangeRateService implements IExchangeRate_Service {
             return null;
         }
 
-        exchangeRateDAO.update(exchangeRate.getId(), rate);
+        EXCHANGE_RATE_DAO.update(exchangeRate.getId(), rate);
         exchangeRate.setRate(rate);
 
         return exchangeRate;
