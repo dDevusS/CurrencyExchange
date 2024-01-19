@@ -1,13 +1,14 @@
 package com.ddevus.currencyExchange.filters.exchangeRate;
 
 import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
-import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+
+import static com.ddevus.currencyExchange.utils.FiltersUtil.*;
 
 @WebFilter("/exchangeRates")
 public class ExchangeRatesParametersFilter implements Filter {
@@ -28,11 +29,11 @@ public class ExchangeRatesParametersFilter implements Filter {
             String rate = req.getParameter("rate");
 
             try {
-                FiltersUtil.checkNumberFormat(rate);
-                FiltersUtil.checkParameters(baseCurrencyCode, targetCurrencyCode);
+                checkNumberFormat(rate);
+                checkParameters(baseCurrencyCode, targetCurrencyCode);
             }
             catch (IncorrectParametersException exception) {
-                FiltersUtil.handleException(res, exception);
+                handleException(res, exception);
             }
         }
 

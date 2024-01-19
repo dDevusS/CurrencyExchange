@@ -22,11 +22,10 @@ public class CurrencyParametersFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         var req = ((HttpServletRequest) request);
-        String servletPath = req.getPathInfo();
-        String[] pathParts = servletPath.split("/");
+        String pathInfo = req.getPathInfo();
 
         try {
-            checkCurrencyPathCode(pathParts);
+            checkCurrencyPathCode(pathInfo);
         }
         catch (IncorrectParametersException exception) {
             handleException(response, exception);

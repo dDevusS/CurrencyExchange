@@ -54,7 +54,9 @@ public class FiltersUtil {
         }
     }
 
-    public static void checkCurrencyPathCode(String[] pathParts) {
+    public static void checkCurrencyPathCode(String pathInfo) {
+        String[] pathParts = pathInfo.split("/");
+
         if (!isPathCode(pathParts) || !isCorrectCode(pathParts[1])) {
             throw new IncorrectParametersException("Required parameters are incorrect.");
         }

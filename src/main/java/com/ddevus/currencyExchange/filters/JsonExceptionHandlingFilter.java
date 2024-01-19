@@ -1,11 +1,12 @@
 package com.ddevus.currencyExchange.filters;
 
 import com.ddevus.currencyExchange.exceptions.BasicApplicationException;
-import com.ddevus.currencyExchange.utils.FiltersUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 
 import java.io.IOException;
+
+import static com.ddevus.currencyExchange.utils.FiltersUtil.handleException;
 
 @WebFilter("/*")
 public class JsonExceptionHandlingFilter implements Filter {
@@ -21,7 +22,7 @@ public class JsonExceptionHandlingFilter implements Filter {
             chain.doFilter(request, response);
         }
         catch (BasicApplicationException exception) {
-            FiltersUtil.handleException(response, exception);
+            handleException(response, exception);
         }
     }
 
