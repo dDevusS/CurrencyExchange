@@ -1,5 +1,6 @@
 package com.ddevus.currencyExchange.dao.interfaces;
 
+import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 
 import java.math.BigDecimal;
@@ -14,5 +15,7 @@ public interface IExchangeRateDAO {
     public List<ExchangeRate> findAll();
 
     public boolean update(int id, BigDecimal rate);
+
+    public ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency);
 
 }

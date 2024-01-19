@@ -3,14 +3,11 @@ package com.ddevus.currencyExchange.dao;
 import com.ddevus.currencyExchange.dao.interfaces.IExchangeDAO;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
-import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
-import com.ddevus.currencyExchange.utils.ConnectionManager;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,13 +31,13 @@ public class ExchangeDAO implements IExchangeDAO {
             , "Entered parameters: from: " + baseCurrencyCode + ", to: " + targetCurrencyCode + ".");
         }
 
-        ExchangeRate exchangeRate = findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
+        ExchangeRate exchangeRate = EXCHANGE_RATE_DAO.findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
 
         if (exchangeRate != null) {
             return exchangeRate;
         }
 
-        exchangeRate = findByBaseAndTargetCurrencies(targetCurrency, baseCurrency);
+        exchangeRate = EXCHANGE_RATE_DAO.findByBaseAndTargetCurrencies(targetCurrency, baseCurrency);
 
         if (exchangeRate != null) {
             var goalRate = BigDecimal.valueOf(1).divide(exchangeRate.getRate()
@@ -102,30 +99,6 @@ public class ExchangeDAO implements IExchangeDAO {
             if (isThere(currency, exchangeRateFromList)) {
                 exchangeRateSet.add(exchangeRateFromList);
             }
-        }
-    }
-
-    private ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency) {
-        String sql = "SELECT * FROM exchangeRates WHERE BaseCurrencyID=? AND TargetCurrencyID=?";
-
-        try (var connection = ConnectionManager.open();
-             var preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, baseCurrency.getId());
-            preparedStatement.setInt(2, targetCurrency.getId());
-            var resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return new ExchangeRate(resultSet.getInt("ID")
-                        , baseCurrency
-                        , targetCurrency
-                        , resultSet.getBigDecimal("Rate"));
-            }
-            else {
-                return null;
-            }
-        }
-        catch (SQLException e) {
-            throw new DatabaseException("Couldn't to connect to the database.");
         }
     }
 

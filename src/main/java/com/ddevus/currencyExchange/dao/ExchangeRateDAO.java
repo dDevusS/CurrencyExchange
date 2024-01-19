@@ -125,7 +125,7 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         return findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
     }
 
-    private ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency) {
+    public ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency) {
         String sql = "SELECT * FROM exchangeRates WHERE BaseCurrencyID=? AND TargetCurrencyID=?";
 
         try (var connection = ConnectionManager.open();
