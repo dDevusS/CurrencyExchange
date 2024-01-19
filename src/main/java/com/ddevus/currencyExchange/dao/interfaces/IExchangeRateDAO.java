@@ -9,7 +9,7 @@ public interface IExchangeRateDAO {
 
     public ExchangeRate save(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate);
 
-    public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode);
+    public ExchangeRate findByCodes(String baseCurrencyCode, String targetCurrencyCode);
 
     public List<ExchangeRate> findAll();
 

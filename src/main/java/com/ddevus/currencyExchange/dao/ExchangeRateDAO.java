@@ -117,6 +117,18 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
     }
 
     @Override
+    public ExchangeRate findByCodes(String baseCurrencyCode, String targetCurrencyCode) {
+        Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
+        Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
+
+        if (baseCurrency == null || targetCurrency == null) {
+            throw new NoResultException("There are no currencies with those codes in the database.");
+        }
+
+        return findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
+    }
+
+    @Override
     public ExchangeRate getRequiredExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {
         Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
         Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
@@ -140,17 +152,33 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             return new ExchangeRate(baseCurrency, targetCurrency, goalRate);
         }
 
-        List<ExchangeRate> exchangeRateList = findAll();
-        ExchangeRate transExchangeRate = null;
-        ExchangeRate goalExchangeRate = null;
+        return findCrossedExchangeRate(baseCurrency, targetCurrency);
+    }
 
+    private ExchangeRate findCrossedExchangeRate(Currency baseCurrency, Currency targetCurrency) {
+        List<ExchangeRate> exchangeRateList = findAll();
         Set<ExchangeRate> exchangeRateSet = new LinkedHashSet<>();
 
-        for (ExchangeRate exchangeRateFromList : exchangeRateList) {
-            if (isThere(baseCurrency, exchangeRateFromList)) {
-                exchangeRateSet.add(exchangeRateFromList);
-            }
+        fillSetWithThisCurrencyFromList(exchangeRateSet, baseCurrency, exchangeRateList);
+
+        ExchangeRate[] goalAndTransExchangeRates
+                = findGoalAndTransExchangeRates(baseCurrency, targetCurrency, exchangeRateSet, exchangeRateList);
+
+        if (goalAndTransExchangeRates[0] == null || goalAndTransExchangeRates[1] == null) {
+            return null;
         }
+        else {
+            BigDecimal goalRate = getGoalRate(baseCurrency, targetCurrency
+                    , goalAndTransExchangeRates[1], goalAndTransExchangeRates[0]);
+
+            return new ExchangeRate(baseCurrency, targetCurrency, goalRate);
+        }
+    }
+
+    private ExchangeRate[] findGoalAndTransExchangeRates(Currency baseCurrency, Currency targetCurrency
+        , Set<ExchangeRate> exchangeRateSet, List<ExchangeRate> exchangeRateList){
+        ExchangeRate transExchangeRate = null;
+        ExchangeRate goalExchangeRate = null;
 
         for (ExchangeRate exchangeRateFromSet : exchangeRateSet) {
             Currency transCurrency = getAnotherCurrency(baseCurrency, exchangeRateFromSet);
@@ -168,27 +196,16 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
             }
         }
 
-        if (goalExchangeRate == null) {
-            return null;
-        }
-        else {
-            BigDecimal goalRate = getGoalRate(baseCurrency, targetCurrency, transExchangeRate, goalExchangeRate);
-            exchangeRate = new ExchangeRate(baseCurrency, targetCurrency, goalRate);
-
-            return exchangeRate;
-        }
+        return new ExchangeRate[] {goalExchangeRate, transExchangeRate};
     }
 
-    @Override
-    public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode) {
-        Currency baseCurrency = currencyDAO.findByCode(baseCurrencyCode);
-        Currency targetCurrency = currencyDAO.findByCode(targetCurrencyCode);
-
-        if (baseCurrency == null || targetCurrency == null) {
-            throw new NoResultException("There are no currencies with those codes in the database.");
+    private void fillSetWithThisCurrencyFromList (Set<ExchangeRate> exchangeRateSet
+            , Currency currency, List<ExchangeRate> exchangeRateList) {
+        for (ExchangeRate exchangeRateFromList : exchangeRateList) {
+            if (isThere(currency, exchangeRateFromList)) {
+                exchangeRateSet.add(exchangeRateFromList);
+            }
         }
-
-        return findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);
     }
 
     private ExchangeRate findByBaseAndTargetCurrencies(Currency baseCurrency, Currency targetCurrency) {

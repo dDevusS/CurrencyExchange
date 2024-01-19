@@ -32,7 +32,7 @@ public class ExchangeRateService implements IExchangeRate_Service {
     @Override
     public ExchangeRate findByBaseAndTargetCurrenciesCodes(String baseCurrencyCode, String targetCurrencyCode) {
 
-        return exchangeRateDAO.findByBaseAndTargetCurrenciesCodes(baseCurrencyCode, targetCurrencyCode);
+        return exchangeRateDAO.findByCodes(baseCurrencyCode, targetCurrencyCode);
     }
 
     @Override
