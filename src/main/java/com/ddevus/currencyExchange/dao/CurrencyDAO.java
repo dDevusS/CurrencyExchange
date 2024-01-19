@@ -3,6 +3,7 @@ package com.ddevus.currencyExchange.dao;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
+import lombok.Getter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,13 +13,10 @@ import java.util.Optional;
 
 public class CurrencyDAO implements com.ddevus.currencyExchange.dao.interfaces.ICurrencyDAO {
 
+    @Getter
     private static final CurrencyDAO INSTANCE = new CurrencyDAO();
 
     private CurrencyDAO() {
-    }
-
-    public static CurrencyDAO getINSTANCE() {
-        return INSTANCE;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,13 +19,10 @@ public class ExchangeDAO implements IExchangeDAO {
 
     private static final CurrencyDAO CURRENCY_DAO = CurrencyDAO.getINSTANCE();
     private static final ExchangeRateDAO EXCHANGE_RATE_DAO = ExchangeRateDAO.getINSTANCE();
+    @Getter
     private static final ExchangeDAO INSTANCE = new ExchangeDAO();
 
     private ExchangeDAO() {
-    }
-
-    public static ExchangeDAO getINSTANCE() {
-        return INSTANCE;
     }
 
     public ExchangeRate getRequiredExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {

@@ -6,6 +6,7 @@ import com.ddevus.currencyExchange.dto.ExchangeDTO;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
 import com.ddevus.currencyExchange.services.interfaces.IExchange_Service;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,13 +14,10 @@ import java.math.RoundingMode;
 public class ExchangeService implements IExchange_Service {
 
     private static final IExchangeDAO EXCHANGE_DAO = ExchangeDAO.getINSTANCE();
+    @Getter
     private static final ExchangeService INSTANCE = new ExchangeService();
 
     private ExchangeService() {
-    }
-
-    public static ExchangeService getINSTANCE() {
-        return INSTANCE;
     }
 
     @Override

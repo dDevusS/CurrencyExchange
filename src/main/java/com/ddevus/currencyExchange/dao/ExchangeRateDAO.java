@@ -5,6 +5,7 @@ import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.DatabaseException;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
 import com.ddevus.currencyExchange.utils.ConnectionManager;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -14,13 +15,10 @@ import java.util.List;
 public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO {
 
     private static final CurrencyDAO CURRENCY_DAO = CurrencyDAO.getINSTANCE();
+    @Getter
     private static final ExchangeRateDAO INSTANCE = new ExchangeRateDAO();
 
     private ExchangeRateDAO() {
-    }
-
-    public static ExchangeRateDAO getINSTANCE() {
-        return INSTANCE;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,13 +12,10 @@ import java.util.List;
 public class ExchangeRateService implements IExchangeRate_Service {
 
     private static final IExchangeRateDAO EXCHANGE_RATE_DAO = ExchangeRateDAO.getINSTANCE();
+    @Getter
     private static final IExchangeRate_Service INSTANCE = new ExchangeRateService();
 
     private ExchangeRateService() {
-    }
-
-    public static IExchangeRate_Service getINSTANCE() {
-        return INSTANCE;
     }
 
     @Override

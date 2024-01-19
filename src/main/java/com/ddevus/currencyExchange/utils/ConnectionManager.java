@@ -12,13 +12,13 @@ import java.util.logging.Logger;
 public class ConnectionManager {
 
     private final static String URL_KEY = "db.url";
-    private static final Logger logger = Logger.getLogger(ConnectionManager.class.getName());
+    private static final Logger LOG_INFO = Logger.getLogger(ConnectionManager.class.getName());
 
     public static Connection open() {
         try {
             Class.forName("org.sqlite.JDBC");
 
-            logger.info("Connecting to the database.");
+            LOG_INFO.info("Connecting to the database.");
 
             return DriverManager.getConnection(PropertiesReader.read(URL_KEY));
         }

@@ -3,19 +3,17 @@ package com.ddevus.currencyExchange.services;
 import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
+import lombok.Getter;
 
 import java.util.List;
 
 public class CurrencyService implements ICurrency_Service {
 
     private static final CurrencyDAO CURRENCY_DAO = CurrencyDAO.getINSTANCE();
+    @Getter
     private static final ICurrency_Service INSTANCE = new CurrencyService();
 
     private CurrencyService() {
-    }
-
-    public static ICurrency_Service getINSTANCE() {
-        return INSTANCE;
     }
 
     @Override
