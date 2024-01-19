@@ -2,7 +2,7 @@ package com.ddevus.currencyExchange.servlets.exchangeRate;
 
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
-import com.ddevus.currencyExchange.services.ExchangeRate_Service;
+import com.ddevus.currencyExchange.services.ExchangeRateService;
 import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
 import jakarta.servlet.ServletException;
@@ -15,9 +15,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @WebServlet("/exchangeRate/*")
-public class ExchangeRate_Servlet extends BasicServlet {
+public class ExchangeRateServlet extends BasicServlet {
 
-    private final IExchangeRate_Service exchangeRateService = ExchangeRate_Service.getINSTANCE();
+    private final IExchangeRate_Service exchangeRateService = ExchangeRateService.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

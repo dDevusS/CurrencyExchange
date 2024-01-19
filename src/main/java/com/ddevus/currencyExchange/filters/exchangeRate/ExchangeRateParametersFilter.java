@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter("/exchangeRate/*")
-public class ExchangeRate_Filter_ForCheckingRequestParameters implements Filter {
+public class ExchangeRateParametersFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

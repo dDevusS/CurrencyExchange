@@ -8,7 +8,7 @@ import jakarta.servlet.annotation.WebFilter;
 import java.io.IOException;
 
 @WebFilter("/*")
-public class ExceptionHandler_For_Servlet implements Filter {
+public class JsonExceptionHandlingFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

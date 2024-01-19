@@ -6,12 +6,12 @@ import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 
 import java.util.List;
 
-public class Currency_Service implements ICurrency_Service {
+public class CurrencyService implements ICurrency_Service {
 
     private static final CurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
-    private static final ICurrency_Service INSTANCE = new Currency_Service();
+    private static final ICurrency_Service INSTANCE = new CurrencyService();
 
-    private Currency_Service() {
+    private CurrencyService() {
     }
 
     public static ICurrency_Service getINSTANCE() {

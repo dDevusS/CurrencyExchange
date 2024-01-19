@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter("/exchange")
-public class Exchange_Filter_ForCheckingRequestParameters implements Filter {
+public class ExchangeParametersFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

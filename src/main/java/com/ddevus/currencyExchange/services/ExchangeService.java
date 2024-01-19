@@ -11,16 +11,16 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.logging.Logger;
 
-public class Exchange_Service implements IExchange_Service {
+public class ExchangeService implements IExchange_Service {
 
     private static final IExchangeRateDAO exchangeRateDAO = ExchangeRateDAO.getINSTANCE();
-    private static final Logger logger = Logger.getLogger(Exchange_Service.class.getName());
-    private static final Exchange_Service INSTANCE = new Exchange_Service();
+    private static final Logger logger = Logger.getLogger(ExchangeService.class.getName());
+    private static final ExchangeService INSTANCE = new ExchangeService();
 
-    private Exchange_Service() {
+    private ExchangeService() {
     }
 
-    public static Exchange_Service getINSTANCE() {
+    public static ExchangeService getINSTANCE() {
         return INSTANCE;
     }
 

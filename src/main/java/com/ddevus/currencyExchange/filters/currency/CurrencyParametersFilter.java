@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @WebFilter("/currency/*")
-public class Currency_Filter_ForCheckingRequestParameters implements Filter {
+public class CurrencyParametersFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

@@ -10,13 +10,13 @@ import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class ExchangeRate_Service implements IExchangeRate_Service {
+public class ExchangeRateService implements IExchangeRate_Service {
 
     private static final IExchangeRateDAO exchangeRateDAO = ExchangeRateDAO.getINSTANCE();
     private static final ICurrencyDAO currencyDAO = CurrencyDAO.getINSTANCE();
-    private static final IExchangeRate_Service INSTANCE = new ExchangeRate_Service();
+    private static final IExchangeRate_Service INSTANCE = new ExchangeRateService();
 
-    private ExchangeRate_Service() {
+    private ExchangeRateService() {
     }
 
     public static IExchangeRate_Service getINSTANCE() {

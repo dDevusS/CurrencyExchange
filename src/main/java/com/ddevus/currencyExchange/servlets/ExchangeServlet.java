@@ -1,7 +1,7 @@
 package com.ddevus.currencyExchange.servlets;
 
 import com.ddevus.currencyExchange.dto.ExchangeDTO;
-import com.ddevus.currencyExchange.services.Exchange_Service;
+import com.ddevus.currencyExchange.services.ExchangeService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,9 +12,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @WebServlet("/exchange")
-public class Exchange_Servlet extends BasicServlet {
+public class ExchangeServlet extends BasicServlet {
 
-    private final Exchange_Service exchangeService = Exchange_Service.getINSTANCE();
+    private final ExchangeService exchangeService = ExchangeService.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

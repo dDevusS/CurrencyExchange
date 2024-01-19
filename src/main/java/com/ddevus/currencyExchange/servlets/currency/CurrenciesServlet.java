@@ -2,7 +2,7 @@ package com.ddevus.currencyExchange.servlets.currency;
 
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.exceptions.InsertFailedException;
-import com.ddevus.currencyExchange.services.Currency_Service;
+import com.ddevus.currencyExchange.services.CurrencyService;
 import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
 import com.ddevus.currencyExchange.servlets.BasicServlet;
 import jakarta.servlet.ServletException;
@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/currencies")
-public class Currencies_Servlet extends BasicServlet {
+public class CurrenciesServlet extends BasicServlet {
 
-    private final ICurrency_Service currencyService = Currency_Service.getINSTANCE();
+    private final ICurrency_Service currencyService = CurrencyService.getINSTANCE();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
