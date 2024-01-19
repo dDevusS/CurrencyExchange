@@ -5,19 +5,19 @@ import com.ddevus.currencyExchange.exceptions.IncorrectParametersException;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.experimental.UtilityClass;
+import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.logging.Logger;
 
 @UtilityClass
+@Log
 public class FiltersUtil {
 
     private final static int CODE_LENGTH = 3;
     private final static int CODE_PAIR_LENGTH = 6;
     private final static int NUM_PARTS_PATH = 2;
     private final static int SIGN_LENGTH = 3;
-    private final static Logger LOG_EXCEPTION = Logger.getLogger(FiltersUtil.class.getName());
 
     public static void handleException(ServletResponse response
             , BasicApplicationException exception) {
@@ -25,7 +25,7 @@ public class FiltersUtil {
         httpServletResponse.setStatus(exception.getHttpCodeStatus());
 
         String json = "{\"errorMessage\":\"" + exception.getErrorMessage() + "\"}";
-        LOG_EXCEPTION.warning(exception.getErrorMessage());
+        log.warning(exception.getErrorMessage());
 
         try (var writer = response.getWriter()) {
             writer.write(json);

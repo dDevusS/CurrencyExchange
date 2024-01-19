@@ -9,11 +9,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/currencies")
+@Log
 public class CurrenciesServlet extends BasicServlet {
 
     private static final ICurrency_Service CURRENCY_SERVICE = CurrencyService.getINSTANCE();
@@ -21,7 +23,7 @@ public class CurrenciesServlet extends BasicServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        LOG_INFO.info("Processing the client's GET request.");
+        log.info("Processing the client's GET request.");
 
         List<Currency> currencies = CURRENCY_SERVICE.findAll();
 
@@ -31,7 +33,7 @@ public class CurrenciesServlet extends BasicServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        LOG_INFO.info("Processing the client's POST request.");
+        log.info("Processing the client's POST request.");
 
         String name = req.getParameter("name");
         String code = req.getParameter("code");

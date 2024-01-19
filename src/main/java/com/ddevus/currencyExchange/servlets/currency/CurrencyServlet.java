@@ -9,10 +9,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.java.Log;
 
 import java.io.IOException;
 
 @WebServlet("/currency/*")
+@Log
 public class CurrencyServlet extends BasicServlet {
 
     private static final ICurrency_Service CURRENCY_SERVICE = CurrencyService.getINSTANCE();
@@ -20,7 +22,7 @@ public class CurrencyServlet extends BasicServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        LOG_INFO.info("Processing the client's GET request.");
+        log.info("Processing the client's GET request.");
 
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
@@ -36,7 +38,7 @@ public class CurrencyServlet extends BasicServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        LOG_INFO.info("Processing the client's DELETE request.");
+        log.info("Processing the client's DELETE request.");
 
         String servletPath = req.getPathInfo();
         String[] pathParts = servletPath.split("/");
@@ -46,7 +48,7 @@ public class CurrencyServlet extends BasicServlet {
         }
 
         String json = "{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}";
-        LOG_INFO.info("Json response: " + json);
+        log.info("Json response: " + json);
 
         try (var writer = resp.getWriter()) {
             writer.write(json);

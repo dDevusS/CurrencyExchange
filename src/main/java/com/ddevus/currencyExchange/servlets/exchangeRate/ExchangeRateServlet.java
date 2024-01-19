@@ -9,12 +9,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @WebServlet("/exchangeRate/*")
+@Log
 public class ExchangeRateServlet extends BasicServlet {
 
     private static final IExchangeRate_Service EXCHANGE_RATE_SERVICE = ExchangeRateService.getINSTANCE();
@@ -22,7 +24,7 @@ public class ExchangeRateServlet extends BasicServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        LOG_INFO.info("Processing the client's GET request.");
+        log.info("Processing the client's GET request.");
 
         var currenciesCodes = extractCurrenciesCodes(req.getPathInfo());
 
@@ -51,7 +53,7 @@ public class ExchangeRateServlet extends BasicServlet {
 
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        LOG_INFO.info("Processing the client's PATCH request.");
+        log.info("Processing the client's PATCH request.");
 
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
         rate = rate.setScale(6, RoundingMode.HALF_UP);

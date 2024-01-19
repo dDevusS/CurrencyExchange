@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.java.Log;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
+@Log
 public abstract class BasicServlet extends HttpServlet {
 
-    protected static final Logger LOG_INFO = Logger.getLogger(BasicServlet.class.getName());
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static String getJson(Object object) throws JsonProcessingException {
@@ -20,7 +20,7 @@ public abstract class BasicServlet extends HttpServlet {
 
     public static void doResponse(Object object, HttpServletResponse resp) throws IOException {
         String json = getJson(object);
-        LOG_INFO.info("JSON Response: " + json);
+        log.info("JSON Response: " + json);
 
         try (var writer = resp.getWriter()) {
             writer.write(json);
