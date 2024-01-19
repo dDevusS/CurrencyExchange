@@ -4,7 +4,7 @@ public class InsertFailedException extends BasicApplicationException {
 
     public InsertFailedException(String errorMassage) {
         super.errorMessage = errorMassage;
-        super.HTTP_CODE_STATUS = 409;
+        super.httpCodeStatus = 409;
     }
 
 }

@@ -6,6 +6,6 @@ import lombok.Getter;
 public abstract class BasicApplicationException extends RuntimeException {
 
     protected String errorMessage;
-    protected int HTTP_CODE_STATUS;
+    protected int httpCodeStatus;
 
 }

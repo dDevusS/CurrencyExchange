@@ -21,7 +21,7 @@ public class FiltersUtil {
     public static void handleException(ServletResponse response
             , BasicApplicationException exception) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setStatus(exception.getHTTP_CODE_STATUS());
+        httpServletResponse.setStatus(exception.getHttpCodeStatus());
 
         String json = "{\"errorMessage\":\"" + exception.getErrorMessage() + "\"}";
         LOG_EXCEPTION.warning(json);
