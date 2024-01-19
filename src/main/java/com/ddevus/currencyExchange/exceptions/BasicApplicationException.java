@@ -7,5 +7,6 @@ public abstract class BasicApplicationException extends RuntimeException {
 
     protected String errorMessage;
     protected int httpCodeStatus;
+    protected String detailsOfError;
 
 }

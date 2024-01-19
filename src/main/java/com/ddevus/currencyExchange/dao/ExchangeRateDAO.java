@@ -30,7 +30,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
 
         if (baseCurrency == null || targetCurrency == null) {
             throw new NoResultException("There are no currencies with those codes in the database." +
-                    " Inserting new exchange rate was failed.");
+                    " Inserting new exchange rate was failed."
+            , "Entered parameters: baseCurrencyCode: " + baseCurrencyCode + ", targetCurrencyCode: " + targetCurrencyCode + ".");
         }
 
         try (var connection = ConnectionManager.open();
@@ -117,7 +118,8 @@ public class ExchangeRateDAO implements com.ddevus.currencyExchange.dao.interfac
         Currency targetCurrency = CURRENCY_DAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
-            throw new NoResultException("There are no currencies with those codes in the database.");
+            throw new NoResultException("There are no currencies with those codes in the database."
+            , "Entered parameters: baseCurrencyCode: " + baseCurrencyCode + ", targetCurrencyCode: " + targetCurrencyCode + ".");
         }
 
         return findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);

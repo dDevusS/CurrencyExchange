@@ -24,13 +24,14 @@ public class CurrencyServlet extends BasicServlet {
             throws ServletException, IOException {
         log.info("Processing the client's GET request.");
 
-        String servletPath = req.getPathInfo();
-        String[] pathParts = servletPath.split("/");
+        String pathInfo = req.getPathInfo();
+        String[] pathParts = pathInfo.split("/");
 
         Currency currency = CURRENCY_SERVICE.findByCode(pathParts[1]);
 
         if (currency == null) {
-            throw new NoResultException("There is no currency with this code in the database.");
+            throw new NoResultException("There is no currency with this code in the database."
+            , "Entered parameters: pathInfo: " + pathInfo + ".");
         }
 
         doResponse(currency, resp);
@@ -40,11 +41,12 @@ public class CurrencyServlet extends BasicServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("Processing the client's DELETE request.");
 
-        String servletPath = req.getPathInfo();
-        String[] pathParts = servletPath.split("/");
+        String pathInfo = req.getPathInfo();
+        String[] pathParts = pathInfo.split("/");
 
         if (!CURRENCY_SERVICE.deleteByCode(pathParts[1])) {
-            throw new NoResultException("There is no currency with this code in the database.");
+            throw new NoResultException("There is no currency with this code in the database."
+            , "Entered parameters: pathInfo: " + pathInfo + ".");
         }
 
         String json = "{\"message\":\"currency with code " + pathParts[1] + " was deleted\"}";

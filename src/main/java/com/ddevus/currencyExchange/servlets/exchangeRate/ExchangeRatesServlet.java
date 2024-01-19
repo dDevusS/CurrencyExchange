@@ -46,7 +46,9 @@ public class ExchangeRatesServlet extends BasicServlet {
                 = EXCHANGE_RATE_SERVICE.save(baseCurrencyCode, targetCurrencyCode, rate);
 
         if (newExchangeRate == null) {
-            throw new InsertFailedException("There is a exchange rate in the database with those currencies codes.");
+            throw new InsertFailedException("There is a exchange rate in the database with those currencies codes."
+            , "Entered parameters: baseCurrencyCode: " + baseCurrencyCode + ", targetCurrencyCode: " + targetCurrencyCode
+                    + ", rate: " + rate + ".");
         }
 
         doResponse(newExchangeRate, resp);

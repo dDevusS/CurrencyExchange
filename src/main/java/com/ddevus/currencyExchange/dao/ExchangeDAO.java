@@ -30,7 +30,8 @@ public class ExchangeDAO implements IExchangeDAO {
         Currency targetCurrency = CURRENCY_DAO.findByCode(targetCurrencyCode);
 
         if (baseCurrency == null || targetCurrency == null) {
-            throw new NoResultException("There are no currencies with those codes in the database.");
+            throw new NoResultException("There are no currencies with those codes in the database."
+            , "Entered parameters: from: " + baseCurrencyCode + ", to: " + targetCurrencyCode + ".");
         }
 
         ExchangeRate exchangeRate = findByBaseAndTargetCurrencies(baseCurrency, targetCurrency);

@@ -43,7 +43,8 @@ public class CurrenciesServlet extends BasicServlet {
         newCurrency = CURRENCY_SERVICE.save(newCurrency);
 
         if (newCurrency == null) {
-            throw new InsertFailedException("There is a currency in the database with the following parameters.");
+            throw new InsertFailedException("There is a currency in the database with the following parameters."
+            , "Entered parameters: name: " + name + ", code: " + code + ", sing: " + sign + ".");
         }
 
         doResponse(newCurrency, resp);

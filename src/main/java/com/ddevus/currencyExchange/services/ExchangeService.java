@@ -26,7 +26,9 @@ public class ExchangeService implements IExchange_Service {
                 = EXCHANGE_DAO.getRequiredExchangeRate(baseCurrencyCode, targetCurrencyCode);
 
         if (requiredExchangeRate == null) {
-            throw new NoResultException("There is no suitable exchange rate in the database for these currency pairs.");
+            throw new NoResultException("There is no suitable exchange rate in the database for these currency pairs."
+            , "Entered parameters: baseCurrencyCode: " + baseCurrencyCode + ", targetCurrencyCode: " + targetCurrencyCode
+                    + ", amount: " + amount + ".");
         }
 
         return getExchangeDtoWithConvertedAmount(amount, requiredExchangeRate);

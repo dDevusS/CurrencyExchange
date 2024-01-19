@@ -33,7 +33,8 @@ public class ExchangeRateServlet extends BasicServlet {
                 , currenciesCodes[1]);
 
         if (exchangeRate == null) {
-            throw new NoResultException("There is no exchange rate with those currencies codes.");
+            throw new NoResultException("There is no exchange rate with those currencies codes."
+            , "Entered parameters: : " + req.getPathInfo() + ".");
         }
 
         doResponse(exchangeRate, resp);
@@ -65,7 +66,8 @@ public class ExchangeRateServlet extends BasicServlet {
                 , rate);
 
         if (exchangeRate == null) {
-            throw new NoResultException("There is no exchange rate with those currencies codes.");
+            throw new NoResultException("There is no exchange rate with those currencies codes."
+            , "Entered parameters: pathInfo: " + req.getPathInfo() + ", rate: " + rate + ".");
         }
 
         doResponse(exchangeRate, resp);
