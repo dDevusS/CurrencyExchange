@@ -3,17 +3,17 @@ package com.ddevus.currencyExchange.services;
 import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
 import com.ddevus.currencyExchange.dao.interfaces.IExchangeRateDAO;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
-import com.ddevus.currencyExchange.services.interfaces.IExchangeRate_Service;
+import com.ddevus.currencyExchange.services.interfaces.IExchangeRateService;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class ExchangeRateService implements IExchangeRate_Service {
+public class ExchangeRateService implements IExchangeRateService {
 
     private static final IExchangeRateDAO EXCHANGE_RATE_DAO = ExchangeRateDAO.getINSTANCE();
     @Getter
-    private static final IExchangeRate_Service INSTANCE = new ExchangeRateService();
+    private static final IExchangeRateService INSTANCE = new ExchangeRateService();
 
     private ExchangeRateService() {
     }

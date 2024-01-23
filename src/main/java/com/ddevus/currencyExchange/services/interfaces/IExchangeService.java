@@ -4,7 +4,7 @@ import com.ddevus.currencyExchange.dto.ExchangeDTO;
 
 import java.math.BigDecimal;
 
-public interface IExchange_Service {
+public interface IExchangeService {
 
     public ExchangeDTO exchangeAmount(String baseCurrencyCode, String targetCurrencyCode, BigDecimal amount);
 }

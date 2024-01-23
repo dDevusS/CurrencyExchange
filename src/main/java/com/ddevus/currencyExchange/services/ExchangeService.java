@@ -5,13 +5,13 @@ import com.ddevus.currencyExchange.dao.interfaces.IExchangeDAO;
 import com.ddevus.currencyExchange.dto.ExchangeDTO;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
-import com.ddevus.currencyExchange.services.interfaces.IExchange_Service;
+import com.ddevus.currencyExchange.services.interfaces.IExchangeService;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class ExchangeService implements IExchange_Service {
+public class ExchangeService implements IExchangeService {
 
     private static final IExchangeDAO EXCHANGE_DAO = ExchangeDAO.getINSTANCE();
     @Getter

@@ -2,16 +2,16 @@ package com.ddevus.currencyExchange.services;
 
 import com.ddevus.currencyExchange.dao.CurrencyDAO;
 import com.ddevus.currencyExchange.entity.Currency;
-import com.ddevus.currencyExchange.services.interfaces.ICurrency_Service;
+import com.ddevus.currencyExchange.services.interfaces.ICurrencyService;
 import lombok.Getter;
 
 import java.util.List;
 
-public class CurrencyService implements ICurrency_Service {
+public class CurrencyService implements ICurrencyService {
 
     private static final CurrencyDAO CURRENCY_DAO = CurrencyDAO.getINSTANCE();
     @Getter
-    private static final ICurrency_Service INSTANCE = new CurrencyService();
+    private static final ICurrencyService INSTANCE = new CurrencyService();
 
     private CurrencyService() {
     }

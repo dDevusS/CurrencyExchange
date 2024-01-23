@@ -5,7 +5,7 @@ import com.ddevus.currencyExchange.entity.ExchangeRate;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface IExchangeRate_Service {
+public interface IExchangeRateService {
 
     public ExchangeRate save(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate);
 
