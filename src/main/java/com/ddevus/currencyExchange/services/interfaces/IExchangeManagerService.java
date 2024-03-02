@@ -1,8 +1,8 @@
-package com.ddevus.currencyExchange.dao.interfaces;
+package com.ddevus.currencyExchange.services.interfaces;
 
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 
-public interface IExchangeDAO {
+public interface IExchangeManagerService {
 
     public ExchangeRate getRequiredExchangeRate(String baseCurrencyCode, String targetCurrencyCode);
 }

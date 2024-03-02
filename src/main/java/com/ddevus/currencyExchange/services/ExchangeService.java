@@ -1,7 +1,6 @@
 package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dao.ExchangeDAO;
-import com.ddevus.currencyExchange.dao.interfaces.IExchangeDAO;
+import com.ddevus.currencyExchange.services.interfaces.IExchangeManagerService;
 import com.ddevus.currencyExchange.dto.ExchangeDTO;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
@@ -13,7 +12,7 @@ import java.math.RoundingMode;
 
 public class ExchangeService implements IExchangeService {
 
-    private static final IExchangeDAO EXCHANGE_DAO = ExchangeDAO.getINSTANCE();
+    private static final IExchangeManagerService EXCHANGE_DAO = ExchangeManagerService.getINSTANCE();
     @Getter
     private static final ExchangeService INSTANCE = new ExchangeService();
 

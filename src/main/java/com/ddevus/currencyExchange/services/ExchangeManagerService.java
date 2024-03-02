@@ -1,6 +1,8 @@
-package com.ddevus.currencyExchange.dao;
+package com.ddevus.currencyExchange.services;
 
-import com.ddevus.currencyExchange.dao.interfaces.IExchangeDAO;
+import com.ddevus.currencyExchange.dao.CurrencyDAO;
+import com.ddevus.currencyExchange.dao.ExchangeRateDAO;
+import com.ddevus.currencyExchange.services.interfaces.IExchangeManagerService;
 import com.ddevus.currencyExchange.entity.Currency;
 import com.ddevus.currencyExchange.entity.ExchangeRate;
 import com.ddevus.currencyExchange.exceptions.NoResultException;
@@ -12,14 +14,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ExchangeDAO implements IExchangeDAO {
+public class ExchangeManagerService implements IExchangeManagerService {
 
     private static final CurrencyDAO CURRENCY_DAO = CurrencyDAO.getINSTANCE();
     private static final ExchangeRateDAO EXCHANGE_RATE_DAO = ExchangeRateDAO.getINSTANCE();
     @Getter
-    private static final ExchangeDAO INSTANCE = new ExchangeDAO();
+    private static final ExchangeManagerService INSTANCE = new ExchangeManagerService();
 
-    private ExchangeDAO() {
+    private ExchangeManagerService() {
     }
 
     public ExchangeRate getRequiredExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {
